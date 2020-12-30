@@ -1,0 +1,25 @@
+﻿<div id="sw-inventory" class="sw-zoom-container">
+   <div class="inventory-container">
+      <div class="sw-inventory-area-title">Inventory</div>
+      <div ng-if="::$ctrl.gameHasTimer()" class="sw-inventory-area-timer-countdown">{{$ctrl.timerCountDown()}}</div>
+      <div ng-if="::$ctrl.gameHasTimer()" class="sw-inventory-area-timer-bar" ng-style="{'width': $ctrl.getTimerWidth()}"></div>
+      <div class="inventory-container-inner">
+         <div ng-repeat="cardType in $ctrl.getCardTypes()" ng-style="{'width': $ctrl.getCardWidth()}" class="sw-inventory-card" ng-click="$ctrl.clickOnCard(cardType.effect)">
+            <div ng-attr-class="sw-inventory-card-container {{$ctrl.getCardClass(cardType.effect)}}">
+               <div class="sw-inventory-effect-count" ng-if="::$ctrl.showEffectCount(cardType.effect)">{{$ctrl.getEffectCount(cardType.effect)}}</div>
+               <div class="sw-inventory-title">{{$ctrl.getCardName(cardType.effect)}}</div>
+               <div ng-repeat="index in [0,1,2,3,4]" ng-if="index == 1 || cardType.itemMap[index] || (index > 0 && (cardType.itemMap[index+1] || cardType.itemMap[index+2]))"><span class="sw-inventory-card-number">{{index}}</span>: {{cardType.itemMap[index]}}</div>
+               <i class="{{$ctrl.getCardIconClass(cardType.effect)}}"></i>
+            </div>
+         </div>
+         <div ng-style="{'width': $ctrl.getCardWidth()}" class="sw-inventory-card">
+            <div class="sw-inventory-deck-info sw-inventory-card-container">
+               <div class="sw-inventory-title">Deck Info</div>
+               <div>Cards: {{$ctrl.getDeckCount()}}</div>
+               <div ng-if="$ctrl.isAssistMode()">1 card: {{$ctrl.getPercentageForCard()}}</div>
+               <div ng-if="$ctrl.isAssistMode()">bust: {{$ctrl.getPercentageToBust()}}</div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

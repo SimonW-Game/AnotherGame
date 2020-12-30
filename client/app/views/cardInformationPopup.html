@@ -1,0 +1,18 @@
+﻿<div class="sw-popup sw-popup-small sw-card-information-popup" ng-if="$ctrl.cardInformationHelper.isShowing" ng-click="$ctrl.cardInformationHelper.close(); $event.stopPropagation();">
+   <div class="sw-content">
+      <div ng-attr-class="sw-popup-header {{$ctrl.cardInformationHelper.class}}">{{$ctrl.cardInformationHelper.headerText}}</div>
+      <div ng-attr-class="sw-popup-body {{$ctrl.cardInformationHelper.class}}">
+         <div>
+            <span>{{$ctrl.cardInformationHelper.descriptionText}}</span>
+            <div ng-if="$ctrl.cardInformationHelper.effect">
+               <div class="sw-info-card-price-header" ng-if="$ctrl.getCardPrices($ctrl.cardInformationHelper.effect).length > 0"><i ng-attr-class="{{$ctrl.cardInformationHelper.priceHeaderClass}}"></i> Price <i ng-attr-class="{{$ctrl.cardInformationHelper.priceHeaderClass}}"></i></div>
+               <div class="sw-info-card-prices"><div ng-repeat="itemPrice in ::$ctrl.getCardPrices($ctrl.cardInformationHelper.effect)">{{itemPrice.points}}: <span class="font-weight-bold">{{itemPrice.cost}}</span></div></div>
+            </div>
+         </div>
+         <i class="{{$ctrl.cardInformationHelper.iconClass}}"></i>
+      </div>
+      <button class="btn btn-light sw-popup-footer sw-card-information-footer" ng-click="$ctrl.cardInformationHelper.close()">
+         <div>Close</div>
+      </button>
+   </div>
+</div>

@@ -1,0 +1,18 @@
+﻿<div ng-controller="GameController as gameVm">
+   <pregame-settings ng-if="gameVm.isPreRound()"></pregame-settings>
+
+   <div ng-if="gameVm.isPreRound()" id="sw-action-area">
+      <div id="sw-pre-round-start-container">
+         <div ng-if="gameVm.userData.isHost" class="btn btn-lg btn-primary" ng-click="gameVm.startRound()">Start</div>
+         <h4 ng-if="!gameVm.userData.isHost" class="">Waiting for host to start</h4>
+      </div>
+      <div id="sw-pre-round-start-container">
+      </div>
+   </div>
+   <board-area ng-if="gameVm.isPlayPhase() || gameVm.isBuyPhase()"> </board-area>
+   <inventory-area ng-if="gameVm.isPlayPhase() || gameVm.isBuyPhase()"> </inventory-area>
+   <play-action-area ng-if="gameVm.isPlayPhase()"></play-action-area>
+   <buy-action-area ng-if="gameVm.isBuyPhase()"></buy-action-area>
+   <scorebar></scorebar>
+   <end-game-screen ng-if="gameVm.isEndGamePhase()"></end-game-screen>
+</div>

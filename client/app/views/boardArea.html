@@ -1,0 +1,14 @@
+﻿<div id="sw-boardArea" class="sw-zoom-container" on-long-press="$ctrl.viewBoardSpaceInfo()" on-long-touch-end="$ctrl.exitInfo()">
+   <div class="sw-boardSpace" ng-repeat="space in $ctrl.getBoardItems() track by $index" ng-class="$ctrl.getSpaceClasses(space, $index)">
+      <span class="board-index">{{$index}}</span>
+      <i ng-if="space" class="board-space-played-card {{$ctrl.getCardIconClass(space.effect)}}"></i>
+      <span id="sw-board-marker" ng-if="$index === $ctrl.selection.currentLocation"><i class="fa fa-chess-pawn"></i></span>
+      <div class="sw-board-points"><span><i class="fa fa-award"></i>{{::$ctrl.getSpacePoints($index)}}</span><span ng-if="::$ctrl.hasGem($index)"><i class="fa fa-gem currency-icon"></i></span></div>
+   </div>
+</div>
+
+<div class="sw-boardArea-currency" ng-class="{'sw-boardArea-currency-big': $ctrl.isBuyPhase()}" on-long-press="$ctrl.viewCurrencyInfo()" on-long-touch-end="$ctrl.exitInfo()">
+   <div ng-attr-title="{{$ctrl.isBuyPhase() ? 'Available money to buy with' : 'Money earned this round'}}"><i class="fa fa-money-bill-alt"></i><span>{{$ctrl.getRemainingMoneyToSpend()}}</span></div>
+   <div ng-attr-title="{{$ctrl.isBuyPhase() ? 'Available gems to buy with' : 'Gems earned this round'}}"><i class="fa fa-gem"></i><span>{{$ctrl.getRemainingGemsToSpend()}}</span></div>
+   <div ng-attr-title="{{$ctrl.isBuyPhase() ? 'Available card buys left' : 'Extra card buys this round'}}"><i class="fa fa-shopping-cart"></i><span>{{$ctrl.getRemainingBuys()}}</span></div>
+</div>

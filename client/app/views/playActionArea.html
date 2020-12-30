@@ -1,0 +1,31 @@
+﻿<div id="sw-action-area" class="sw-zoom-container">
+   <div ng-if="!$ctrl.isWaitingForOthers()" class="action-area-scrollable-container">
+      <div ng-repeat="item in $ctrl.roundWrapper.currentHand track by $index" ng-attr-class="play-area-action-item sw-playing-card {{$ctrl.getCardClass(item.effect)}}" ng-class="{'sw-card-effective':$ctrl.isCardEffective(item)}" ng-click="$ctrl.clickItem(item)">
+         <div class="play-area-item-details">
+            <div class="sw-card-name"><i class="fa fa-hand-holding-medical" ng-if="$ctrl.isExtraCard(item)"></i><i class="fa fa-skull-crossbones" ng-if="$ctrl.willCauseBust(item)"></i><span>{{$ctrl.getCardName(item)}}</span></div>
+            <div><i class="fa fa-map-marked-alt"></i>{{$ctrl.getMovementText(item)}} <i class="fa fa-gem gem-count" ng-if="$ctrl.willLandOnGem(item)"></i></div>
+         </div>
+         <div class="play-area-item-image">
+            <div ng-attr-class="{{$ctrl.getCardClass(item.effect)}}">
+               <i class="{{$ctrl.getCardIconClass(item.effect)}}"></i>
+            </div>
+         </div>
+         <div class="play-area-information-button" ng-click="$ctrl.clickInformation(item, $event)"><i class="fa fa-info-circle"></i></div>
+      </div>
+      <div ng-if="$ctrl.giveTurnOptions()" class="play-area-action-item">
+         <div class="play-area-draw" ng-click="$ctrl.drawItems(item, $event)">Draw</div>
+         <div class="play-area-end-turn" ng-class="{'play-area-end-warning': $ctrl.isEndTurnWarning()}" ng-click="$ctrl.endTurn()">End</div>
+      </div>
+      <div ng-repeat="perk in $ctrl.getAvailablePerks()" class="play-area-action-item sw-playing-card sw-perk-card" ng-click="$ctrl.clickPerk(perk)">
+         <div class="play-area-item-details">
+            <div class="sw-card-name"><span>{{$ctrl.getPerkName(perk)}}</span></div>
+         </div>
+         <div class="play-area-item-image">
+         </div>
+         <div class="play-area-information-button" ng-click="$ctrl.clickInformation($ctrl.getItemFromPerk(perk), $event)"><i class="fa fa-info-circle"></i></div>
+      </div>
+   </div>
+   <div ng-if="$ctrl.isWaitingForOthers()" class="action-area-scrollable-container sw-action-waitingForOthers">
+      <div>Waiting For Other Players</div>
+   </div>
+</div>

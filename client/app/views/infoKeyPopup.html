@@ -1,0 +1,92 @@
+﻿<div class="sw-popup sw-popup-medium sw-popup-no-background" ng-if="$ctrl.hoverKeyHelper.infoKey != undefined" ng-click="$ctrl.hoverKeyHelper.close(); $event.stopPropagation();">
+   <div class="sw-content">
+      <div class="sw-popup-header">{{$ctrl.getHeaderText()}}</div>
+      <div class="sw-popup-body">
+
+         <!--
+            Horrible practice, but I'm fine with it...
+            scoreboard = 0,
+            currencySelection = 1,
+            currencyBuy = 2,
+            boardSpace = 3,
+            roundResultSpoils = 4,
+            tapTutorial = 5,
+            endGame = 6,
+         -->
+         <div ng-if="$ctrl.hoverKeyHelper.infoKey == 0">
+            <ul>
+               <li class="hide-marker"><i class="fa fa-crown"></i>Player(s) with the highest Score.</li>
+               <li class="hide-marker"><i class="fa fa-user-minus"></i>Player(s) who have disconnected.</li>
+               <li class="hide-marker"><i class="fa fa-map-pin"></i>Player's starting square.</li>
+               <li class="hide-marker"><i class="fa fa-hand-paper"></i>Player's hand size.</li>
+               <li class="hide-marker"><i class="fa fa-shopping-cart"></i>Player's available buys.</li>
+               <li class="hide-marker"><i class="fa fa-gem gem-count"></i>Player's gem total.</li>
+               <li class="hide-marker"><i class="fa fa-award"></i>Player's total score.</li>
+            </ul>
+         </div>
+         <div ng-if="$ctrl.hoverKeyHelper.infoKey == 1">
+            <ul>
+               <li class="hide-marker"><i class="fa fa-money-bill-alt"></i>Money earned this round.</li>
+               <li class="hide-marker"><i class="fa fa-gem"></i>Gems earned this round.</li>
+               <li class="hide-marker"><i class="fa fa-shopping-cart"></i>Extra buys earned this round.</li>
+            </ul>
+         </div>
+         <div ng-if="$ctrl.hoverKeyHelper.infoKey == 2">
+            <ul>
+               <li class="hide-marker"><i class="fa fa-money-bill-alt"></i>Money left to spend on cards this buy phase.</li>
+               <li class="hide-marker"><i class="fa fa-gem"></i>Gems left to spend on enhancements this buy phase.</li>
+               <li class="hide-marker"><i class="fa fa-shopping-cart"></i>Card buys left this buy phase</li>
+            </ul>
+         </div>
+         <div ng-if="$ctrl.hoverKeyHelper.infoKey == 3">
+            <ul>
+               <li class="">Upper left number is the board space number. This represents the base amount of money earned for the buy phase.</li>
+               <li class="hide-marker"><i class="fa fa-award"></i>Bottom left is the number of points earned for reaching this board space.</li>
+               <li class="hide-marker"><i class="fa fa-gem gem-count"></i>Indicates if landing on this board space will grant you a gem. (Passing over a gem does not earn you a gem)</li>
+            </ul>
+         </div>
+         <div ng-if="$ctrl.hoverKeyHelper.infoKey == 4">
+            <div>Selection Results</div>
+            <ul>
+               <li class="">If highlighted in red, the player busted.</li>
+               <li class="hide-marker"><i class="fa fa-map-marked-alt"></i>Last board space landed on.</li>
+               <li class="hide-marker"><i class="fa fa-money-bill-alt"></i>Money earned this round.</li>
+               <li class="hide-marker"><i class="fa fa-gem"></i>Gems earned this round.</li>
+               <li class="hide-marker"><i class="fa fa-shopping-cart"></i>Extra Buys earned this round.</li>
+               <li class="hide-marker"><i class="fa fa-award"></i>Points earned from cards immediately added to total score.</li>
+               <li class="hide-marker"><span><i class="fa fa-award"></i> For <i class="fa fa-map-marked-alt"></i></span>Points for Movement.</li>
+            </ul>
+            <div class="bold">Buy Results</div>
+            <ul>
+               <li class="">Bought means the player could buy cards/enhancements.</li>
+               <li class="">Scored means the player gained points.</li>
+               <li class="hide-marker"><span><i class="fa fa-minus"></i><i class="fa fa-gem"></i></span>How many gems were spent.</li>
+               <li class="hide-marker"><span><i class="fa fa-plus"></i><i class="fa fa-map-pin"></i></span>Advanced starting location handicap.</li>
+            </ul>
+         </div>
+         <div ng-if="$ctrl.hoverKeyHelper.infoKey == 5">
+            <ul>
+               <li class="">A triangle in the upper left corner means you can tap/click and hold down to see more information.</li>
+               <li class="">Doing so will explain icons and more!</li>
+            </ul>
+            <div class="info-example"><span on-long-press>This is an example</span></div>
+         </div>
+         <div ng-if="$ctrl.hoverKeyHelper.infoKey == 6">
+            <ul>
+               <li class="hide-marker"><i class="fa fa-crown"></i>Game Winner(s).</li>
+               <li class="hide-marker"><i class="fa fa-award" style="background: lightgreen"></i>Final Score.</li>
+               <li class="hide-marker"><i class="fa fa-skull-crossbones"></i>Times Busted.</li>
+               <li class="hide-marker"><i class="fa fa-map-pin"></i>Final starting location.</li>
+               <li class="hide-marker"><i class="fa fa-hand-paper"></i>Final hand size.</li>
+               <li class="hide-marker"><i class="fa fa-map-marked-alt"></i>Total spaces moved from cards.</li>
+               <li class="hide-marker"><i class="fa fa-clone"></i>Total cards played.</li>
+               <li class="hide-marker"><i class="fa fa-gem gem-count"></i>Total gems earned.</li>
+               <li class="hide-marker"><span><i class="fa fa-award"></i> For <i class="fa fa-map-marked-alt"></i></span>Points from last round money (none if busted).</li>
+               <li class="hide-marker"><span><i class="fa fa-award"></i> For <i class="fa fa-gem"></i></span>Points for remaining gems.</li>
+               <li class="hide-marker"><span><i class="fa fa-award"></i> For <i class="fa fa-clone"></i></span>Endgame points from cards.</li>
+            </ul>
+         </div>
+
+      </div>
+   </div>
+</div>

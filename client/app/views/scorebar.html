@@ -1,0 +1,15 @@
+﻿<div id="sw-scorebar" class="sw-zoom-container">
+   <div id="sw-scorebar-round-results-button" ng-click="$ctrl.showRoundInfo()"><div>Round Results</div></div>
+   <div id="sw-scorebar-container" on-long-press="$ctrl.viewScorebarInfo()" on-long-touch-end="$ctrl.exitScorebarInfo()">
+      <div ng-repeat="player in $ctrl.getPlayers()" class="player-score" ng-class="{'user-disconnected':player.isDisconnected, 'user-waiting-on-others': player.isWaitingOnOthers}">
+         <div class="sw-scorebar-player-alias">{{::player.playerData.username}}<i ng-if="$ctrl.playerIsWinning(player.playerData)" class="fa fa-crown"></i><i ng-if="player.isDisconnected" class="fa fa-user-minus"></i></div>
+         <div class="sw-scorebar-points-container">
+            <div title="Starting Position" class=""><i class="fa fa-map-pin"></i> <span>{{player.playerData.startingPosition}}</span></div>
+            <div title="Hand Size" class=""><i class="fa fa-hand-paper"></i> <span>{{player.playerData.handSize}}</span></div>
+            <div title="Available Buys" class=""><i class="fa fa-shopping-cart"></i> <span>{{player.playerData.availableBuys}}</span></div>
+            <div title="Gem Total" class="gem-count"><i class="fa fa-gem"></i> <span>{{player.playerData.gemTotal}}</span></div>
+            <div title="Score" class=""><i class="fa fa-award"></i> <span>{{player.playerData.totalScore}}</span></div>
+         </div>
+      </div>
+   </div>
+</div>

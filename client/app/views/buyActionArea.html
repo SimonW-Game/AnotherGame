@@ -1,0 +1,46 @@
+﻿<div id="sw-action-area" class="sw-zoom-container sw-buy-action-area">
+   <div ng-if="!$ctrl.isWaitingForOthers()" id="sw-buy-action-area-title">
+      <span ng-if="$ctrl.needsToChooseBustOption()">Choose to Buy or Score</span>
+      <span ng-if="!$ctrl.needsToChooseBustOption()">Shop - Click to View</span>
+   </div>
+   <div ng-if="!$ctrl.isWaitingForOthers() && $ctrl.needsToChooseBustOption()" class="action-area-scrollable-container action-buy-area">
+      <div class="play-area-action-item" ng-click="$ctrl.choseToBuy()">
+         <div class="play-area-item-details buy-area-choose-points-or-buy">
+            <div>Buy Items</div>
+            <div><i class="fa fa-money-bill-alt"></i>{{$ctrl.getRoundMoneyAmount()}}</div>
+            <div><i class="fa fa-gem"></i>{{$ctrl.getGemAmount()}}</div>
+            <i class="fa fa-money-bill-alt"></i>
+         </div>
+      </div>
+      <div class="play-area-action-item" ng-click="$ctrl.choseToScore()">
+         <div class="play-area-item-details buy-area-choose-points-or-buy">
+            <div>Gain Points</div>
+            <div><i class="fa fa-award"></i>{{$ctrl.getRoundPointsAmount()}}</div>
+            <i class="fa fa-award"></i>
+         </div>
+      </div>
+   </div>
+
+   <div ng-if="!$ctrl.isWaitingForOthers() && !$ctrl.needsToChooseBustOption()" class="action-area-scrollable-container action-buy-area action-area-wrap-container">
+      <div ng-repeat="itemEffect in $ctrl.getItemsToBuy()" ng-attr-class="play-area-action-item buy-area-item {{$ctrl.getCardClass(itemEffect)}}" ng-click="$ctrl.clickItemEffect(itemEffect)">
+         <div class="sw-has-bought" ng-if="$ctrl.hasBoughtEffect(itemEffect)"><i class="fa fa-check"></i></div>
+         <div class="play-area-item-details">
+            <div class="sw-card-name"><span>{{$ctrl.getCardName(itemEffect)}}</span></div>
+            <i class="{{$ctrl.getCardIconClass(itemEffect)}}"></i>
+         </div>
+      </div>
+
+      <div class="play-area-action-item buy-area-item sw-enhancement-background" ng-click="$ctrl.clickSpendGems()">
+         <div class="sw-has-bought" ng-if="$ctrl.hasBoughtEnhancement()"><i class="fa fa-check"></i></div>
+         <div class="">Spend Gems</div>
+      </div>
+
+      <div class="play-area-action-item buy-area-item">
+         <div class="buy-area-end-turn" ng-class="{'play-area-end-warning': $ctrl.isEndTurnWarning()}" ng-click="$ctrl.endTurn()">End</div>
+      </div>
+   </div>
+
+   <div ng-if="$ctrl.isWaitingForOthers()" class="action-area-scrollable-container sw-action-waitingForOthers">
+      <div>Waiting For Other Players</div>
+   </div>
+</div>

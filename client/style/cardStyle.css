@@ -1,0 +1,748 @@
+.play-area-action-item.sw-card-effective::after {
+	border: 6px dotted greenyellow;
+	border-radius: 10px;
+	content: " ";
+	position: absolute;
+	top: -6px;
+	bottom: -6px;
+	left: -6px;
+	right: -6px;
+}
+
+.play-area-action-item::before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+
+.sw-playing-card.sw-card-special-no-effect::before {
+	background-color: rgba(255, 180, 210, .75);
+}
+
+.sw-card-special-no-effect {
+	background-color: rgb(255, 180, 210);
+}
+
+
+.sw-playing-card.sw-card-just-move::before {
+	background-color: rgba(255, 255, 255, .25);
+}
+
+.sw-card-just-move {
+	background-color: rgb(255, 255, 255);
+}
+
+
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item.sw-playing-card.sw-perk-card {
+	background-color: rgb(255, 120, 120);
+	height: 50%;
+}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item.sw-playing-card.sw-perk-card::before {
+		background-color: rgba(255, 120, 120, .75);
+	}
+
+
+
+.sw-playing-card.sw-card-add-to-hand::before {
+	background-color: rgba(255, 185, 100, .75);
+}
+
+.sw-card-add-to-hand {
+	background-color: rgb(255, 185, 100);
+}
+
+
+.sw-playing-card.sw-card-money-for-special::before {
+	background-color: rgba(130, 230, 130, .75);
+}
+
+.sw-card-money-for-special {
+	background-color: rgb(130, 230, 130);
+}
+
+
+.sw-playing-card.sw-card-moves-for-special::before {
+	background-color: rgba(200, 255, 200, .75);
+}
+
+.sw-card-moves-for-special {
+	background-color: rgb(200, 255, 200);
+}
+
+
+.sw-playing-card.sw-card-far-reaching::before {
+	background-color: rgba(140, 160, 255, .75);
+}
+
+.sw-card-far-reaching {
+	background-color: rgb(140, 160, 255);
+}
+
+
+.sw-playing-card.sw-card-extra-gem::before {
+	background-color: rgba(200, 200, 255, .75);
+}
+
+.sw-card-extra-gem {
+	background-color: rgb(200, 200, 255);
+}
+
+
+.sw-playing-card.sw-card-point-investment::before {
+	background-color: rgba(120, 20, 160, .75);
+}
+
+.sw-card-point-investment {
+	color: rgb(255, 185, 100);
+	background-color: rgb(120, 20, 160);
+}
+
+
+.sw-playing-card.sw-card-shuffle-hand::before {
+	background-color: rgba(235, 160, 235, .75);
+}
+
+.sw-card-shuffle-hand {
+	background-color: rgb(235, 160, 235);
+}
+
+
+.sw-playing-card.sw-card-growing-mover::before {
+	background-color: rgba(90, 190, 90, .75);
+}
+
+.sw-card-growing-mover {
+	color: rgb(235, 235, 235);
+	background-color: rgb(90, 190, 90);
+}
+
+
+.sw-playing-card.sw-card-grower-points::before {
+	background-color: rgba(90, 90, 190, .75);
+}
+
+.sw-card-grower-points {
+	color: rgb(190, 250, 190);
+	background-color: rgb(90, 90, 190);
+}
+
+
+.sw-playing-card.sw-card-bonus-for-keys::before {
+	background-color: rgba(120, 20, 120, .75);
+}
+
+.sw-card-bonus-for-keys {
+	color: rgb(255, 190, 120);
+	background-color: rgb(120, 20, 120);
+}
+
+
+.sw-playing-card.sw-card-draw-lowest::before {
+	background-color: rgba(20, 160, 160, .75);
+}
+
+.sw-card-draw-lowest {
+	color: rgb(255, 190, 120);
+	background-color: rgb(20, 140, 140);
+}
+
+
+
+.sw-playing-card.sw-card-move-point::before {
+	background-color: rgba(20, 160, 160, .75);
+}
+
+.sw-card-move-point {
+	color: rgb(125, 90, 40);
+	background-color: rgb(120, 240, 240);
+}
+
+
+.sw-playing-card.sw-card-played-most-reward::before {
+	background-color: rgba(190, 90, 190, .75);
+}
+
+.sw-card-played-most-reward {
+	background-color: rgb(190, 90, 190);
+}
+
+
+.sw-playing-card.sw-card-copyMover-hand::before {
+	background-color: rgba(90, 90, 190, .75);
+}
+
+.sw-card-copyMover-hand {
+	color: rgb(235, 235, 235);
+	background-color: rgb(90, 90, 190);
+}
+
+
+.sw-playing-card.sw-card-copy-previous::before {
+	background-color: rgba(160, 80, 160, .75);
+}
+
+.sw-card-copy-previous {
+	color: rgb(235, 235, 235);
+	background-color: rgb(160, 80, 160);
+}
+
+
+.sw-playing-card.sw-card-special-adjacent-mover::before {
+	background-color: rgba(200, 100, 20, .75);
+}
+
+.sw-card-special-adjacent-mover {
+	color: rgb(235, 235, 235);
+	background-color: rgb(200, 100, 20);
+}
+
+
+.sw-playing-card.sw-card-moves-for-gems::before {
+	background-color: rgba(90, 190, 90, .75);
+}
+
+.sw-card-moves-for-gems {
+	color: rgb(150, 40, 150);
+	background-color: rgb(90, 190, 90);
+}
+
+
+.sw-playing-card.sw-card-remove-bane::before {
+	background-color: rgba(140, 140, 20, .75);
+}
+
+.sw-card-remove-bane {
+	color: rgb(235, 235, 235);
+	background-color: rgb(140, 140, 20);
+}
+
+
+.sw-playing-card.sw-card-cost-less::before {
+	background-color: rgba(170, 10, 100, .75);
+}
+
+.sw-card-cost-less {
+	color: rgb(235, 235, 235);
+	background-color: rgb(170, 10, 100);
+}
+
+
+.sw-playing-card.sw-card-virus::before {
+	background-color: rgba(10, 10, 10, .75);
+}
+
+.sw-card-virus {
+	color: rgb(235, 150, 150);
+	background-color: rgb(10, 10, 10);
+}
+
+
+.sw-playing-card.sw-card-tax-collector::before {
+	background-color: rgba(0, 60, 0, .75);
+}
+
+.sw-card-tax-collector {
+	color: rgb(160, 160, 40);
+	background-color: rgb(0, 60, 0);
+}
+
+
+.sw-playing-card.sw-card-tax::before {
+	background-color: rgba(10, 10, 10, .75);
+}
+
+.sw-card-tax {
+	color: rgb(160, 160, 40);
+	background-color: rgb(10, 10, 10);
+}
+
+
+.sw-playing-card.sw-card-poison::before {
+	background-color: rgba(10, 10, 10, .75);
+}
+
+.sw-card-poison {
+	color: rgb(150, 235, 150);
+	background-color: rgb(10, 10, 10);
+}
+
+
+.sw-playing-card.sw-card-poison-brewer::before {
+	background-color: rgba(0, 60, 0, .75);
+}
+
+.sw-card-poison-brewer {
+	color: rgb(180, 255, 180);
+	background-color: rgb(0, 60, 0);
+}
+
+
+.sw-playing-card.sw-card-bane-giver::before {
+	background-color: rgba(60, 60, 60, .75);
+}
+
+.sw-card-bane-giver {
+	color: rgb(255, 255, 255);
+	background-color: rgb(60, 60, 60);
+}
+
+
+.sw-playing-card.sw-card-last-card-gem::before {
+	background-color: rgba(220, 140, 255, .75);
+}
+
+.sw-card-last-card-gem {
+	background-color: rgb(220, 140, 255);
+}
+
+
+.sw-playing-card.sw-card-trash-item::before {
+	background-color: rgba(230, 200, 80, .75);
+}
+
+.sw-card-trash-item {
+	background-color: rgb(230, 200, 80);
+}
+
+
+.sw-playing-card.sw-card-discard-item::before {
+	background-color: rgba(230, 200, 80, .75);
+}
+
+.sw-card-discard-item {
+	background-color: rgb(230, 200, 80);
+}
+
+
+.sw-playing-card.sw-enhancement-background::before {
+	background-color: rgba(190, 90, 90, .75);
+}
+
+.sw-enhancement-background {
+	color: rgb(235, 235, 235);
+	background-color: rgb(190, 90, 90);
+}
+
+
+.sw-playing-card.sw-card-gain-buy::before {
+	background-color: rgba(180, 20, 20, .75);
+}
+
+.sw-card-gain-buy {
+	background-color: rgb(180, 20, 20);
+	color: lightgreen;
+}
+
+
+.sw-playing-card.sw-card-move-5x::before {
+	background-color: rgba(20, 20, 180, .75);
+}
+
+.sw-card-move-5x {
+	background-color: rgb(20, 20, 180);
+	color: rgb(255, 185, 100);
+}
+
+
+.sw-playing-card.sw-card-extra-money::before {
+	background-color: rgba(80, 0, 120, .75);
+}
+
+.sw-card-extra-money {
+	background-color: rgb(80, 0, 120);
+	color: rgb(230, 200, 80);
+}
+
+
+.sw-playing-card.sw-card-points-5x::before {
+	background-color: rgba(20, 20, 180, .75);
+}
+
+.sw-card-points-5x {
+	background-color: rgb(20, 20, 180);
+	color: rgb(200, 255, 200);
+}
+
+
+.sw-playing-card.sw-card-empty-gems::before {
+	background-color: rgba(60, 60, 60, .75);
+}
+
+.sw-card-empty-gems {
+	color: rgb(200, 60, 200);
+	background-color: rgb(60, 60, 60);
+}
+
+
+.sw-playing-card.sw-card-increase-hand::before {
+	background-color: rgba(60, 60, 60, .75);
+}
+
+.sw-card-increase-hand {
+	color: rgb(200, 60, 200);
+	background-color: rgb(60, 60, 60);
+}
+
+
+.sw-playing-card.sw-card-extra-future-gem::before {
+	background-color: rgba(30, 90, 30, .75);
+}
+
+.sw-card-extra-future-gem {
+	color: rgb(200, 60, 200);
+	background-color: rgb(30, 90, 30);
+}
+
+
+.sw-playing-card.sw-card-points-per-buy::before {
+	background-color: rgba(60, 60, 60, .75);
+}
+
+.sw-card-points-per-buy {
+	color: rgb(200, 60, 200);
+	background-color: rgb(60, 60, 60);
+}
+
+
+.sw-playing-card.sw-card-empty-moves::before {
+	background-color: rgba(60, 60, 60, .75);
+}
+
+.sw-card-empty-moves {
+	color: rgb(255, 255, 0);
+	background-color: rgb(60, 60, 60);
+}
+
+
+.sw-playing-card.sw-card-bane-moves::before {
+	background-color: rgba(60, 60, 60, .75);
+}
+
+.sw-card-bane-moves {
+	color: rgb(100, 200, 200);
+	background-color: rgb(60, 60, 60);
+}
+
+
+.sw-playing-card.sw-card-move-to-gem::before {
+	background-color: rgba(120, 0, 0, .75);
+}
+
+.sw-card-move-to-gem {
+	color: rgb(0, 255, 200);
+	background-color: rgb(120, 0, 0);
+}
+
+
+.sw-playing-card.sw-card-gem-for-money::before {
+	background-color: rgba(0,0,80, .75);
+}
+
+.sw-card-gem-for-money {
+	color: rgb(120, 255, 120);
+	background-color: rgb(0,0,80);
+}
+
+
+.sw-playing-card.sw-card-points-no-gems::before {
+	background-color: rgba(0, 60, 60, .75);
+}
+
+.sw-card-points-no-gems {
+	color: rgb(255, 100, 150);
+	background-color: rgb(0, 60, 60);
+}
+
+
+.sw-playing-card.sw-card-money-pass-gem::before {
+	background-color: rgba(0, 200, 0, .75);
+}
+
+.sw-card-money-pass-gem {
+	background-color: rgb(0, 200, 0);
+}
+
+
+.sw-playing-card.sw-card-bane-removal::before {
+	background-color: rgba(190, 190, 190, .75);
+}
+
+.sw-card-bane-removal {
+	background-color: rgb(190, 190, 190);
+	color: rgb(0, 100, 0);
+}
+
+
+.sw-playing-card.sw-card-bane::before {
+	background-color: rgba(245, 245, 245, .75);
+}
+
+.sw-card-bane {
+	background-color: rgb(245, 245, 245);
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item {
+	/* margin-top: 5%;*/
+	/* height: 90%;*/
+	height: 100%;
+	width: 32%;
+	font-size: 3.63vw;
+	position: relative;
+	display: inline-block;
+	border: 6px solid black;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item.sw-playing-card {
+		background-image: url("../images/randomBackground.jpg");
+		border-radius: 10px;
+		margin-right: 1px;
+		background-size: contain;
+	}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item.buy-area-item {
+		height: 49.7%;
+		min-width: 16.5%;
+		width: unset;
+		flex-grow: 1;
+		border-width: 2px;
+		border-radius: 0px;
+		text-align: center;
+	}
+
+		#sw-action-area .action-area-scrollable-container .play-area-action-item.buy-area-item .buy-area-end-turn {
+			position: absolute;
+			text-align: center;
+			font-size: 10vw;
+			left: 0px;
+			right: 0px;
+			top: 0px;
+			bottom: 0px;
+			background: rgba(250, 250, 250, .9);
+			cursor: pointer;
+			justify-content: center;
+			align-items: center;
+			display: flex;
+		}
+
+			#sw-action-area .action-area-scrollable-container .play-area-action-item.buy-area-item .buy-area-end-turn.play-area-end-warning {
+				background: rgba(250, 150, 150, .95);
+			}
+
+.buy-area-choose-points-or-buy {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	text-align: center;
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item.buy-area-item .play-area-item-details {
+	position: absolute;
+	text-align: center;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item.buy-area-item .play-area-item-details .sw-card-name {
+		flex-grow: 1;
+	}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item.sw-playing-card .play-area-item-details {
+	position: absolute;
+	text-align: center;
+	top: 4%;
+	left: 6%;
+	right: 6%;
+	bottom: 60%;
+	background: white;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	color: black;
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item.sw-playing-card .play-area-item-image {
+	position: absolute;
+	text-align: center;
+	top: 40%;
+	left: 6%;
+	right: 6%;
+	bottom: 8%;
+	color: black;
+	background-image: linear-gradient(rgb(255,255,255), rgba(255,255,255,.6));
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	display: flex;
+	justify-content: center;
+}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item.sw-playing-card .play-area-item-image > div {
+		border-top-left-radius: 50px;
+		border-top-right-radius: 50px;
+		width: 72%; /*unsure why this isn't 100 - 18 - 18*/
+		height: 100%;
+		font-size: 10vw;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		padding-top: 10%;
+	}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item.buy-area-item .play-area-item-details {
+	height: 100%;
+}
+
+#sw-action-area .play-area-item-details .sw-card-name {
+	white-space: break-spaces;
+}
+
+.sw-has-bought {
+	position: absolute;
+	bottom: 4px;
+	right: 4px;
+	font-size: 2vw;
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-item-details > i {
+	text-align: center;
+	font-size: 8vw;
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-information-button {
+	position: absolute;
+	text-align: center;
+	left: 18%;
+	right: 18%;
+	bottom: 0px;
+	height: 20%;
+	border: 1px solid darkgray;
+	border-top-left-radius: 14px;
+	border-top-right-radius: 14px;
+	background: rgb(240, 240, 240);
+	color: black;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 4vh;
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item.sw-perk-card .play-area-information-button {
+	height: 40%;
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-information-button:hover {
+	background: rgb(220, 220, 220);
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-draw {
+	position: absolute;
+	text-align: center;
+	font-size: 10vw;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	height: 70%;
+	border-bottom: 1px solid black;
+	border-radius: 10px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	background: rgba(250, 250, 250, .9);
+	cursor: pointer;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	border-bottom: 1px solid black;
+}
+
+#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-end-turn {
+	position: absolute;
+	text-align: center;
+	font-size: 10vw;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	height: 30%;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background: rgba(250, 250, 250, .9);
+	cursor: pointer;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-end-turn.play-area-end-warning {
+		background: rgba(250, 150, 150, .95);
+	}
+
+@media (min-width: 800px) {
+	#sw-action-area .action-area-scrollable-container .play-area-action-item * {
+		font-size: 24px;
+	}
+
+	.play-area-action-item {
+		width: 19%;
+		max-width: 300px;
+	}
+
+	#sw-action-area.sw-buy-action-area .action-area-scrollable-container .play-area-action-item {
+		width: unset;
+		max-width: unset;
+	}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item {
+		width: 19%;
+		min-width: 200px;
+		max-width: 300px;
+	}
+
+		#sw-action-area .action-area-scrollable-container .play-area-action-item.buy-area-item {
+			min-width: 200px;
+		}
+
+		#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-item-details > i {
+			font-size: 50px;
+		}
+
+	#sw-boardArea .sw-boardSpace i.board-space-played-card {
+		font-size: 50px;
+	}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-draw {
+		font-size: 40px;
+	}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-end-turn {
+		font-size: 40px;
+	}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item.sw-playing-card .play-area-item-image .fa {
+		font-size: 50px;
+	}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-information-button {
+		font-size: 50px;
+	}
+
+		#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-information-button .fa {
+			font-size: 50px;
+		}
+
+	#sw-action-area .action-area-scrollable-container .play-area-action-item.buy-area-item .buy-area-end-turn {
+		font-size: 40px;
+	}
+}

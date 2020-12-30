@@ -1,0 +1,136 @@
+﻿<div id="sw-pregame-settings" class="sw-zoom-container">
+   <h1>Game Settings</h1>
+   <div class="btn-group sw-pregame-modes">
+      <div class="btn" ng-class="{'btn-light': $ctrl.game.options.gameMode != -1, 'btn-primary': $ctrl.game.options.gameMode == -1}">Custom</div>
+      <div class="btn" ng-repeat="index in [0, 1, 2, 3]" ng-click="$ctrl.setMode(index)" ng-class="{'btn-light': $ctrl.game.options.gameMode != index, 'btn-primary': $ctrl.game.options.gameMode == index}">{{$ctrl.getModeName(index)}}</div>
+   </div>
+   <div class="sw-settings-toggles">
+      <div ng-click="$ctrl.game.options.giveRoundBonuses = !$ctrl.game.options.giveRoundBonuses"><span>Give Round Bonuses</span><input type="checkbox" ng-model="$ctrl.game.options.giveRoundBonuses" /></div>
+      <div ng-click="$ctrl.game.options.disableAssistMode = !$ctrl.game.options.disableAssistMode"><span>Disable Assist Mode</span><input type="checkbox" ng-model="$ctrl.game.options.disableAssistMode" /></div>
+      <table>
+         <tr class="sw-slider-option">
+            <td class="flex-grow">Total Rounds</td>
+            <td><input type="number" min="1" max="20" ng-model="$ctrl.game.options.totalRounds" onclick="this.select()" /></td>
+            <td><input class="flex-grow" type="range" min="1" max="20" ng-model="$ctrl.game.options.totalRounds" />       </td>
+         </tr>
+         <tr class="sw-slider-option">
+            <td class="flex-grow">Starting Hand Size</td>
+            <td> <input type="number" min="1" max="5" ng-model="$ctrl.game.options.startingPlayerHandSize" onclick="this.select()" /></td>
+            <td><input class="flex-grow" type="range" min="1" max="5" ng-model="$ctrl.game.options.startingPlayerHandSize" />        </td>
+         </tr>
+         <tr class="sw-slider-option">
+            <td class="flex-grow">Starting Bane Threshold</td>
+            <td><input type="number" min="1" max="20" ng-model="$ctrl.game.options.startingBaneThreshold" onclick="this.select()" /></td>
+            <td><input class="flex-grow" type="range" min="1" max="20" ng-model="$ctrl.game.options.startingBaneThreshold" />       </td>
+         </tr>
+         <tr class="sw-slider-option">
+            <td class="flex-grow">Starting Gems</td>
+            <td><input type="number" min="0" max="50" ng-model="$ctrl.game.options.startingGems" onclick="this.select()" /></td>
+            <td><input class="flex-grow" type="range" min="0" max="50" ng-model="$ctrl.game.options.startingGems" />       </td>
+         </tr>
+         <tr class="sw-slider-option">
+            <td class="flex-grow">Starting Buys</td>
+            <td><input type="number" min="1" max="5" ng-model="$ctrl.game.options.startingBuys" onclick="this.select()" /></td>
+            <td><input class="flex-grow" type="range" min="1" max="5" ng-model="$ctrl.game.options.startingBuys" />       </td>
+         </tr>
+         <tr class="sw-slider-option">
+            <td class="flex-grow">Last Round Money For 1 point</td>
+            <td><input type="number" min="1" max="100" ng-model="$ctrl.game.options.endGameMoneyForPoints" onclick="this.select()" /></td>
+            <td><input class="flex-grow" type="range" min="1" max="100" ng-model="$ctrl.game.options.endGameMoneyForPoints" /></td>
+         </tr>
+         <tr class="sw-slider-option">
+            <td class="flex-grow">End Game Unspent Gems for 1 point</td>
+            <td><input type="number" min="1" max="100" ng-model="$ctrl.game.options.endGameGemsForPoints" onclick="this.select()" /></td>
+            <td><input class="flex-grow" type="range" min="1" max="100" ng-model="$ctrl.game.options.endGameGemsForPoints" />       </td>
+         </tr>
+         <tr class="sw-slider-option">
+            <td class="flex-grow"><span ng-click="$ctrl.game.options.enableTimeLimit = !$ctrl.game.options.enableTimeLimit"><span>Time Limit</span><input type="checkbox" ng-model="$ctrl.game.options.enableTimeLimit" /></span></td>
+            <td><input ng-if="$ctrl.game.options.enableTimeLimit" type="number" min="1" max="120" ng-model="$ctrl.game.options.secondsPerPhase" onclick="this.select()" /></td>
+            <td><input ng-if="$ctrl.game.options.enableTimeLimit" class="flex-grow" type="range" min="1" max="120" ng-model="$ctrl.game.options.secondsPerPhase" />       </td>
+         </tr>
+         <tr class="sw-slider-option">
+            <td class="flex-grow"><span ng-click="$ctrl.game.options.enableEndGameBonus = !$ctrl.game.options.enableEndGameBonus"><span>End Game Bonus</span><input type="checkbox" ng-model="$ctrl.game.options.enableEndGameBonus" /></span><span ng-if="$ctrl.game.options.enableEndGameBonus"> Points per bonus:</span></td>
+            <td><input ng-if="$ctrl.game.options.enableEndGameBonus" type="number" min="1" max="10" ng-model="$ctrl.game.options.pointsPerEndGameBonus" onclick="this.select()" /></td>
+            <td><input ng-if="$ctrl.game.options.enableEndGameBonus" class="flex-grow" type="range" min="1" max="10" ng-model="$ctrl.game.options.pointsPerEndGameBonus" /></td>
+         </tr>
+         <tr class="sw-slider-option" ng-if="$ctrl.game.options.enableEndGameBonus">
+            <td colspan="3">
+               <div class="btn-group" style="flex-wrap: wrap;">
+                  <div ng-repeat="endGameBonus in $ctrl.getEndGameBonuses()" class="btn" ng-class="{'btn-light': !$ctrl.game.options.endGameBonuses.includes(endGameBonus), 'btn-primary': $ctrl.game.options.endGameBonuses.includes(endGameBonus)}" ng-click="$ctrl.toggleEndGameBonus(endGameBonus)">{{$ctrl.getEndGameBonusName(endGameBonus)}}</div>
+               </div>
+            </td>
+         </tr>
+      </table>
+   </div>
+   <h2>Empty Hand Perks</h2>
+   <div class="btn-group">
+      <div ng-repeat="perk in ::$ctrl.getAllPerks()" class="btn btn-light" ng-class="{'active': $ctrl.game.options.perks.includes(perk)}" ng-click="$ctrl.togglePerk(perk)">
+         {{::$ctrl.getPerkName(perk)}}
+      </div>
+   </div>
+   <h1>Starting Hand</h1>
+   <div class="sw-settings-items">
+      <div ng-attr-class="sw-settings-hand-card {{$ctrl.getCardClass(startingCard.effect)}}" ng-repeat="startingCard in $ctrl.game.options.startingHand">
+         <span class="sw-settings-hand-header" ng-click="$ctrl.removeFromHand(startingCard)">
+            <span>{{$ctrl.getCardName(startingCard.effect)}} {{startingCard.points}}</span>
+            <i ng-attr-class="{{$ctrl.getCardIconClass(startingCard.effect)}}"></i>
+            <i ng-attr-class="fa fa-trash-alt"></i>
+         </span>
+         <input class="sw-setting-hand-input" type="range" min="1" max="4" ng-model="startingCard.points" />
+         <i class="sw-settings-info-button fa fa-info" ng-click="$ctrl.getInfo(startingCard)"></i>
+      </div>
+      <div ng-attr-class="sw-settings-hand-card sw-settings-hand-add" ng-click="$ctrl.addCardToHand()">
+         <i class="fa fa-plus"></i>
+      </div>
+   </div>
+   <div ng-repeat="roundIndex in $ctrl.getRoundArray() track by $index">
+      <h1>Round {{roundIndex + 1}}</h1>
+      <h2>New Cards to Buy For Round</h2>
+      <div class="sw-settings-items">
+         <div ng-attr-class="sw-settings-hand-card {{$ctrl.getCardClass(effect)}}" ng-repeat="effect in $ctrl.getNewCardEffectForRound(roundIndex) track by $index">
+            <span class="sw-settings-hand-header" ng-click="$ctrl.removeFromNewEffectsInRound(roundIndex, effect)">
+               <span>{{$ctrl.getCardName(effect)}}</span>
+               <i ng-attr-class="{{$ctrl.getCardIconClass(effect)}}"></i>
+               <i ng-attr-class="fa fa-trash-alt"></i>
+            </span>
+            <i class="sw-settings-info-button fa fa-info" ng-click="$ctrl.getEffectInfo(effect)"></i>
+         </div>
+         <div class="sw-settings-hand-card sw-settings-hand-add" ng-click="$ctrl.addEffectToRound(roundIndex)">
+            <i class="fa fa-plus"></i>
+         </div>
+      </div>
+
+      <h2>Items Added to Deck After Round</h2>
+      <div class="sw-settings-items">
+         <div ng-attr-class="sw-settings-hand-card {{$ctrl.getCardClass(card.effect)}}" ng-repeat="card in $ctrl.getForceBuysForRound(roundIndex)">
+            <span class="sw-settings-hand-header" ng-click="$ctrl.removeFromForceBuysInRound(roundIndex, card)">
+               <span>{{$ctrl.getCardName(card.effect)}}  {{card.points}}</span>
+               <i ng-attr-class="{{$ctrl.getCardIconClass(card.effect)}}"></i>
+               <i ng-attr-class="fa fa-trash-alt"></i>
+            </span>
+            <input class="sw-setting-hand-input" type="range" min="1" max="4" ng-model="card.points" />
+            <i class="sw-settings-info-button fa fa-info" ng-click="$ctrl.getEffectInfo(card.effect)"></i>
+         </div>
+         <div class="sw-settings-hand-card sw-settings-hand-add" ng-click="$ctrl.addForceCardToRound(roundIndex)">
+            <i class="fa fa-plus"></i>
+         </div>
+      </div>
+
+      <h2>New Enhancements to Buy For Round</h2>
+      <div class="sw-settings-items">
+         <div ng-attr-class="sw-settings-hand-card sw-enhancement-background" ng-repeat="enhancement in $ctrl.getEnhancementsForRound(roundIndex)">
+            <span class="sw-settings-hand-header" ng-click="$ctrl.removeFromEnhancementsInRound(roundIndex, enhancement)">
+               <span>{{$ctrl.getEnhancementName(enhancement)}}</span>
+               <i ng-attr-class="fa fa-gem"></i>
+               <i ng-attr-class="fa fa-trash-alt"></i>
+            </span>
+            <i class="sw-settings-info-button fa fa-info" ng-click="$ctrl.getEnhancementInfo(enhancement)"></i>
+         </div>
+         <div class="sw-settings-hand-card sw-settings-hand-add" ng-click="$ctrl.addEnhancementToRound(roundIndex)">
+            <i class="fa fa-plus"></i>
+         </div>
+      </div>
+
+   </div>
+</div>
+<effect-add-popup></effect-add-popup>

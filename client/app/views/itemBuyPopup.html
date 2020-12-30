@@ -1,0 +1,56 @@
+﻿<div class="sw-popup sw-popup-medium sw-item-buy-popup" ng-if="$ctrl.itemBuyHelper.effect != undefined || $ctrl.itemBuyHelper.showGem" ng-click="$ctrl.itemBuyHelper.close()">
+   <div class="sw-content">
+      <div class="sw-popup-header">{{$ctrl.getHeader()}}</div>
+      <div class="sw-popup-body">
+         <div class="sw-item-buy-currency"><div><i class="fa fa-money-bill-alt"></i> {{$ctrl.getRemainingMoneyToSpend()}}</div><div><i class="fa fa-shopping-cart"></i> {{$ctrl.getRemainingBuys()}}</div><div><i class="fa fa-gem"></i> {{$ctrl.getRemainingGemsToSpend()}}</div></div>
+         <div class="sw-item-buy-description">{{$ctrl.getDescription()}}</div>
+         <div class="sw-item-buy-card-container">
+            <div ng-if="$ctrl.itemBuyHelper.effect != undefined" ng-attr-class="sw-item-buy-card {{$ctrl.getCardClass($ctrl.itemBuyHelper.effect)}}" ng-class="{'sw-item-buy-card-cannotBuy':!$ctrl.canBuyClass(item)}" ng-repeat="item in $ctrl.getItemsToBuy()" ng-click="$event.stopPropagation();$ctrl.buyItem(item);">
+               <div class="sw-item-buy-details">
+                  <div ng-attr-class="refund-container {{$ctrl.getCardClass($ctrl.itemBuyHelper.effect)}}" ng-class="{'inactive':!$ctrl.hasBoughtItem(item)}" ng-click="$ctrl.refundItem(item); $event.stopPropagation()"><i class="fa fa-undo-alt"></i></div>
+                  <div class="sw-item-buy-prices">
+                     <div><i class="fa fa-money-bill-alt"></i> {{$ctrl.getItemCost(item)}}</div>
+                     <div><i class="fa fa-map-marked-alt"></i> {{item.points}}</div>
+                     <div><i class="fa fa-hand-rock"></i> {{item.amount}}</div>
+                  </div>
+               </div>
+               <i class="{{$ctrl.getCardIconClass($ctrl.itemBuyHelper.effect)}}"></i>
+               <i ng-attr-class="sw-did-buy-item {{$ctrl.getCheckMarkClass(item)}}"></i>
+            </div>
+            <div ng-if="$ctrl.itemBuyHelper.showGem" class="sw-item-buy-card sw-enhancement-background" ng-class="{'sw-item-buy-card-cannotBuy':!$ctrl.canBuyEnhancement(enhancement)}" ng-repeat="enhancement in $ctrl.getEnhancementsToBuy()" ng-click="$event.stopPropagation();$ctrl.buyEnhancement(enhancement);">
+               <div class="info-container sw-enhancement-background" ng-click="$ctrl.getEnhancementInfo(enhancement); $event.stopPropagation()"><i class="fa fa-info"></i></div>
+               <div class="refund-container sw-enhancement-background" ng-class="{'inactive':!$ctrl.hasBoughtEnhancement(enhancement)}" ng-click="$ctrl.refundEnhancement(enhancement); $event.stopPropagation()"><i class="fa fa-undo-alt"></i></div>
+               <div class="sw-item-buy-details sw-gem-buy-details">
+                  <div><i class="fa fa-gem"></i> {{$ctrl.getEnhancementCost(enhancement)}}</div>
+                  <div class="sw-enhancement-name">{{$ctrl.getEnhancementName(enhancement)}}</div>
+               </div>
+               <i ng-attr-class="sw-did-buy-enhancement {{$ctrl.getCheckMarkClassForEnahancement(enhancement)}}"></i>
+            </div>
+         </div>
+         <div class="sw-item-buy-note">
+            <div ng-if="$ctrl.itemBuyHelper.effect != undefined">
+               <ul>
+                  <li class="hide-marker"><i class="fa fa-money-bill-alt"></i> How much money the card costs</li>
+                  <li class="hide-marker"><i class="fa fa-arrow-right"></i> How far the card will move you (before effects applied)</li>
+                  <li class="hide-marker"><i class="fa fa-hand-rock"></i> How much of an effect the card will have</li>
+                  <li>Click to buy the card.</li>
+                  <li>Money will not carry over to future rounds.</li>
+                  <li>You can only buy one card of each effect per buy round.</li>
+               </ul>
+
+
+            </div>
+            <div ng-if="$ctrl.itemBuyHelper.showGem">
+               <ul>
+                  <li class="hide-marker"><i class="fa fa-gem"></i> How many gems the enhancement costs</li>
+                  <li>Click to buy the enhancement.</li>
+                  <li>Gems will carry over to future rounds.</li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <button class="btn btn-light sw-popup-footer sw-card-information-footer" ng-click="$ctrl.itemBuyHelper.close()">
+         <div>Close</div>
+      </button>
+   </div>
+</div>

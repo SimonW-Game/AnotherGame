@@ -1,0 +1,188 @@
+#sw-pregame-settings {
+	position: fixed;
+	top: 4%;
+	left: 0;
+	font-size: 3vw;
+	right: 0;
+	height: 56%;
+	overflow: auto;
+	background: white;
+}
+
+	#sw-pregame-settings .sw-pregame-modes {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	#sw-pregame-settings h1 {
+		text-align: center;
+		font-weight: bold;
+		font-size: 4.5vw;
+	}
+
+	#sw-pregame-settings h2 {
+		font-weight: bold;
+		font-size: 3.4vw;
+	}
+
+	#sw-pregame-settings .sw-settings-toggles table {
+		width: 100%;
+	}
+
+	#sw-pregame-settings .sw-settings-items {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+		#sw-pregame-settings .sw-settings-items .sw-settings-hand-card {
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			text-align: center;
+			border: 1px solid darkgray;
+			border-radius: 15px;
+			font-size: 4vw;
+			min-width: 16.66%;
+			max-width: 16.66%;
+		}
+
+			#sw-pregame-settings .sw-settings-items .sw-settings-hand-card.sw-enhancement-background {
+				min-width: 50%;
+				max-width: 50%;
+			}
+
+			#sw-pregame-settings .sw-settings-items .sw-settings-hand-card.sw-settings-hand-add {
+				justify-content: center;
+				font-size: 10vw;
+			}
+
+
+			#sw-pregame-settings .sw-settings-items .sw-settings-hand-card .fa-trash-alt {
+				display: block;
+			}
+
+			#sw-pregame-settings .sw-settings-items .sw-settings-hand-card .sw-settings-hand-header {
+				flex-grow: 1;
+			}
+
+			#sw-pregame-settings .sw-settings-items .sw-settings-hand-card .sw-setting-hand-input {
+				width: 100%;
+			}
+
+.sw-settings-info-button {
+	border-top: 1px solid black;
+	padding-top: 3px;
+}
+
+.sw-effect-add-popup .sw-popup-body {
+	display: flex;
+	flex-direction: column
+}
+
+	.sw-effect-add-popup .sw-popup-body .sw-add-amount-container {
+		text-align: center;
+	}
+
+		.sw-effect-add-popup .sw-popup-body .sw-add-amount-container input {
+			width: 100%;
+		}
+
+	.sw-effect-add-popup .sw-popup-body .effect-container {
+		display: flex;
+		flex-grow: 1;
+		flex-wrap: wrap;
+		overflow-x: hidden;
+		overflow-y: auto;
+		align-content: start;
+	}
+
+		.sw-effect-add-popup .sw-popup-body .effect-container *:first-child {
+			flex-grow: 1;
+		}
+
+		.sw-effect-add-popup .sw-popup-body .effect-container .sw-settings-hand-card > i {
+			font-size: 8vw;
+		}
+
+	.sw-effect-add-popup .sw-popup-body > .effect-container > div {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		border: 1px solid darkgray;
+		border-radius: 15px;
+		font-size: 4vw;
+		min-width: 20%;
+		max-width: 20%;
+		/*max-height: 40%;*/
+	}
+
+		.sw-effect-add-popup .sw-popup-body > .effect-container > div.sw-enhancement-background {
+			min-width: 50%;
+			min-height: 16%;
+			position: relative
+		}
+
+			.sw-effect-add-popup .sw-popup-body > .effect-container > div.sw-enhancement-background .info-container {
+				position: absolute;
+				right: 1px;
+				bottom: 1px;
+				width: 15%;
+				padding: 2px;
+				font-size: 5vw;
+				border-left: 1px solid darkgray;
+				border-top-left-radius: 12px;
+			}
+
+	.sw-effect-add-popup .sw-popup-body > .effect-container .info-container {
+		flex-grow: 0;
+		border-top: 1px solid darkgray;
+	}
+
+@media (min-width: 800px) {
+	.sw-settings-info-button {
+		font-size: 40px;
+	}
+
+	#sw-pregame-settings .sw-settings-items .sw-settings-hand-card {
+		min-height: 120px;
+	}
+
+	#sw-pregame-settings h1 {
+		font-size: 2.5rem;
+	}
+
+	#sw-pregame-settings h2 {
+		font-size: 2rem;
+	}
+
+	#sw-pregame-settings .sw-settings-items .sw-settings-hand-card {
+		min-width: 12%;
+		max-width: 12%;
+	}
+
+		#sw-pregame-settings .sw-settings-items .sw-settings-hand-card.sw-enhancement-background {
+			min-width: 14%;
+			max-width: 14%;
+		}
+
+	#sw-action-area #sw-pre-round-start-container .btn {
+		font-size: 9vh;
+	}
+
+	.sw-effect-add-popup.sw-popup .sw-popup-body * {
+		font-size: 16px;
+	}
+
+	.sw-effect-add-popup .sw-popup-body .effect-container .sw-settings-hand-card > i {
+		font-size: 50px;
+	}
+
+	.sw-effect-add-popup .sw-popup-body > .effect-container > div.sw-enhancement-background .info-container {
+		font-size: 30px;
+	}
+
+		.sw-effect-add-popup .sw-popup-body > .effect-container > div.sw-enhancement-background .info-container i {
+			font-size: 30px;
+		}
+}

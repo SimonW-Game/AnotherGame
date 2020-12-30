@@ -1,0 +1,117 @@
+﻿<div class="sw-popup sw-popup-large" ng-if="$ctrl.roundSummaryHelper.isShowing" ng-click="$ctrl.roundSummaryHelper.isShowing = false">
+   <div class="sw-content">
+      <div class="sw-popup-header">{{$ctrl.getRoundHeader()}}</div>
+      <div class="sw-popup-body" ng-repeat="roundData in [$ctrl.roundSummaryHelper.roundData]" ng-click="$event.stopPropagation()">
+         <!--ng-click="$event.stopPropagation()"-->
+         <div ng-if="!roundData.selectionResults">
+            Selection Results will show up after selections are made for all players.
+         </div>
+         <div ng-if="roundData.selectionResults">
+            <div class="sw-round-content-header">Selection Results</div>
+            <div ng-if="roundData.selectionResults.bonus">Bonus: {{roundData.selectionResults.bonus}}</div>
+            <div class="font-weight-bold">Winners: {{$ctrl.getWinningPlayers()}}</div>
+            <div class="sw-round-selection" ng-repeat="player in ::$ctrl.getPlayers()">
+               <div class="sw-round-spoils" ng-class="{'sw-round-spoils-busted':roundData.selectionResults.playerSelectionData[player.playerData.index].didBust}">
+                  <div><i ng-if="::$ctrl.roundSummaryHelper.roundData.selectionResults.winnerIndexes.indexOf(player.playerData.index) >= 0" class="fa fa-crown"></i> {{::player.playerData.username}}</div>
+                  <div class="sw-round-spoils-stats" on-long-press="$ctrl.viewRoundSpoilsInfo()" on-long-touch-end="$ctrl.exitInfo()">
+                     <div title="Last board space landed on">
+                        <i class="fa fa-map-marked-alt"></i>
+                        <span>{{::roundData.selectionResults.playerSelectionData[player.playerData.index].movement}}</span>
+                     </div>
+                     <div title="Money earned this round">
+                        <i class="fa fa-money-bill-alt"></i>
+                        <span>{{::roundData.selectionResults.playerSelectionData[player.playerData.index].moneyGains}}</span>
+                     </div>
+                     <div title="Gems earned this round">
+                        <i class="fa fa-gem"></i>
+                        <span>{{::roundData.selectionResults.playerSelectionData[player.playerData.index].gemsEarned}}</span>
+                     </div>
+                     <div title="Extra Buys earned this round">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>{{::roundData.selectionResults.playerSelectionData[player.playerData.index].totalAvailableBuys - player.playerData.availableBuys}}</span>
+                     </div>
+                     <div title="Points earned from cards">
+                        <i class="fa fa-award"></i>
+                        <span>{{::roundData.selectionResults.playerSelectionData[player.playerData.index].immediatePoints}}</span>
+                     </div>
+                     <div title="Points for Movement">
+                        <i class="fa fa-award"></i> For <i class="fa fa-map-marked-alt"></i>
+                        <span>{{::roundData.selectionResults.playerSelectionData[player.playerData.index].pointGains}}</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="sw-round-items">
+                  <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item {{$ctrl.getCardClass(item.effect)}}" ng-class="{'sw-item-effective': item.wasEffective}" ng-repeat="item in ::roundData.selectionResults.playerSelectionData[player.playerData.index].playedItems track by $index">
+                     <div>{{$ctrl.getCardName(item.effect)}} {{item.points}}</div>
+                     <i class="{{$ctrl.getCardIconClass(item.effect)}}"></i>
+                  </div>
+               </div>
+               <div class="sw-round-items sw-round-trash" ng-if="::roundData.selectionResults.playerSelectionData[player.playerData.index].trashedItems.length > 0">
+                  <div>Trashed:</div>
+                  <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item sw-round-item-large {{$ctrl.getCardClass(item.effect)}}" ng-repeat="item in ::roundData.selectionResults.playerSelectionData[player.playerData.index].trashedItems track by $index">
+                     <div>{{$ctrl.getCardName(item.effect)}} {{item.points}}</div>
+                     <i class="{{$ctrl.getCardIconClass(item.effect)}}"></i>
+                  </div>
+               </div>
+            </div>
+
+            <div ng-if="!roundData.buySelectionData">
+               Buy Results will show up after selections are made for all players.
+            </div>
+            <div ng-if="roundData.buySelectionData">
+               <div class="sw-round-content-header">
+                  Buy Results
+               </div>
+               <div class="sw-round-selection" ng-repeat="player in ::$ctrl.getPlayers()">
+                  <div class="sw-round-spoils">
+                     <div>{{::player.playerData.username}}</div>
+                     <div class="sw-round-spoils-stats sw-buy-spoils" on-long-press="$ctrl.viewRoundSpoilsInfo()" on-long-touch-end="$ctrl.exitInfo()">
+                        <div>
+                           <span>
+                              Bought
+                              <i class="far"
+                                 ng-class="{'fa-square': !roundData.buySelectionData.playerBuySelectionData[player.playerData.index].buyingItems,
+                                 'fa-check-square': roundData.buySelectionData.playerBuySelectionData[player.playerData.index].buyingItems}"></i>
+                           </span>
+                        </div>
+                        <div>
+                           <span>
+                              Scored
+                              <i class="far"
+                                 ng-class="{'fa-square': !roundData.buySelectionData.playerBuySelectionData[player.playerData.index].gainingPoints,
+                                 'fa-check-square': roundData.buySelectionData.playerBuySelectionData[player.playerData.index].gainingPoints}"></i>
+                           </span>
+                        </div>
+                        <div>
+                           <i class="fa fa-minus"></i><i class="fa fa-gem"></i>
+                           <span>{{::roundData.buySelectionData.playerBuySelectionData[player.playerData.index].gemsSpent}}</span>
+                        </div>
+                        <div>
+                           <i class="fa fa-plus"></i><i class="fa fa-map-pin"></i>
+                           <span>{{::roundData.buySelectionData.additionalStartingPoints[player.playerData.index]}}</span>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="sw-round-items">
+                     <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item sw-round-item-large {{$ctrl.getCardClass(item.effect)}}" ng-repeat="item in ::roundData.buySelectionData.playerBuySelectionData[player.playerData.index].items track by $index">
+                        <div>{{$ctrl.getCardName(item.effect)}} {{item.points}}</div>
+                        <i class="{{$ctrl.getCardIconClass(item.effect)}}"></i>
+                     </div>
+
+                     <div ng-click="$ctrl.clickEnhancement(enhancement)" class="sw-round-item sw-round-item-large sw-enhancement-background" ng-repeat="enhancement in ::roundData.buySelectionData.playerBuySelectionData[player.playerData.index].enhancements track by $index">
+                        <div>{{$ctrl.getEnhancementName(enhancement)}}</div>
+                        <i class="fa fa-gem"></i>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="sw-popup-footer sw-round-popup-footer">
+         <button class="btn btn-light" ng-click="$event.stopPropagation(); $ctrl.roundSummaryHelper.showPreviousRound()" ng-disabled="$ctrl.roundSummaryHelper.isPreviousDisabled()"><i class="fa fa-arrow-alt-circle-left"></i> Previous</button>
+         <button class="btn btn-light" ng-click="$event.stopPropagation(); $ctrl.roundSummaryHelper.showNextRound()" ng-disabled="$ctrl.roundSummaryHelper.isNextDisabled()">Next <i class="fa fa-arrow-alt-circle-right"></i></button>
+      </div>
+
+   </div>
+</div>

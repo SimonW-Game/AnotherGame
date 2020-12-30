@@ -1,0 +1,49 @@
+﻿<div id="sw-end-game-screen" class="sw-zoom-container">
+   <h1>Game Results</h1>
+   <div class="sw-end-game-bonuses" ng-if="::$ctrl.getBonuses().length > 0">
+      <h3>End Game Bonuses ({{::$ctrl.getBonusPointAmount()}} points each)</h3>
+      <table>
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Received</th>
+               <th>Amount</th>
+            </tr>
+         </thead>
+         <tr ng-repeat="bonus in ::$ctrl.getBonuses()">
+            <td>{{::$ctrl.getBonusName(bonus)}}</td>
+            <td> {{::$ctrl.getBonusWinners(bonus)}}</td>
+            <td> {{::$ctrl.getBonusAmount(bonus)}}</td>
+         </tr>
+      </table>
+   </div>
+   <div class="sw-end-game-player" ng-repeat="player in ::$ctrl.getPlayers()">
+      <div class="sw-end-game-spoils">
+         <div class="sw-end-game-name"><i ng-if="::$index == 0 || $ctrl.didPlayerWin(player)" class="fa fa-crown"></i><i ng-if="$ctrl.isPlayerTheUser(player)" class="fa fa-user"></i>{{::player.playerData.username}}</div>
+         <div class="sw-end-game-details" on-long-press="$ctrl.viewEndGameInfo()" on-long-touch-end="$ctrl.exitInfo()">
+            <div class="sw-end-game-points"><i class="fa fa-award"></i> <span>{{::player.playerData.totalScore}}</span></div>
+            <div><i class="fa fa-skull-crossbones"></i> <span>{{::player.playerData.totalBustedCount}}</span></div>
+            <div><i class="fa fa-map-pin"></i> <span>{{::player.playerData.startingPosition}}</span></div>
+            <div><i class="fa fa-hand-paper"></i> <span>{{::player.playerData.handSize}}</span></div>
+            <div><i class="fa fa-map-marked-alt"></i> <span>{{::player.playerData.totalMovedSquares}}</span></div>
+            <div><i class="far fa-clone"></i> <span>{{::player.playerData.totalCardsPlayed}}</span></div>
+            <div class="gem-count"><i class="fa fa-gem"></i> <span>{{::player.playerData.totalGameGemCount}}</span></div>
+            <div class=""><i class="fa fa-award"></i> For <i class="fa fa-money-bill-alt"></i> <span>{{::player.endGamePointsForMoney}}</span></div>
+            <div class=""><i class="fa fa-award"></i> For <i class="fa fa-gem"></i> <span>{{::player.endGamePointsForGems}}</span></div>
+            <div class=""><i class="fa fa-award"></i> For <i class="far fa-clone"></i> <span>{{::player.endGamePointsForCards}}</span></div>
+         </div>
+      </div>
+      <div class="sw-end-game-items">
+         <div ng-attr-class="sw-end-game-item {{$ctrl.getCardClass(item.effect)}}" ng-repeat="item in ::$ctrl.getPlayerItems(player) track by $index">
+            <div>{{$ctrl.getCardName(item.effect)}} {{item.amount > item.points ? item.amount : item.points}}</div>
+            <i class="{{$ctrl.getCardIconClass(item.effect)}}"></i>
+         </div>
+      </div>
+      <div class="sw-end-game-items sw-end-game-enhancements">
+         <div class="sw-end-game-item sw-enhancement-background" ng-repeat="enhancement in ::$ctrl.getPlayerEnhancements(player) track by $index">
+            <div>{{$ctrl.getEnhancementName(enhancement)}}</div>
+            <i class="fa fa-gem"></i>
+         </div>
+      </div>
+   </div>
+</div>
