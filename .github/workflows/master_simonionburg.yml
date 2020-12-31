@@ -31,5 +31,5 @@ jobs:
       with:
         app-name: 'simonionburg'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_1335ffde594a4426aad11a580e023d26 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ee77312c277e41ae8b92604be1e5fd70 }}
         package: .
