@@ -6,7 +6,7 @@ const app = express();
 //const http = require('http');
 
 
-const port = process.env.port || 1337;
+const port = process.env.port || 8080;
 
 
 //http.createServer(function (req, res) {
@@ -15,8 +15,8 @@ const port = process.env.port || 1337;
 //}).listen(port);
 
 app.use(express.static(__dirname + '/client'))
-app.get('/', (req, res) => res.sendFile(__dirname + '\\client\\views\\index.html'));
-const server = app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+app.get('/', (req, res) => res.sendFile(__dirname + '/client/views/index.html'));
+const server = app.listen(port, () => console.log(`listening at http://localhost:${port}`));
 
 const io = socketIo(server, { pingTimeout: 60000, pingInterval: 10000 });
 io.on('connection', (socket: socketIo.Socket) => {
