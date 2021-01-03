@@ -24,6 +24,7 @@
          </div>
          <div class="play-area-information-button" ng-click="$ctrl.clickInformation($ctrl.getItemFromPerk(perk), $event)"><i class="fa fa-info-circle"></i></div>
       </div>
+      <div class="sw-play-area-label" on-long-press="$ctrl.viewHandDetails()" on-long-touch-end="$ctrl.exitInfo()"><div>Your Hand</div></div>
    </div>
    <div ng-if="$ctrl.isWaitingForOthers()" class="action-area-scrollable-container sw-action-waitingForOthers">
       <div>Waiting For Other Players</div>

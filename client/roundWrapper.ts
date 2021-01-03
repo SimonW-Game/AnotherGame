@@ -51,7 +51,7 @@ class RoundWrapper {
 		this.scrollToIndex(playerData.startingPosition + helperPosition);
 
 		if (this.gameWrapper.game.options.enableTimeLimit)
-			this.timerHelper.startPreRoundCountdown(() => this.endSelectionTurn(true, true), gameWrapper.game.options.secondsPerPhase);
+			this.timerHelper.startPreRoundCountdown(() => this.endSelectionTurn(playerData, true, true), gameWrapper.game.options.secondsPerPhase);
 	}
 	public forceWaitingOnServer() { this.waitingOnServer = true; }
 	public isWaitingOnOthers() { return this.waitingOnServer; }
@@ -181,7 +181,7 @@ class RoundWrapper {
 		if (this.waitingOnServer) return;
 		if (this.selection.playedItems.length == 0 && this.gameWrapper.game.options.enableTimeLimit) {
 			// If we have a timer, make sure to start it now if it hadn't already.
-			this.timerHelper.startRoundTimer(() => this.endSelectionTurn(true, true), gameWrapper.game.options.secondsPerPhase);
+			this.timerHelper.startRoundTimer(() => this.endSelectionTurn(player, true, true), gameWrapper.game.options.secondsPerPhase);
 		}
 
 		// Reset after each played card.
@@ -307,7 +307,7 @@ class RoundWrapper {
 			}
 			else if (item.effect == itemEffect.DrawLowestNonBane) {
 				let lowestIndex = -1;
-				let lowestPoints = 3; // must be lower than 3.
+				let lowestPoints = 2; // must be lower than 2.
 				this.remainingItems.forEach((i, ndx) => {
 					if (i.effect != itemEffect.Bane) {
 						if (i.points < lowestPoints) {
@@ -318,6 +318,24 @@ class RoundWrapper {
 				});
 				if (lowestIndex >= 0) {
 					item.wasEffective = true;
+					this.currentHand.push(this.remainingItems.splice(lowestIndex, 1)[0]);
+					this.shuffleItems();
+					this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
+				}
+			}
+			else if (item.effect == itemEffect.BaneDrawer) {
+				// Find the first bane and draw it.
+				// Because this is rude, we'll give the option of ending your turn.
+				this.forceShowTurnOptions = true;
+				let lowestIndex = -1;
+				this.remainingItems.some((i, ndx) => {
+					if (i.effect == itemEffect.Bane) {
+						lowestIndex = ndx;
+						return true;
+					}
+					return false;
+				});
+				if (lowestIndex >= 0) {
 					this.currentHand.push(this.remainingItems.splice(lowestIndex, 1)[0]);
 					this.shuffleItems();
 					this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
@@ -368,6 +386,21 @@ class RoundWrapper {
 				if (moneyGains > 0)
 					item.wasEffective = true;
 			}
+			else if (item.effect == itemEffect.BonusForKeys) {
+				const playedKeysCount = Math.min(3, this.selection.playedItems.reduce((count, curItem) => curItem.effect == itemEffect.SpecialNoEffect ? (count + 1) : count, 0));
+				if (playedKeysCount > 0) {
+					item.wasEffective = true;
+					if (playedKeysCount > 1) {
+						this.selection.immediatePointGains += 1;
+						if (playedKeysCount > 2) {
+							this.selection.moneyGains += 1;
+							this.selection.gemGains += 1;
+						}
+					} else {
+						this.selection.moneyGains += 1;
+					}
+				}
+			}
 
 			// Add the item to a cached list for easier lookup than boardItems.
 			this.selection.playedItems.push(item);
@@ -389,7 +422,7 @@ class RoundWrapper {
 			if (item.effect == itemEffect.Bane) {
 				this.selection.baneCount += item.amount;
 				if (this.selection.baneCount > player.baneThreshold)
-					this.endSelectionTurn(false);
+					this.endSelectionTurn(player, false);
 			}
 
 			this.justDrawnCards = []; // If you played a card, you no longer "just drew" one.
@@ -426,14 +459,15 @@ class RoundWrapper {
 			}
 		} else if (item.effect == itemEffect.MovesForGems) {
 			// one space for every 4 gems, up to 3.
-			return Math.min(3, Math.floor(this.selection.gemGains / 4));
+			return Math.min(3, Math.floor(this.selection.gemGains / 5));
 		} else if (item.effect == itemEffect.EmptyHandMoves) {
 			// one space if your hand will be empty by playing this.
 			return this.currentHand.length == 1 ? 1 : 0;
 		}
-		else if (item.effect == itemEffect.Move5X) {
-			if (this.selection.currentLocation > 0 && this.selection.currentLocation % 5 == 0)
-				return 1;
+		else if (item.effect == itemEffect.MoveTo5) {
+			// If you are not landing on a multiple of 5 already.
+			if (this.selection.currentLocation % 5 != 0)
+				return (Math.ceil(this.selection.currentLocation / 5) * 5) - this.selection.currentLocation;
 		}
 		else if (item.effect == itemEffect.MoveNextGem) {
 			let extraSpaces = 0;
@@ -457,13 +491,35 @@ class RoundWrapper {
 			return false;
 		return this.forceShowTurnOptions || this.currentHand.length <= this.handSize - 1;
 	}
-	public endSelectionTurn(didNotBust: boolean, ranOutOfTime: boolean = false) {
+	public endSelectionTurn(playerData: IPlayerClientData, didNotBust: boolean, ranOutOfTime: boolean = false) {
 		if (this.waitingOnServer) return;
 		// Populate the points (so we only have one function for this as opposed to client and server).
+
+		this.selection.playedItems.forEach(item => {
+			if (item.effect == itemEffect.PointsForPassingGems) {
+				let gemBalance = 0;
+				let helperPosition = this.getExtraStartingPoint(playerData.index);
+				for (let i = playerData.startingPosition + helperPosition + 1; i < this.selection.currentLocation; i++) {
+					if (this.hasGem(i)) {
+						// If the spot has a gem, balance goes up if you played a card and down if not.
+						if (!this.boardItems[i])
+							gemBalance--;
+						else if (this.boardItems[i])
+							gemBalance++;
+					}
+				}
+				if (gemBalance < 0) {
+					// If you passed more gems than landing on, gain points.
+					item.wasEffective = true;
+					this.selection.immediatePointGains += -gemBalance; // inverse the gem balance as you gain points for being below the balance.
+				}
+			}
+		});
+
 		this.selection.pointGains = this.getSpacePoints(this.selection.currentLocation);
 		socket.emit("finishSelecting", this.gameWrapper.game.gameId, this.selection);
 		this.waitingOnServer = true;
-		if (!didNotBust) // Now that I've changed the name of this, it seems like a horrible name...
+		if (!didNotBust) // Now that I've changed the name of this, it seems like a horrible name... Not not
 			alert("Busted! (too many banes)");
 	}
 
@@ -499,7 +555,7 @@ class RoundWrapper {
 	}
 	public hasGem(index: number) {
 		for (let i = 1; i < 45; i++)
-			if (Math.floor(2.2 * i) == index)
+			if (Math.floor(2.1999 * i) == index)
 				return true;
 		return false;
 	}

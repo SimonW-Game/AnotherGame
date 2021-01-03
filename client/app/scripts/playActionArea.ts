@@ -22,10 +22,13 @@ interface IPlayActionComponent extends ng.IComponentController {
 	getAvailablePerks: () => noHandPerk[];
 	getPerkName: (perk: noHandPerk) => string;
 	getItemFromPerk: (perk: noHandPerk) => IItem;
+	viewHandDetails: () => void;
+	exitInfo: () => void;
+	isAssistMode: () => boolean;
 }
 
 function playActionFunc() {
-	const controllerFunc = function (userData: IUserData, gameWrapper: IGameWrapper, globalSettings: IGlobalSettings, roundWrapper: RoundWrapper, styleHelper: StyleHelper, cardInformationHelper: CardInformationHelper) {
+	const controllerFunc = function (userData: IUserData, gameWrapper: IGameWrapper, globalSettings: IGlobalSettings, roundWrapper: RoundWrapper, styleHelper: StyleHelper, cardInformationHelper: CardInformationHelper, hoverKeyHelper: HoverKeyHelper) {
 		var ctrl: IPlayActionComponent = this;
 		let player: IPlayer = gameWrapper.game.getPlayerByIndex(userData.index);
 
@@ -50,6 +53,9 @@ function playActionFunc() {
 		ctrl.getItemFromPerk = getItemFromPerk;
 		ctrl.getPerkName = (perk: noHandPerk) => styleHelper.getPerkName(perk);
 		ctrl.willLandOnGem = (item: IItem) => roundWrapper.willLandOnGem(item);
+		ctrl.viewHandDetails = () => hoverKeyHelper.show(infoKeyType.handInfo);
+		ctrl.exitInfo = () => hoverKeyHelper.close();
+		ctrl.isAssistMode = () => globalSettings.assistMode && !gameWrapper.game.options.disableAssistMode;
 
 		let endTurnWarning: boolean = false;
 
@@ -88,7 +94,7 @@ function playActionFunc() {
 				}
 			}
 			if ((canBust && !canPlayCard) || (roundWrapper.remainingItems.length == 0 && roundWrapper.currentHand.length == 0) || endTurnWarning) {
-				roundWrapper.endSelectionTurn(true);
+				roundWrapper.endSelectionTurn(player.playerData, true);
 				endTurnWarning = false;
 			}
 			else {
@@ -97,7 +103,8 @@ function playActionFunc() {
 		}
 		function getCardName(item: IItem) {
 			let cardName = styleHelper.getCardName(item.effect);
-			if (item.effect == itemEffect.GainExtraMoney)
+			if (item.effect == itemEffect.GainExtraMoney
+				|| item.effect == itemEffect.PointInvestment)
 				cardName = cardName + " " + item.amount;
 			return cardName;
 		}
@@ -123,14 +130,14 @@ function playActionFunc() {
 				return roundWrapper.currentHand[0] != item; // if this is not the leftmost card in your hand
 			} else if (item.effect == itemEffect.TrashItem) {
 				return roundWrapper.currentHand[0] != item; // if this is not the leftmost card in your hand
-			} else if (item.effect == itemEffect.Move5X) {
-				return roundWrapper.selection.currentLocation > 0 && roundWrapper.selection.currentLocation % 5 == 0; // if you are on a multiple of 5
+			} else if (item.effect == itemEffect.MoveTo5) {
+				return roundWrapper.getExtraMoves(item) > 0;
 			} else if (item.effect == itemEffect.Bane) {
 				return roundWrapper.getExtraMoves(item) > 0;
 			} else if (item.effect == itemEffect.GainPoints5X) {
 				return (roundWrapper.selection.currentLocation + item.points) % 5 == 0; // if you are landing on a multiple of 5
 			} else if (item.effect == itemEffect.MovesForGems) {
-				return roundWrapper.selection.gemGains >= 4; // if you've earned at least 4 gems.
+				return roundWrapper.selection.gemGains >= 5; // if you've earned at least 5 gems.
 			} else if (item.effect == itemEffect.EmptyHandGems) {
 				return roundWrapper.currentHand.length == 1; // if this is the only card in your hand, playing it would make your hand empty.
 			} else if (item.effect == itemEffect.DrawLowestNonBane) {

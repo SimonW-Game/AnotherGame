@@ -186,7 +186,7 @@ class StyleHelper {
 			cardClass = "sw-card-bonus-for-keys";
 		else if (effect == itemEffect.GainExtraBuy)
 			cardClass = "sw-card-gain-buy";
-		else if (effect == itemEffect.Move5X)
+		else if (effect == itemEffect.MoveTo5)
 			cardClass = "sw-card-move-5x";
 		else if (effect == itemEffect.BaneCountRemoval)
 			cardClass = "sw-card-bane-removal";
@@ -214,7 +214,7 @@ class StyleHelper {
 			cardClass = "sw-card-move-to-gem";
 		else if (effect == itemEffect.GemsForMoney)
 			cardClass = "sw-card-gem-for-money";
-		else if (effect == itemEffect.PointsForNoGems)
+		else if (effect == itemEffect.PointsForPassingGems)
 			cardClass = "sw-card-points-no-gems";
 		else if (effect == itemEffect.MoneyForPassingGems)
 			cardClass = "sw-card-money-pass-gem";
@@ -286,7 +286,7 @@ class StyleHelper {
 			cardClass = "fa fa-unlock-alt";
 		else if (effect == itemEffect.GainExtraBuy)
 			cardClass = "fa fa-shopping-basket";
-		else if (effect == itemEffect.Move5X)
+		else if (effect == itemEffect.MoveTo5)
 			cardClass = "fa fa-dice-five";
 		else if (effect == itemEffect.BaneCountRemoval)
 			cardClass = "fa fa-minus-square";
@@ -314,7 +314,7 @@ class StyleHelper {
 			cardClass = "fa fa-angle-double-right";
 		else if (effect == itemEffect.GemsForMoney)
 			cardClass = "fa fa-exchange-alt";
-		else if (effect == itemEffect.PointsForNoGems)
+		else if (effect == itemEffect.PointsForPassingGems)
 			cardClass = "fa fa-times-circle";
 		else if (effect == itemEffect.MoneyForPassingGems)
 			cardClass = "fa fa-circle-notch";
@@ -384,8 +384,8 @@ class StyleHelper {
 			cardName = "Bonus For Keys";
 		else if (effect == itemEffect.GainExtraBuy)
 			cardName = "Extra Buy";
-		else if (effect == itemEffect.Move5X)
-			cardName = "Move On 5";
+		else if (effect == itemEffect.MoveTo5)
+			cardName = "Move To 5n";
 		else if (effect == itemEffect.BaneCountRemoval)
 			cardName = "Remove Bane Count";
 		else if (effect == itemEffect.GainExtraMoney)
@@ -414,8 +414,8 @@ class StyleHelper {
 			cardName = "Move To Gem";
 		else if (effect == itemEffect.GemsForMoney)
 			cardName = "Gems for Money";
-		else if (effect == itemEffect.PointsForNoGems)
-			cardName = "Low Gems Points";
+		else if (effect == itemEffect.PointsForPassingGems)
+			cardName = "Passing Gems Points";
 		else if (effect == itemEffect.MoneyForPassingGems)
 			cardName = "Pass Gem Money";
 
@@ -458,11 +458,11 @@ class StyleHelper {
 		} else if (item.effect == itemEffect.ShuffleHand) {
 			description = "Shuffle the remaining cards in your hand back into your deck.";
 		} else if (item.effect == itemEffect.DrawLowestNonBane) {
-			description = "Draw the lowest moving 0-2 moving, non-bane card.  Ties decided randomly (attack cards can be drawn)";
+			description = "Draw the lowest 0-1 moving, non-bane card from your deck and add it to your hand.  Ties decided randomly (attack cards can be drawn)";
 		} else if (item.effect == itemEffect.GrowingMover) {
 			let additionalCardText: string;
 			if (item.points == 1)
-				additionalCardText = "1 space";
+				additionalCardText = "0 space";
 			else
 				additionalCardText = item.points + " spaces"
 
@@ -503,7 +503,7 @@ class StyleHelper {
 		} else if (item.effect == itemEffect.TaxCollector) {
 			description = "Adds a Tax to everyone else's deck during the next selection phase (Tax will be trashed after one round).  This effect stacks, send as many Taxes to your opponents as you can!";
 		} else if (item.effect == itemEffect.BaneDrawer) {
-			description = "When played, this will decrease the money you have to buy with during the buy phase by 10% (rounding down, or at least 1).  Taxes only last one round and will be trashed after the buy phase.";
+			description = "When played, this will draw the next bane in your deck (you will have the choice to end your turn).  Bane Drawers only last one round and will be trashed after the buy phase.";
 		} else if (item.effect == itemEffect.Tax) {
 			description = "When played, this will decrease the money you have to buy with during the buy phase by 10% (rounding down, or at least 1).  Taxes only last one round and will be trashed after the buy phase.";
 		} else if (item.effect == itemEffect.TrashItem) {
@@ -511,15 +511,22 @@ class StyleHelper {
 		} else if (item.effect == itemEffect.DiscardItem) {
 			description = "When played, discard the card to the left of this card.  If there are no cards to the left of this, it discards nothing.";
 		} else if (item.effect == itemEffect.PointInvestment) {
-			description = "Has no effect during the selection phase.  When played, it will earn you a point.  Then it will be trashed and you will be refunded half of the cost.";
+			let additionalText: string;
+			if (item.amount == 0)
+				additionalText = "1-2 points";
+			else if (item.amount == 1)
+				additionalText = "1 point";
+			else if (item.amount == 2)
+				additionalText = "2 points";
+			description = "When played, it will earn you " + additionalText + ".  Then it will be trashed and you will be refunded half of the cost.";
 		} else if (item.effect == itemEffect.PlayedMostReward) {
 			description = "Gains a bonus for playing more of these than others. Playing the least yields no reward. Playing more than one other player gains you 1 money for the buy phase.  Playing more than half of the other players also gives you starting location + 1.  If you played the most of these this round, gain a money, starting location + 1, and a point.";
 		} else if (item.effect == itemEffect.BonusForKeys) {
-			description = "Gains a bonus for keys played before this. 1 key = 1 extra money during buy phase.  2 keys = 1 point.  3 or more keys = 1 extra money and 1 point.";
+			description = "Gains a bonus for keys played before this. 1 key = 1 extra money during buy phase.  2 keys = 1 point.  3 or more keys = 1 money, 1 point, and 1 gem.";
 		} else if (item.effect == itemEffect.GainExtraBuy) {
 			description = "Gain an extra buy during the buy phase.  This effect stacks.";
-		} else if (item.effect == itemEffect.Move5X) {
-			description = "If you play this card while on a board space of a multiple of 5, move an extra space.";
+		} else if (item.effect == itemEffect.MoveTo5) {
+			description = "Move to the next board space multiple of 5 (Will not move if already on a multiple of 5).";
 		} else if (item.effect == itemEffect.BaneCountRemoval) {
 			description = "Remove a single bane counter.";
 		}
@@ -536,7 +543,7 @@ class StyleHelper {
 			description = "For every Bane 1 you play after this, it will move 2 spaces instead of 1.";
 		}
 		else if (item.effect == itemEffect.MovesForGems) {
-			description = "Move an extra space for every 4 gems you've earned this round so far, up to three spaces.";
+			description = "Move an extra space for every 5 gems you've earned this round so far, up to three spaces.";
 		}
 		else if (item.effect == itemEffect.DrawNoPenalty) {
 			description = "Draw your hand size + 1 with the additional option of ending your turn (for the next two cards you play before the effect wears off).";
@@ -568,11 +575,11 @@ class StyleHelper {
 			else
 				description = "If you have " + (item.amount * 3) + " or more gems, exchange them for " + item.amount + " money.";
 		}
-		else if (item.effect == itemEffect.PointsForNoGems) {
-			description = "Gain a point for every number below 4 gems you've earned at the end of this round.";
+		else if (item.effect == itemEffect.PointsForPassingGems) {
+			description = "At the end of the round, gain a point for every additional gem you passed more than gem you landed on.";
 		}
 		else if (item.effect == itemEffect.MoneyForPassingGems) {
-			description = "Gain 1 money for every gem you have not landed on so far.";
+			description = "Gain " + (item.amount > 1 ? item.amount : 1) + " money for every gem you have not landed on so far.";
 		}
 		return description;
 	}
@@ -879,6 +886,7 @@ enum infoKeyType {
 	roundResultSpoils,
 	tapTutorial,
 	endGame,
+	handInfo,
 }
 
 // This is copied to server/Game.ts...
@@ -904,12 +912,12 @@ enum itemEffect {
 	DiscardItem, // Discards the leftmost card in your hand.
 	PointInvestment, // Single use card that will grant you a point (you get most of your money back for buy phase when you play it).
 	GainExtraBuy, // Grants you an additional buy during the buy phase.
-	Move5X, // If you are on a board space multiple of 5, move an extra space.
+	MoveTo5, // Move to next multiple of 5.
 	GainPoints5X, // If you land on a multiple of 5, gain a point.
 	BaneCountRemoval, // Remove a bane counter
 	GainExtraMoney, // Gain extra money during the buy phase.
 	Bane1Moves2, // Future Bane 1's you play move 2 spaces.  Take that BaneGiver!
-	MovesForGems, // For each 4 gems you got this round, move an extra space (up to three).
+	MovesForGems, // For each 5 gems you got this round, move an extra space (up to three).
 	EmptyHandGems, // Gain 3 gems if played with an empty hand.
 	EmptyHandMoves, // Move an extra space if played with an empty hand.
 	IncreaseHandSize, // Increase hand size for the rest of the round
@@ -920,7 +928,7 @@ enum itemEffect {
 	MoveAndPoint, // Just moves and gives you points.
 	MoveNextGem, // Moves to the next gem.
 	GemsForMoney, // Removes 3 gems for 1 money.
-	PointsForNoGems, // point for each gem below 4 you are.
+	PointsForPassingGems, // point for each gem below 4 you are.
 	MoneyForPassingGems, // Get extra money for each gem you passed.
 	// Get Reward if you have the most of these played
 	// Decide if you want to add the previous card back to your deck.

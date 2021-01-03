@@ -76,11 +76,11 @@ function effectAddPopupComponentFunc() {
 			} else if (tabIndex == TAB_KEY) {
 				effects = [itemEffect.SpecialNoEffect, itemEffect.MoneyForSpecial, itemEffect.MovesForSpecial, itemEffect.SpecialAdjacentMover, itemEffect.BonusForKeys];
 			} else if (tabIndex == TAB_MOVERS) {
-				effects = [itemEffect.JustMove, itemEffect.MovesForSpecial, itemEffect.SpecialAdjacentMover, itemEffect.FarMoving, itemEffect.GrowingMover, itemEffect.CopyMover, itemEffect.Move5X, itemEffect.Bane1Moves2, itemEffect.MovesForGems, itemEffect.EmptyHandMoves, itemEffect.MoveNextGem];
+				effects = [itemEffect.JustMove, itemEffect.MovesForSpecial, itemEffect.SpecialAdjacentMover, itemEffect.FarMoving, itemEffect.GrowingMover, itemEffect.CopyMover, itemEffect.MoveTo5, itemEffect.Bane1Moves2, itemEffect.MovesForGems, itemEffect.EmptyHandMoves, itemEffect.MoveNextGem];
 			} else if (tabIndex == TAB_POINTS) {
-				effects = [itemEffect.BonusForKeys, itemEffect.GrowingPoints, itemEffect.PointInvestment, itemEffect.GainPoints5X, itemEffect.GainPointPerBuy, itemEffect.PlayedMostReward, itemEffect.MoveAndPoint, itemEffect.PointsForNoGems];
+				effects = [itemEffect.BonusForKeys, itemEffect.GrowingPoints, itemEffect.PointInvestment, itemEffect.GainPoints5X, itemEffect.GainPointPerBuy, itemEffect.PlayedMostReward, itemEffect.MoveAndPoint, itemEffect.PointsForPassingGems];
 			} else if (tabIndex == TAB_GEMS) {
-				effects = [itemEffect.MoneyForSpecial, itemEffect.GemLandingExtra, itemEffect.LastCardGem, itemEffect.MovesForGems, itemEffect.EmptyHandGems, itemEffect.GainExtraGemFromHere, itemEffect.MoveNextGem, itemEffect.GemsForMoney, itemEffect.PointsForNoGems, itemEffect.MoneyForPassingGems];
+				effects = [itemEffect.MoneyForSpecial, itemEffect.GemLandingExtra, itemEffect.LastCardGem, itemEffect.MovesForGems, itemEffect.EmptyHandGems, itemEffect.GainExtraGemFromHere, itemEffect.MoveNextGem, itemEffect.GemsForMoney, itemEffect.PointsForPassingGems, itemEffect.MoneyForPassingGems];
 			} else if (tabIndex == TAB_HAND) {
 				effects = [itemEffect.AddToHand, itemEffect.ShuffleHand, itemEffect.CopyOfPreviousCardToHand, itemEffect.TrashItem, itemEffect.DiscardItem, itemEffect.EmptyHandGems, itemEffect.EmptyHandMoves, itemEffect.IncreaseHandSize, itemEffect.DrawLowestNonBane];
 			} else if (tabIndex == TAB_PLAY_MORE) {

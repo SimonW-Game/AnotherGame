@@ -29,6 +29,8 @@ function infoKeyPopupComponentFunc() {
 				title = "Info Tutorial";
 			} else if (hoverKeyHelper.infoKey == infoKeyType.endGame) {
 				title = "End Game";
+			} else if (hoverKeyHelper.infoKey == infoKeyType.handInfo) {
+				title = "Hand Info";
 			}
 			return title;
 		}

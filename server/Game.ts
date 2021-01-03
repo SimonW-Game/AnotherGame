@@ -239,11 +239,6 @@ class Game {
 				} else if (item.effect == itemEffect.Tax) {
 					// Gotta do this here as we need to know how far we've moved.
 					playerSelectionData.moneyGains -= Math.max(1, Math.floor(playerSelectionData.moneyGains * .1));
-				} else if (item.effect == itemEffect.BonusForKeys) {
-					if (keysPlayed > 0)
-						playerSelectionData.moneyGains += 1;
-					if (keysPlayed > 1)
-						player.playerData.totalScore += 1;
 				} else if (item.effect == itemEffect.PlayedMostReward) {
 					playerPlayedMostCount.count++;
 				} else if (item.effect == itemEffect.GrowingMover) {
@@ -252,10 +247,6 @@ class Game {
 				} else if (item.effect == itemEffect.GrowingPoints) {
 					let growItem = player.playerData.items.find(i => i.effect == item.effect && i.points == item.points && i.amount == item.amount);
 					growItem.amount += 1;
-				} else if (item.effect == itemEffect.PointsForNoGems) {
-					// Could perhaps change if there was a way to gain gems from cards after the round ended?
-					if (playerSelectionData.gemsEarned < 4)
-						player.playerData.totalScore += 4 - playerSelectionData.gemsEarned;
 				}
 			});
 
@@ -347,8 +338,11 @@ class Game {
 			(effs: { [effect: number /*itemEffect*/]: IItem[] }, _, ndx) => {
 				this.options.effectsAvailable[ndx].forEach(e => {
 					const allItems = getAllItemsOfEffect(e);
-					if (allItems.length > 0)
+					if (allItems.length > 0) {
+						if (allItems[0].effect == itemEffect.MoveAndPoint)
+							allItems.splice(0, 1); // Remove the first
 						effs[e] = allItems;
+					}
 				});
 				return effs;
 			}, {});
@@ -682,7 +676,7 @@ export enum itemEffect {
 	DiscardItem,
 	PointInvestment,
 	GainExtraBuy,
-	Move5X,
+	MoveTo5,
 	GainPoints5X,
 	BaneCountRemoval,
 	GainExtraMoney,
@@ -698,7 +692,7 @@ export enum itemEffect {
 	MoveAndPoint,
 	MoveNextGem,
 	GemsForMoney,
-	PointsForNoGems,
+	PointsForPassingGems,
 	MoneyForPassingGems,
 
 

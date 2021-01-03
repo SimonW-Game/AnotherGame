@@ -127,6 +127,22 @@ body {
 		text-align: initial;
 	}
 
+.sw-info-key-popup .effective-border {
+	position: relative;
+	border: 2px solid black;
+}
+
+	.sw-info-key-popup .effective-border::after {
+		border: 2px dotted greenyellow;
+		border-radius: 4px;
+		content: " ";
+		position: absolute;
+		top: -2px;
+		bottom: -2px;
+		left: -2px;
+		right: -2px;
+	}
+
 #game-header {
 	position: fixed;
 	top: 0;
@@ -468,6 +484,25 @@ body {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+
+	#sw-action-area .action-area-scrollable-container .sw-play-area-label {
+		position: absolute;
+		top: 0;
+		left: 90%;
+		left: calc(90% - 1px);
+		right: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		border-left: 1px solid black;
+	}
+
+		#sw-action-area .action-area-scrollable-container .sw-play-area-label > div {
+			font-size: 4.5vh;
+			transform: rotate(90deg);
 		}
 
 #sw-scorebar {

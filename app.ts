@@ -18,7 +18,7 @@ app.use(express.static(__dirname + '/client'))
 app.get('/', (req, res) => res.sendFile(__dirname + '/client/views/index.html'));
 const server = app.listen(port, () => console.log(`listening at http://localhost:${port}`));
 
-const io = socketIo(server, { pingTimeout: 60000, pingInterval: 10000 });
+const io = socketIo(server, { pingTimeout: 120000, pingInterval: 25000 /*Default*/ });
 io.on('connection', (socket: socketIo.Socket) => {
 	socketHandler.setupSocket(io, socket);
 });

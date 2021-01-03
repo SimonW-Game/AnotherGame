@@ -1,4 +1,4 @@
-﻿<div class="sw-popup sw-popup-medium sw-popup-no-background" ng-if="$ctrl.hoverKeyHelper.infoKey != undefined" ng-click="$ctrl.hoverKeyHelper.close(); $event.stopPropagation();">
+﻿<div class="sw-popup sw-popup-medium sw-popup-no-background sw-info-key-popup" ng-if="$ctrl.hoverKeyHelper.infoKey != undefined" ng-click="$ctrl.hoverKeyHelper.close(); $event.stopPropagation();">
    <div class="sw-content">
       <div class="sw-popup-header">{{$ctrl.getHeaderText()}}</div>
       <div class="sw-popup-body">
@@ -12,6 +12,7 @@
             roundResultSpoils = 4,
             tapTutorial = 5,
             endGame = 6,
+            handInfo = 7,
          -->
          <div ng-if="$ctrl.hoverKeyHelper.infoKey == 0">
             <ul>
@@ -84,6 +85,20 @@
                <li class="hide-marker"><span><i class="fa fa-award"></i> For <i class="fa fa-map-marked-alt"></i></span>Points from last round money (none if busted).</li>
                <li class="hide-marker"><span><i class="fa fa-award"></i> For <i class="fa fa-gem"></i></span>Points for remaining gems.</li>
                <li class="hide-marker"><span><i class="fa fa-award"></i> For <i class="fa fa-clone"></i></span>Endgame points from cards.</li>
+            </ul>
+         </div>
+
+         <div ng-if="$ctrl.hoverKeyHelper.infoKey == 7">
+            <ul>
+               <li class="">These are the cards in your hand.</li>
+               <li class="">Tap/Click a card to play it.</li>
+               <li class="">Drawing will draw cards up to your hand size.</li>
+               <li class="hide-marker"><i class="fa fa-map-marked-alt"></i>How many spaces on the board the card will move you.</li>
+               <li class="hide-marker"><i class="fa fa-gem gem-count"></i>Playing a card with this icon means it will land on a gem.</li>
+               <li class="hide-marker"><i class="fa fa-square effective-border"></i>A card with a highlighted border can be played to trigger a special effect.</li>
+               <li class="hide-marker"><i class="fa fa-hand-holding-medical"></i>A card with this icon was added to your hand from the "Add To Hand" card.</li>
+               <li class="hide-marker"><i class="fa fa-skull-crossbones"></i>Playing a card with this icon will cause you to bust.</li>
+               <li class="hide-marker"><i class="fa fa-info-circle"></i>Tap/Click for info about the card.</li>
             </ul>
          </div>
 

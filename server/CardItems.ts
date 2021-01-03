@@ -65,16 +65,16 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		// This is meant to be drawn as a second buy, usually at the cost of a buying a higher tier card.
 		item.amount = 1;
 		item.points = 1;
-		item.cost = 8;
+		item.cost = 9;
 	} else if (effect == itemEffect.GrowingMover) {
-		// Horrible buy late in the game. You're paying almost 2 spaces worth for 0 space.
-		// Over the next 5 rounds, you'll be getting $16 worth for $7.
-		item.amount = 1;
-		item.points = 1;
+		// Horrible buy late in the game. You're paying 2 spaces worth for 0 space.
+		// Over the next 5 rounds, you'll be getting $16/17 worth for $8.
+		item.amount = 0;
+		item.points = 0;
 		item.cost = 8;
 	} else if (effect == itemEffect.GrowingPoints) {
 		// This sucks to have in your deck, but buying it 5 turns before the end will grant you 4 points.  Might be worth picking up.
-		// Miss a buy phase and get 4 points.  Buy on last round for 1 point.  Cheap enough to maybe buy a sucky card as well.  Decent enough to play with "empty hand" cards.
+		// Miss a buy phase and get 4 points.  Buy on last round for 0 point.  Cheap enough to maybe buy a sucky card as well.  Decent enough to play with "empty hand" cards.
 		item.amount = 0;
 		item.points = 0;
 		item.cost = 7;
@@ -131,7 +131,7 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 			item.cost = 18;
 	} else if (effect == itemEffect.LastCardGem) {
 		// If you play this last, you get $6 worth of gems making it worth $10 total.
-		// But you only get one of these and it cna be tough to achieve in later rounds.
+		// But you only get one of these and it can be tough to achieve in later rounds.
 		item.amount = 1;
 		item.points = 1;
 		item.cost = 5;
@@ -178,9 +178,11 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		item.cost = 12;
 	} else if (effect == itemEffect.PointInvestment) {
 		// This gives you back $4.  $8 - $4 for the refund is $4 for a point, not bad. Aside from being able to buy something big tt round.
-		item.amount = 1;
+		// added second level, $14 for 2 points getting back $7 for next round.
+		points = Math.min(2, points);
+		item.amount = points;
 		item.points = 0;
-		item.cost = 8;
+		item.cost = 2 + (6 * points);
 	} else if (effect == itemEffect.GainExtraBuy) {
 		// Really good with the correct deck.  Balance off the correct deck.
 		// $4/$8 for movement.  $2 for each buy, discount $1 on the second buy.
@@ -191,20 +193,19 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 			item.cost = 6;
 		else
 			item.cost = 13;
-	} else if (effect == itemEffect.Move5X) {
-		// As it is fairly easy to hold on to a card,
-		// Make the base movement cost $4 per space and $3 for the extra space.
+	} else if (effect == itemEffect.MoveTo5) {
+		// This will move you at most 4 spaces.  If randomly played, it would move you 2 spaces ($8).
+		// If you try to move more than that, you will on average.  It isn't hard to get the full affect making it a very budget 4 moving card.
+		item.points = 0;
 		item.amount = 1;
-		item.cost = 2 + (item.points * 4); // 6,10,14,19
-		if (item.points == 4)
-			item.cost++;
+		item.cost = 12 // 12
 	} else if (effect == itemEffect.BaneCountRemoval) {
 		// Chaining these together is really good.
 		// Extra movement with this effect is really good as well (less tradeoff to get a good effect without movement penalty).
 		// $10 to remove a bane counter. $4 to move one, $6 to move a second time.
 		points = Math.min(2, points);
 		item.points = points;
-		item.amount = points;
+		item.amount = 1;
 		if (points == 1)
 			item.cost = 14;
 		else
@@ -275,9 +276,9 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		else if (item.points == 4)
 			item.cost = 18;
 	} else if (effect == itemEffect.MoveNextGem) {
-		//Typically this will be used for 2 spaces forward, but could occasionally be used for 3 spaces.
+		// Typically this will be used for 2 spaces forward, but could occasionally be used for 3 spaces.
 		// Could easily be missed to only move a single space open.
-		item.cost = 8;
+		item.cost = 7;
 	} else if (effect == itemEffect.GemsForMoney) {
 		// This is an approximately "fair" tradeoff.  Presumably your goal will either be not getting gems (except the minimum for this effect),
 		//  or getting a lot of gems and using this as a money gemerator.
@@ -286,11 +287,11 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		item.cost = (item.points * 4) + 1;
 		if (item.points == 3)
 			item.cost++;
-	} else if (effect == itemEffect.PointsForNoGems) {
+	} else if (effect == itemEffect.PointsForPassingGems) {
 		// Could earn up to 4 points per round.  Especially combined with gems for money or when not moving very far on purpose.
 		item.points = 0;
 		item.amount = 1;
-		item.cost = 7;
+		item.cost = 9;
 	} else if (effect == itemEffect.MoneyForPassingGems) {
 		item.points = 1;
 		item.amount = Math.min(2, points);
@@ -322,7 +323,6 @@ export function getAllItemsOfEffect(effect: itemEffect) {
 		case itemEffect.BaneGiver:
 		case itemEffect.TrashItem:
 		case itemEffect.DiscardItem:
-		case itemEffect.PointInvestment:
 		case itemEffect.BonusForKeys:
 		case itemEffect.Bane1Moves2:
 		case itemEffect.EmptyHandGems:
@@ -332,7 +332,8 @@ export function getAllItemsOfEffect(effect: itemEffect) {
 		case itemEffect.PlayedMostReward:
 		case itemEffect.DrawLowestNonBane:
 		case itemEffect.MoveNextGem:
-		case itemEffect.PointsForNoGems:
+		case itemEffect.PointsForPassingGems:
+		case itemEffect.MoveTo5:
 			maxSize = 1;
 			break;
 
@@ -344,6 +345,7 @@ export function getAllItemsOfEffect(effect: itemEffect) {
 		case itemEffect.GainPoints5X:
 		case itemEffect.EmptyHandMoves:
 		case itemEffect.MoneyForPassingGems:
+		case itemEffect.PointInvestment:
 			maxSize = 2;
 			break;
 
@@ -355,7 +357,6 @@ export function getAllItemsOfEffect(effect: itemEffect) {
 		case itemEffect.MovesForSpecial:
 		case itemEffect.AddToHand:
 		case itemEffect.RemovePreviousBane:
-		case itemEffect.Move5X:
 		case itemEffect.GainExtraMoney:
 		case itemEffect.MoveAndPoint:
 		case itemEffect.JustMove:

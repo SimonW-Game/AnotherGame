@@ -7,8 +7,8 @@ export function getDefaultGameOptions(): IGameOptions {
 	options.effectsAvailable[0] = [itemEffect.GainExtraGemFromHere, itemEffect.EmptyHandGems, itemEffect.MovesForGems, itemEffect.PointInvestment, itemEffect.DrawLowestNonBane, itemEffect.MoveAndPoint];
 	options.effectsAvailable[1] = [itemEffect.PlayedMostReward, itemEffect.GainPointPerBuy, itemEffect.GainPoints5X, itemEffect.AddToHand];
 
-	options.forceBuys[2] = [{ effect: itemEffect.Bane, points: 1, amount: 0, cost: 0 }];
-	options.forceBuys[5] = [{ effect: itemEffect.Bane, points: 2, amount: 0, cost: 0 }];
+	options.forceBuys[2] = [{ effect: itemEffect.Bane, points: 2, amount: 0, cost: 0 }];
+	options.forceBuys[6] = [{ effect: itemEffect.Bane, points: 2, amount: 0, cost: 0 }];
 
 	return options;
 }
@@ -68,9 +68,9 @@ export function getAttackGameOptions(): IGameOptions {
 
 	options.enhancementsAvailable[0] = [purchaseEnhancement.IncreaseStartingSquare, purchaseEnhancement.ExtraMoney, purchaseEnhancement.GainTwoPoints];
 	options.effectsAvailable[0] = [itemEffect.DiscardItem, itemEffect.GemLandingExtra, itemEffect.GemLandingExtra, itemEffect.ShuffleHand, itemEffect.GainPoints5X, itemEffect.TaxCollector, itemEffect.BaneGiver];
-	options.effectsAvailable[2] = [itemEffect.PointInvestment, itemEffect.Move5X];
+	options.effectsAvailable[2] = [itemEffect.PointInvestment, itemEffect.MoveTo5];
 
-	options.forceBuys[2] = [{ effect: itemEffect.Bane, points: 1, amount: 0, cost: 0 }];
+	options.forceBuys[2] = [{ effect: itemEffect.Bane, points: 2, amount: 0, cost: 0 }];
 	options.forceBuys[6] = [{ effect: itemEffect.Bane, points: 2, amount: 0, cost: 0 }];
 
 	return options;
@@ -102,9 +102,8 @@ function getBaseOptions(rounds: number = 9, startingEffects: itemEffect[] = [ite
 		endGameGemsForPoints: 8,
 		endGameMoneyForPoints: 8,
 		startingHand: [
-			...new Array(4).fill({ effect: itemEffect.Bane, points: 1, amount: 0, cost: 0 }),
+			...new Array(5).fill({ effect: itemEffect.Bane, points: 1, amount: 0, cost: 0 }),
 			...new Array(2).fill({ effect: itemEffect.Bane, points: 2, amount: 0, cost: 0 }),
-			...new Array(1).fill({ effect: itemEffect.Bane, points: 3, amount: 0, cost: 0 }),
 			...startingEffects.map(e => { return { effect: e, points: 1, amount: 0, cost: 0 }; }),
 		],
 		effectsAvailable: effectsAvailable,
