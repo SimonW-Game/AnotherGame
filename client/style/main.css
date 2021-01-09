@@ -435,7 +435,7 @@ body {
 		overflow-y: hidden;
 		align-items: center;
 		height: 100%;
-		width: 100%;
+		width: 90%;
 		white-space: nowrap;
 		flex-direction: column;
 		display: flex;
@@ -498,6 +498,7 @@ body {
 		justify-content: center;
 		cursor: pointer;
 		border-left: 1px solid black;
+		background: white;
 	}
 
 		#sw-action-area .action-area-scrollable-container .sw-play-area-label > div {

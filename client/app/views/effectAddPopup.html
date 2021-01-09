@@ -6,7 +6,7 @@
             Amount {{$ctrl.effectChooserHelper.amount}}:
             <input type="range" min="1" max="4" ng-model="$ctrl.effectChooserHelper.amount" />
          </div>
-         <ul class="nav nav-tabs">
+         <ul ng-if="$ctrl.effectChooserHelper.showEffect" class="nav nav-tabs">
             <li class="nav-item"><span class="nav-link" ng-class="{'active':$ctrl.isTabActive(0)}" ng-click="$ctrl.clickTab(0)">All</span></li>
             <li class="nav-item"><span class="nav-link" ng-class="{'active':$ctrl.isTabActive(1)}" ng-click="$ctrl.clickTab(1)">Keys</span></li>
             <li class="nav-item"><span class="nav-link" ng-class="{'active':$ctrl.isTabActive(2)}" ng-click="$ctrl.clickTab(2)">Movers</span></li>

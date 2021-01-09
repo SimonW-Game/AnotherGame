@@ -72,18 +72,6 @@ function gameController($scope: ng.IScope,
 			roundWrapper.startBuyRound(playerData);
 			$scope.$apply();
 		});
-		socket.on("showGameResults", function (roundData: IRoundData, playerDatas: IPlayerClientData[], endGameInfo: IEndGameInfo) {
-			gameWrapper.game.currentRound.selectionResults = roundData.selectionResults;
-			gameWrapper.game.roundPhaseStatus = RoundPhaseStatus.GameAnalysisPhase;
-			gameWrapper.endGameInfo = endGameInfo;
-
-			// I don't think we want to force users to look at the round, but I could be mistaken.
-			//roundSummaryHelper.showCurrentRound();
-
-			updatePlayerData(playerDatas);
-
-			$scope.$apply();
-		});
 		socket.on("roundEnd", function (roundData: IRoundData, playerDatas: IPlayerClientData[], currentRoundData: IRoundData) {
 			// If last round is finished, gonna need to do something else.
 			updatePlayerData(playerDatas);
@@ -93,6 +81,21 @@ function gameController($scope: ng.IScope,
 			gameWrapper.game.completedRounds.push(gameWrapper.game.currentRound);
 			gameWrapper.game.currentRound = currentRoundData;
 			roundWrapper.startPlayPhase(userData.index); // Don't stop the gameplay.
+
+			$scope.$apply();
+		});
+		socket.on("showGameResults", function (roundData: IRoundData, playerDatas: IPlayerClientData[], endGameInfo: IEndGameInfo) {
+			gameWrapper.game.currentRound.selectionResults = roundData.selectionResults;
+			gameWrapper.game.roundPhaseStatus = RoundPhaseStatus.GameAnalysisPhase;
+			gameWrapper.endGameInfo = endGameInfo;
+
+			// I don't think we want to force users to look at the round, but I could be mistaken.
+			//roundSummaryHelper.showCurrentRound();
+
+			// Don't show people as done with phase at the end of the game.
+			gameWrapper.game.players.forEach(p => p.isWaitingOnOthers = false);
+
+			updatePlayerData(playerDatas);
 
 			$scope.$apply();
 		});

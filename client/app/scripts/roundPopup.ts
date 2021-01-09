@@ -6,7 +6,7 @@ interface IRoundPopupComponent extends ng.IComponentController {
 	getRoundHeader: () => string;
 	getWinningPlayers: () => string;
 	getPlayerSelections: () => { selection: IPlayerSelectionData, player: IPlayer }[];
-	getCardName: (effect: itemEffect) => string;
+	getCardNameAndAmount: (card: IItem) => string;
 	getCardIconClass: (effect: itemEffect) => string;
 	getCardClass: (effect: itemEffect) => string;
 	clickItem: (item: IItem) => void;
@@ -24,7 +24,7 @@ function roundPopupComponentFunc() {
 		$ctrl.getWinningPlayers = getWinningPlayers;
 		$ctrl.getPlayerSelections = getPlayerSelections;
 		$ctrl.getPlayers = () => styleHelper.getPlayers(player);
-		$ctrl.getCardName = (effect: itemEffect) => styleHelper.getCardName(effect);
+		$ctrl.getCardNameAndAmount = getCardNameAndAmount;
 		$ctrl.getEnhancementName = (enhancement: purchaseEnhancement) => styleHelper.getEnhancementName(enhancement);
 		$ctrl.getCardIconClass = (effect: itemEffect) => styleHelper.getCardIconClass(effect);
 		$ctrl.getCardClass = (effect: itemEffect) => styleHelper.getCardClass(effect);
@@ -56,6 +56,16 @@ function roundPopupComponentFunc() {
 				};
 				return info;
 			});
+		}
+		function getCardNameAndAmount(card: IItem) {
+			let name = styleHelper.getCardName(card.effect);
+			if (card.effect == itemEffect.PlayCardMovement)
+				name += " " + card.points;
+			else if (card.amount > card.points)
+				name += " " + card.amount;
+			else
+				name += " " + card.points;
+			return name;
 		}
 	};
 

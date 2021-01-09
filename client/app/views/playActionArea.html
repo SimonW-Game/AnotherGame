@@ -13,7 +13,7 @@
          <div class="play-area-information-button" ng-click="$ctrl.clickInformation(item, $event)"><i class="fa fa-info-circle"></i></div>
       </div>
       <div ng-if="$ctrl.giveTurnOptions()" class="play-area-action-item">
-         <div class="play-area-draw" ng-click="$ctrl.drawItems(item, $event)">Draw</div>
+         <div class="play-area-draw" ng-click="$ctrl.drawItems(item, $event)">{{$ctrl.getDrawText()}}</div>
          <div class="play-area-end-turn" ng-class="{'play-area-end-warning': $ctrl.isEndTurnWarning()}" ng-click="$ctrl.endTurn()">End</div>
       </div>
       <div ng-repeat="perk in $ctrl.getAvailablePerks()" class="play-area-action-item sw-playing-card sw-perk-card" ng-click="$ctrl.clickPerk(perk)">

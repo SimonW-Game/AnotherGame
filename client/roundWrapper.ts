@@ -18,6 +18,7 @@ class RoundWrapper {
 	public cardDiscount: number;
 	public handSize: number;
 	public gemGainedOnLanding: number;
+	public gemGainedOnPassing: number;
 	public totalAvailableBuys: number;
 	public canBuyDuplicate: boolean;
 	public constructor($rootscope: ng.IRootScopeService, gameWrapper: IGameWrapper, globalSettings: IGlobalSettings, $timeout: ng.ITimeoutService) {
@@ -38,6 +39,7 @@ class RoundWrapper {
 		this.cardDiscount = 0;
 		this.handSize = 0;
 		this.gemGainedOnLanding = 1;
+		this.gemGainedOnPassing = 0;
 		this.totalAvailableBuys = 0;
 		this.canBuyDuplicate = false;
 		this.timerHelper = new TimerHelper($timeout);
@@ -50,6 +52,17 @@ class RoundWrapper {
 		let helperPosition = this.getExtraStartingPoint(playerIndex);
 		this.scrollToIndex(playerData.startingPosition + helperPosition);
 
+		this.gemGainedOnLanding = 1;
+		let previousRound = gameWrapper.game.completedRounds[gameWrapper.game.completedRounds.length - 1];
+		if (previousRound) {
+			previousRound.buySelectionData.playerBuySelectionData[playerIndex].enhancements.forEach(e => {
+				if (e == purchaseEnhancement.NextRoundGemsUp)
+					this.gemGainedOnLanding += 1;
+				else if (e == purchaseEnhancement.IncreaseBaneThreshold)
+					this.selection.baneCount -= 1;
+			});
+		}
+
 		if (this.gameWrapper.game.options.enableTimeLimit)
 			this.timerHelper.startPreRoundCountdown(() => this.endSelectionTurn(playerData, true, true), gameWrapper.game.options.secondsPerPhase);
 	}
@@ -57,10 +70,11 @@ class RoundWrapper {
 	public isWaitingOnOthers() { return this.waitingOnServer; }
 	private startNewRound(player: IPlayerClientData) {
 		this.remainingItems = [...player.items]; // Shallow copy as we aren't modifying the items.
-		this.currentHand = []; // Start with an empty hand.		let previousRound = gameWrapper.game.completedRounds[gameWrapper.game.completedRounds.length - 1];
+		this.currentHand = []; // Start with an empty hand.
 		this.justDrawnCards = [];
 		this.handSize = player.handSize;
-		this.gemGainedOnLanding = 1;
+
+		this.gemGainedOnPassing = 0;
 
 		this.gameWrapper.game.players.forEach(p => p.isWaitingOnOthers = false);
 
@@ -68,6 +82,18 @@ class RoundWrapper {
 		this.shuffleItems();
 		this.boardItems = new Array(100);
 		this.waitingOnServer = false;
+	}
+	private resetSelection(player: IPlayerClientData) {
+		this.selection.playedItems = [];
+		this.selection.trashedCard = [];
+		this.selection.gemGains = 0;
+		this.selection.moneyGains = 0;
+		this.selection.additionalBuys = 0;
+		this.selection.immediatePointGains = 0;
+		this.selection.hasPerkAvailable = player.hasPerkAvailable;
+		let helperPosition = this.getExtraStartingPoint(player.index);
+		this.selection.currentLocation = player.startingPosition + helperPosition;
+		this.selection.baneCount = 0;
 	}
 	public getExtraStartingPoint(playerIndex: number) {
 		let helperPosition = 0
@@ -103,18 +129,6 @@ class RoundWrapper {
 		if (this.gameWrapper.game.options.enableTimeLimit)
 			this.timerHelper.startPreRoundCountdown(() => this.endBuyTurn(true), gameWrapper.game.options.secondsPerPhase);
 	}
-	private resetSelection(player: IPlayerClientData) {
-		this.selection.playedItems = [];
-		this.selection.trashedCard = [];
-		this.selection.gemGains = 0;
-		this.selection.moneyGains = 0;
-		this.selection.additionalBuys = 0;
-		this.selection.immediatePointGains = 0;
-		this.selection.hasPerkAvailable = player.hasPerkAvailable;
-		let helperPosition = this.getExtraStartingPoint(player.index);
-		this.selection.currentLocation = player.startingPosition + helperPosition;
-		this.selection.baneCount = 0;
-	}
 	public getSelection() {
 		return this.selection;
 	}
@@ -124,27 +138,41 @@ class RoundWrapper {
 
 	public drawHand(player: IPlayerClientData, handSize: number = undefined) {
 		if (this.waitingOnServer) return;
-		this.clearExtraCards();
-		this.forceShowTurnOptions = false;
-		handSize = handSize || this.handSize;
-		let didDrawVirus = false;
-		this.justDrawnCards = [];
-		while (this.currentHand.length < handSize && this.remainingItems.length > 0) {
-			let newCard = this.remainingItems.splice(0, 1)[0]
-			this.currentHand.push(newCard);
-			this.justDrawnCards.push(newCard);
-			if (newCard.effect == itemEffect.Virus)
-				didDrawVirus = true;
-		}
 
-		// Check effects with functions when drawn (just virus right now)
-		if (didDrawVirus && this.currentHand.length > 1) {
-			let nonVirusIndex = this.currentHand.findIndex(i => i.effect != itemEffect.Virus);
-			if (nonVirusIndex >= 0) {
-				let removedCard = this.currentHand.splice(nonVirusIndex, 1)[0];
-				this.remainingItems.push(removedCard);
-				this.shuffleItems();
-				this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
+		handSize = handSize || this.handSize;
+
+		if (this.extraCardsInHand.length > 0) {
+			this.clearExtraCards();
+		} else if (this.currentHand.length >= handSize) {
+			// If you already have a full hand, just return.
+			return;
+		} else {
+			this.clearExtraCards();
+			const handSizeBeforeDrawing = this.currentHand.length;
+			this.forceShowTurnOptions = false;
+			let didDrawVirus = false;
+			this.justDrawnCards = [];
+			while (this.currentHand.length < handSize && this.remainingItems.length > 0) {
+				let newCard = this.remainingItems.splice(0, 1)[0]
+				this.currentHand.push(newCard);
+				this.justDrawnCards.push(newCard);
+				if (newCard.effect == itemEffect.Virus)
+					didDrawVirus = true; // Take it outside (of this loop as it's functionality is larger and relies on the entire hand).
+				else if (newCard.effect == itemEffect.JustDrewEmptyMover)
+					newCard.wasEffective = true;
+				else if (newCard.effect == itemEffect.JustDrewEmptyBonus)
+					newCard.wasEffective = true;
+			}
+
+			// Check effects with functions when drawn (just virus right now)
+			if (didDrawVirus && this.currentHand.length > 1) {
+				let nonVirusIndex = this.currentHand.findIndex(i => i.effect != itemEffect.Virus);
+				if (nonVirusIndex >= 0) {
+					let removedCard = this.currentHand.splice(nonVirusIndex, 1)[0];
+					this.remainingItems.push(removedCard);
+					this.shuffleItems();
+					this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
+				}
 			}
 		}
 
@@ -177,7 +205,7 @@ class RoundWrapper {
 			this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
 		}
 	}
-	public playItem(player: IPlayerClientData, item: IItem) {
+	public playCard(player: IPlayerClientData, card: IItem) {
 		if (this.waitingOnServer) return;
 		if (this.selection.playedItems.length == 0 && this.gameWrapper.game.options.enableTimeLimit) {
 			// If we have a timer, make sure to start it now if it hadn't already.
@@ -193,97 +221,106 @@ class RoundWrapper {
 				this.forceShowTurnOptions = false;
 		}
 
-		let itemIndex = this.currentHand.findIndex(i => i == item);
+		let itemIndex = this.currentHand.findIndex(i => i == card);
 
 		// Before removing from hand, check it's location.  Do these effects first.
-		if (item.effect == itemEffect.TrashItem) {
+		if (card.effect == itemEffect.TrashItem) {
 			// if you have a card in your hand to the left of this, trash it!
 			if (itemIndex > 0) {
-				item.wasEffective = true;
+				card.wasEffective = true;
 				let removedItem = this.currentHand.splice(itemIndex - 1, 1)[0]; // Same as trash, but don't put it in the trashed card's list
 				this.selection.trashedCard.push(removedItem);
 				const extraCardIndex = this.extraCardsInHand.findIndex(i => i == removedItem);
 				if (extraCardIndex >= 0)
 					this.extraCardsInHand.splice(extraCardIndex, 1);
-				itemIndex = this.currentHand.findIndex(i => i == item);
+				itemIndex = this.currentHand.findIndex(i => i == card);
 			}
 		}
-		else if (item.effect == itemEffect.DiscardItem) {
+		else if (card.effect == itemEffect.DiscardItem) {
 			// if you have a card in your hand, discard it!
 			if (itemIndex > 0) {
-				item.wasEffective = true;
+				card.wasEffective = true;
 				let removedItem = this.currentHand.splice(itemIndex - 1, 1)[0]; // Same as trash, but don't put it in the trashed card's list
 				const extraCardIndex = this.extraCardsInHand.findIndex(i => i == removedItem);
 				if (extraCardIndex >= 0)
 					this.extraCardsInHand.splice(extraCardIndex, 1);
-				itemIndex = this.currentHand.findIndex(i => i == item);
+				itemIndex = this.currentHand.findIndex(i => i == card);
 			}
 		}
 
 		// Before removing the card from your hand, check how many extra moves we get
 		// Have to do this prior to removing the card as it needs to be consistent with card text.
-		const extraMoves = this.getExtraMoves(item);
+		const extraMoves = this.getExtraMoves(card);
+		let movedSpaces = card.points + extraMoves;
 
 		// Remove the card from your hand.
 		if (itemIndex >= 0)
 			this.currentHand.splice(itemIndex, 1);
 
-		this.clearExtraCards(item);
+		// After removing the card, check the remaining cards to see if any of them have special effects when held
+		this.currentHand.forEach(c => {
+			if (c.effect == itemEffect.PlayCardMovement)
+				c.amount += 1;
+		});
+
+		this.clearExtraCards(card);
 
 		let previousLocation = this.selection.currentLocation;
 
 		// Don't play the card if it's passed the limit.
-		if (this.selection.currentLocation + item.points < 100) {
+		if (this.selection.currentLocation + card.points < 100) {
 			// play the item on the board.
-			this.selection.currentLocation += item.points + extraMoves;
+			this.selection.currentLocation += movedSpaces;
 			if (extraMoves > 0)
-				item.wasEffective = true;
+				card.wasEffective = true;
 
 			// Check each item effect for something that needs to be done:
-			if (item.effect == itemEffect.RemovePreviousBane) {
-				if (this.didJustDraw(item)) {
+			if (card.effect == itemEffect.RemovePreviousBane) {
+				if (this.didJustDraw(card)) {
 					let previousItem = this.selection.playedItems[this.selection.playedItems.length - 1];
 					if (this.selection.playedItems.length > 0
 						&& previousItem.effect == itemEffect.Bane) {
-						item.wasEffective = true;
+						card.wasEffective = true;
 						// Remove it from the board, then add it back to the deck (still appears as a played item).
 						this.boardItems.splice(previousLocation, 1);
-						this.selection.baneCount -= previousItem.points;
+						this.selection.baneCount -= 1; // previousItem.amount; // Attempting to make it less OP?
 						this.remainingItems.push(previousItem);
 						this.shuffleItems();
 						this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
 					}
 				}
 			}
-			else if (item.effect == itemEffect.CopyOfPreviousCardToHand) {
-				if (this.selection.playedItems.length > 0 && this.didJustDraw(item)) {
-					item.wasEffective = true;
+			else if (card.effect == itemEffect.CopyOfPreviousCard) {
+				if (this.selection.playedItems.length > 0 && this.didJustDraw(card)) {
+					card.wasEffective = true;
 					this.forceShowTurnOptions = true;
 					let lastItem = this.selection.playedItems.splice(this.selection.playedItems.length - 1, 1)[0];
-					for (let i = 0; i < item.amount; i++)
-						this.currentHand.push(lastItem);
+					for (let i = 0; i < card.amount; i++)
+						this.remainingItems.push(lastItem);
+					this.shuffleItems();
+					this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
 				}
 			}
-			else if (item.effect == itemEffect.Virus) {
-				this.remainingItems.push(item);
+			else if (card.effect == itemEffect.Virus) {
+				this.remainingItems.push(card);
 				this.shuffleItems();
 				this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
 			}
-			else if (item.effect == itemEffect.GainExtraBuy) {
-				this.selection.additionalBuys += item.amount;
+			else if (card.effect == itemEffect.GainExtraBuy) {
+				this.selection.additionalBuys += card.amount;
 			}
-			else if (item.effect == itemEffect.BaneCountRemoval) {
+			else if (card.effect == itemEffect.BaneCountRemoval) {
 				this.selection.baneCount = Math.max(0, this.selection.baneCount - 1);
 			}
-			else if (item.effect == itemEffect.GainPoints5X) {
+			else if (card.effect == itemEffect.GainPoints5X) {
 				if ((this.selection.currentLocation) % 5 == 0) {
 					this.selection.immediatePointGains += 2;
-					item.wasEffective = true;
+					card.wasEffective = true;
 				}
-			} else if (item.effect == itemEffect.AddToHand) {
+			} else if (card.effect == itemEffect.AddToHand) {
 				this.forceShowTurnOptions = true;
 				this.extraCardsInHand = [];
-				let amount = item.amount;
+				let amount = card.amount;
 				while (amount > 0 && this.remainingItems.length > 0) {
 					this.extraCardsInHand.push(this.remainingItems.splice(0, 1)[0])
 					amount--;
@@ -291,21 +328,21 @@ class RoundWrapper {
 				this.currentHand.push(...this.extraCardsInHand);
 				this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
 			}
-			else if (item.effect == itemEffect.MoneyForSpecial) {
+			else if (card.effect == itemEffect.GemsForKeys) {
 				const additionalGems = Math.min(3, this.selection.playedItems.reduce((count, curItem) => curItem.effect == itemEffect.SpecialNoEffect ? (count + 1) : count, 0));
 				this.selection.gemGains += additionalGems;
 				if (additionalGems > 0)
-					item.wasEffective = true;
+					card.wasEffective = true;
 			}
-			else if (item.effect == itemEffect.ShuffleHand) {
+			else if (card.effect == itemEffect.ShuffleHand) {
 				if (this.currentHand.length > 0)
-					item.wasEffective = true;
+					card.wasEffective = true;
 				this.remainingItems.push(...this.currentHand);
 				this.currentHand = [];
 				this.shuffleItems();
 				this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
 			}
-			else if (item.effect == itemEffect.DrawLowestNonBane) {
+			else if (card.effect == itemEffect.DrawLowestNonBane) {
 				let lowestIndex = -1;
 				let lowestPoints = 2; // must be lower than 2.
 				this.remainingItems.forEach((i, ndx) => {
@@ -317,13 +354,13 @@ class RoundWrapper {
 					}
 				});
 				if (lowestIndex >= 0) {
-					item.wasEffective = true;
+					card.wasEffective = true;
 					this.currentHand.push(this.remainingItems.splice(lowestIndex, 1)[0]);
 					this.shuffleItems();
 					this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
 				}
 			}
-			else if (item.effect == itemEffect.BaneDrawer) {
+			else if (card.effect == itemEffect.BaneDrawer) {
 				// Find the first bane and draw it.
 				// Because this is rude, we'll give the option of ending your turn.
 				this.forceShowTurnOptions = true;
@@ -341,55 +378,58 @@ class RoundWrapper {
 					this.$rootscope.$broadcast(CHANGE_DECK_EVENT);
 				}
 			}
-			else if (item.effect == itemEffect.Poison) {
+			else if (card.effect == itemEffect.Poison) {
 				this.drawHand(player, this.handSize + 1);
 			}
-			else if (item.effect == itemEffect.DrawNoPenalty) {
+			else if (card.effect == itemEffect.DrawNoPenalty) {
 				this.drawHand(player, this.handSize + 1);
 				this.forceShowTurnOptions = true;
 			}
-			else if (item.effect == itemEffect.EmptyHandGems) {
+			else if (card.effect == itemEffect.EmptyHandGems) {
 				if (this.currentHand.length == 0) {
-					item.wasEffective = true;
+					card.wasEffective = true;
 					this.selection.gemGains += 3;
 				}
 			}
-			else if (item.effect == itemEffect.IncreaseHandSize) {
+			else if (card.effect == itemEffect.IncreaseHandSize) {
 				this.handSize++;
 			}
-			else if (item.effect == itemEffect.GainExtraGemFromHere) {
+			else if (card.effect == itemEffect.FutureGemsUp) {
 				this.gemGainedOnLanding++;
 			}
-			else if (item.effect == itemEffect.PointInvestment) {
-				this.selection.immediatePointGains += item.amount;
-				this.selection.moneyGains += Math.floor(item.cost / 2);
-				this.selection.trashedCard.push(item);
+			else if (card.effect == itemEffect.FuturePassingGemsUp) {
+				this.gemGainedOnPassing += 2; // Much harder to pass gems than land on them.
 			}
-			else if (item.effect == itemEffect.GainExtraMoney) {
-				this.selection.moneyGains += Math.floor(item.amount);
+			else if (card.effect == itemEffect.PointInvestment) {
+				this.selection.immediatePointGains += card.amount;
+				this.selection.moneyGains += Math.floor(card.cost / 2);
+				this.selection.trashedCard.push(card);
 			}
-			else if (item.effect == itemEffect.GemsForMoney) {
-				let gemsNeeded = (item.amount * 3);
+			else if (card.effect == itemEffect.GainExtraMoney) {
+				this.selection.moneyGains += Math.floor(card.amount);
+			}
+			else if (card.effect == itemEffect.GemsForMoney) {
+				let gemsNeeded = (card.amount * 3);
 				if (this.selection.gemGains - gemsNeeded >= 0) {
-					item.wasEffective = true;
+					card.wasEffective = true;
 					this.selection.gemGains -= gemsNeeded;
-					this.selection.moneyGains += item.amount;
+					this.selection.moneyGains += card.amount;
 				}
 			}
-			else if (item.effect == itemEffect.MoneyForPassingGems) {
+			else if (card.effect == itemEffect.MoneyForPassingGems) {
 				let moneyGains = 0;
 				let helperPosition = this.getExtraStartingPoint(player.index);
 				for (let i = player.startingPosition + helperPosition + 1; i < this.selection.currentLocation; i++)
 					if (this.hasGem(i) && !this.boardItems[i])
 						moneyGains++;
-				this.selection.moneyGains += (moneyGains * item.amount);
+				this.selection.moneyGains += (moneyGains * card.amount);
 				if (moneyGains > 0)
-					item.wasEffective = true;
+					card.wasEffective = true;
 			}
-			else if (item.effect == itemEffect.BonusForKeys) {
+			else if (card.effect == itemEffect.BonusForKeys) {
 				const playedKeysCount = Math.min(3, this.selection.playedItems.reduce((count, curItem) => curItem.effect == itemEffect.SpecialNoEffect ? (count + 1) : count, 0));
 				if (playedKeysCount > 0) {
-					item.wasEffective = true;
+					card.wasEffective = true;
 					if (playedKeysCount > 1) {
 						this.selection.immediatePointGains += 1;
 						if (playedKeysCount > 2) {
@@ -401,32 +441,48 @@ class RoundWrapper {
 					}
 				}
 			}
+			else if (card.effect == itemEffect.JustDrewEmptyBonus) {
+				if (card.wasEffective) {
+					this.selection.moneyGains += card.amount;
+					this.selection.gemGains += card.amount;
+					this.selection.immediatePointGains += card.amount;
+				}
+			}
 
 			// Add the item to a cached list for easier lookup than boardItems.
-			this.selection.playedItems.push(item);
+			this.selection.playedItems.push(card);
 
-
-			if (item.points > 0) {
-				this.boardItems[this.selection.currentLocation] = item;
+			if (movedSpaces > 0) {
+				this.boardItems[this.selection.currentLocation] = card;
 
 				if (this.hasGem(this.selection.currentLocation)) {
 					this.selection.gemGains += this.gemGainedOnLanding;
-					if (item.effect == itemEffect.GemLandingExtra) {
-						this.selection.gemGains += item.amount;
-						item.wasEffective = true;
+					if (card.effect == itemEffect.GemLandingExtra) {
+						this.selection.gemGains += card.amount;
+						card.wasEffective = true;
+					}
+				}
+
+				if (this.gemGainedOnPassing > 0) {
+					if (movedSpaces > 1) { // Can't pass when only moving one space.
+						for (let passedSpaceNdx = this.selection.currentLocation - 1; passedSpaceNdx > this.selection.currentLocation - movedSpaces; passedSpaceNdx--) {
+							if (this.hasGem(passedSpaceNdx)) {
+								this.selection.gemGains += this.gemGainedOnPassing;
+							}
+						}
 					}
 				}
 				this.scrollToIndex(this.selection.currentLocation + 1); // center the next position
 			}
 
-			if (item.effect == itemEffect.Bane) {
-				this.selection.baneCount += item.amount;
+			if (card.effect == itemEffect.Bane) {
+				this.selection.baneCount += card.amount;
 				if (this.selection.baneCount > player.baneThreshold)
 					this.endSelectionTurn(player, false);
 			}
 
 			this.justDrawnCards = []; // If you played a card, you no longer "just drew" one.
-			this.$rootscope.$broadcast(PLAY_CARD_EVENT, item);
+			this.$rootscope.$broadcast(PLAY_CARD_EVENT, card);
 		}
 	}
 
@@ -434,14 +490,16 @@ class RoundWrapper {
 		return this.justDrawnCards.indexOf(item) >= 0;
 	}
 	public willLandOnGem(item: IItem) {
-		return item.points > 0 && this.hasGem(this.selection.currentLocation + item.points + this.getExtraMoves(item));
+		let movement = item.points + this.getExtraMoves(item);
+		return movement > 0 && this.hasGem(this.selection.currentLocation + movement);
 	}
 	public getExtraMoves(item: IItem): number {
+		let extraMoves = 0;
 		if (item.effect == itemEffect.MovesForSpecial) {
 			const additionalMoves = Math.min(3, this.selection.playedItems.reduce((count, curItem) => curItem.effect == itemEffect.SpecialNoEffect ? (count + 1) : count, 0));
-			return additionalMoves;
+			extraMoves = additionalMoves;
 		} else if (item.effect == itemEffect.SpecialAdjacentMover) {
-			return this.wasPreviousCardOfType(itemEffect.SpecialNoEffect) ? 1 : 0;
+			extraMoves = this.wasPreviousCardOfType(itemEffect.SpecialNoEffect) ? 1 : 0;
 		} else if (item.effect == itemEffect.CopyMover) {
 			let adjacentCopiers = 0;
 			for (let i = this.selection.playedItems.length - 1; i >= 0; i--) {
@@ -450,33 +508,43 @@ class RoundWrapper {
 				else
 					break; // if it wasn't just played, break out of here.
 			}
-			return (item.points * Math.pow(2, Math.min(2, adjacentCopiers))) - item.points;
+			extraMoves = (item.points * Math.pow(2, Math.min(2, adjacentCopiers))) - item.points;
 		} else if (item.effect == itemEffect.Bane) {
 			// If this is a bane one and you've played a Bane1Moves2, then it moves an extra space.
-			if (item.points == 1
+			if (item.amount == 1 // purposefully looking at amount, not points.
 				&& this.selection.playedItems.findIndex(i => i.effect == itemEffect.Bane1Moves2) >= 0) {
-				return 1;
+				extraMoves = 1;
 			}
 		} else if (item.effect == itemEffect.MovesForGems) {
 			// one space for every 4 gems, up to 3.
-			return Math.min(3, Math.floor(this.selection.gemGains / 5));
+			extraMoves = Math.min(3, Math.floor(this.selection.gemGains / 5));
 		} else if (item.effect == itemEffect.EmptyHandMoves) {
 			// one space if your hand will be empty by playing this.
-			return this.currentHand.length == 1 ? 1 : 0;
+			extraMoves = this.currentHand.length == 1 ? 1 : 0;
 		}
 		else if (item.effect == itemEffect.MoveTo5) {
 			// If you are not landing on a multiple of 5 already.
-			if (this.selection.currentLocation % 5 != 0)
-				return (Math.ceil(this.selection.currentLocation / 5) * 5) - this.selection.currentLocation;
+			if ((item.points + this.selection.currentLocation) % 5 != 0)
+				extraMoves = (Math.ceil((this.selection.currentLocation + item.points) / 5) * 5) - item.points - this.selection.currentLocation;
 		}
 		else if (item.effect == itemEffect.MoveNextGem) {
 			let extraSpaces = 0;
 			// put in a fail-safe of three extra spaces.
-			while (!this.hasGem(this.selection.currentLocation + item.points + extraSpaces) || extraSpaces >= 3)
+			while (!this.hasGem(this.selection.currentLocation + item.points + extraSpaces) && extraSpaces < 4)
 				extraSpaces++;
-			return extraSpaces;
+			extraMoves = extraSpaces;
 		}
-		return 0; // If not one of the above, then it doesn't move extra
+		else if (item.effect == itemEffect.JustDrewEmptyMover) {
+			if (item.wasEffective)
+				extraMoves = 3;
+		}
+		else if (item.effect == itemEffect.PlayCardMovement) {
+			extraMoves = Math.min(3, Math.floor(item.amount / 2));
+		}
+
+		// Check your hand to see if holding a card increases movement.
+
+		return extraMoves; // If not one of the above, then it doesn't move extra
 	}
 
 	public wasPreviousCardOfType(effect: itemEffect, spacesBack: number = 1): boolean {
@@ -511,7 +579,7 @@ class RoundWrapper {
 				if (gemBalance < 0) {
 					// If you passed more gems than landing on, gain points.
 					item.wasEffective = true;
-					this.selection.immediatePointGains += -gemBalance; // inverse the gem balance as you gain points for being below the balance.
+					this.selection.immediatePointGains += Math.min(4, -gemBalance); // inverse the gem balance as you gain points for being below the balance.
 				}
 			}
 		});
@@ -559,11 +627,11 @@ class RoundWrapper {
 				return true;
 		return false;
 	}
-	public buyItem(item: IItem) {
+	public buyItem(playerData: IPlayerClientData, item: IItem) {
 		if (this.gameWrapper.game.options.enableTimeLimit)
 			this.timerHelper.startRoundTimer(() => this.endBuyTurn(true), gameWrapper.game.options.secondsPerPhase);
 
-		if (this.canBuyItem(item)) {
+		if (this.canBuyItem(playerData, item)) {
 			if (this.canBuyDuplicate && this.haveBoughtItemEffect(item))
 				this.canBuyDuplicate = false;
 			else // Don't count a dupe as a buy.
@@ -589,7 +657,15 @@ class RoundWrapper {
 				this.totalAvailableBuys++;
 		}
 	}
-	public canBuyItem(item: IItem) {
+	public canBuyItem(playerData: IPlayerClientData, item: IItem) {
+		const deckLimit = this.getDeckLimit(item.effect);
+		if (deckLimit < Number.MAX_VALUE) {
+			let deckCount = playerData.items.reduce((num, val) => val.effect == item.effect ? num + 1 : num, 0)
+				+ this.buySelection.items.reduce((num, val) => val.effect == item.effect ? num + 1 : num, 0);
+			if (deckCount >= deckLimit)
+				return false;
+		}
+
 		if (this.canBuyDuplicate) {
 			// If you can buy a dupe, but are chosing not to,
 			// then make sure you have an avilable buy
@@ -690,15 +766,23 @@ class RoundWrapper {
 			return 0;
 		return this.enhancementExtraCost;
 	}
+
+	public getDeckLimit(effect: itemEffect) {
+		if (effect == itemEffect.BaneCountRemoval)
+			return 1;
+
+		return Number.MAX_VALUE;
+	}
+
 	public getPercentageToBust(player: IPlayer): number {
 		let baneCount = Math.max(0, player.playerData.baneThreshold - this.selection.baneCount);
 		// if you have a playable card in your hand, there's no chance you will bust.
-		if (this.currentHand.some(item => item.effect != itemEffect.Bane || item.points <= baneCount))
+		if (this.currentHand.some(item => item.effect != itemEffect.Bane || item.amount <= baneCount))
 			return 0;
 		if (this.remainingItems.length == 0)
 			return 0;
 
-		let cardsToBust = this.remainingItems.reduce((amt, item) => amt += item.effect == itemEffect.Bane && item.points > baneCount ? 1 : 0, 0);
+		let cardsToBust = this.remainingItems.reduce((amt, item) => amt += item.effect == itemEffect.Bane && item.amount > baneCount ? 1 : 0, 0);
 		let cardsToDraw = this.handSize - this.currentHand.length;
 		let percentageToBust: number;
 		if (cardsToDraw == 1)

@@ -2,7 +2,7 @@
    <h1>Game Settings</h1>
    <div class="btn-group sw-pregame-modes">
       <div class="btn" ng-class="{'btn-light': $ctrl.game.options.gameMode != -1, 'btn-primary': $ctrl.game.options.gameMode == -1}">Custom</div>
-      <div class="btn" ng-repeat="index in [0, 1, 2, 3]" ng-click="$ctrl.setMode(index)" ng-class="{'btn-light': $ctrl.game.options.gameMode != index, 'btn-primary': $ctrl.game.options.gameMode == index}">{{$ctrl.getModeName(index)}}</div>
+      <div class="btn" ng-repeat="index in [0, 1, 2, 3, 4]" ng-click="$ctrl.setMode(index)" ng-class="{'btn-light': $ctrl.game.options.gameMode != index, 'btn-primary': $ctrl.game.options.gameMode == index}">{{$ctrl.getModeName(index)}}</div>
    </div>
    <div class="sw-settings-toggles">
       <div ng-click="$ctrl.game.options.giveRoundBonuses = !$ctrl.game.options.giveRoundBonuses"><span>Give Round Bonuses</span><input type="checkbox" ng-model="$ctrl.game.options.giveRoundBonuses" /></div>

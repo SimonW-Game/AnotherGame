@@ -33,7 +33,7 @@ interface effectAddPopupComponent extends ng.IComponentController {
 }
 
 function effectAddPopupComponentFunc() {
-	const controllerFunc = function (gameWrapper: IGameWrapper, styleHelper: StyleHelper, effectChooserHelper: EffectChooserHelper, cardInformationHelper: CardInformationHelper) {
+	const controllerFunc = function ($scope: ng.IScope, gameWrapper: IGameWrapper, styleHelper: StyleHelper, effectChooserHelper: EffectChooserHelper, cardInformationHelper: CardInformationHelper) {
 		let activeTab = TAB_ALL;
 		let effects: itemEffect[] = [];
 		var $ctrl: ICardInfoPopupComponent = this;
@@ -74,27 +74,28 @@ function effectAddPopupComponentFunc() {
 			if (tabIndex == TAB_ALL) {
 				effects = new Array(Number(itemEffect.Bane) + (effectChooserHelper.includeBane ? 1 : 0)).fill(0).map((_, ndx) => <itemEffect>ndx);
 			} else if (tabIndex == TAB_KEY) {
-				effects = [itemEffect.SpecialNoEffect, itemEffect.MoneyForSpecial, itemEffect.MovesForSpecial, itemEffect.SpecialAdjacentMover, itemEffect.BonusForKeys];
+				effects = [itemEffect.SpecialNoEffect, itemEffect.GemsForKeys, itemEffect.MovesForSpecial, itemEffect.SpecialAdjacentMover, itemEffect.BonusForKeys];
 			} else if (tabIndex == TAB_MOVERS) {
-				effects = [itemEffect.JustMove, itemEffect.MovesForSpecial, itemEffect.SpecialAdjacentMover, itemEffect.FarMoving, itemEffect.GrowingMover, itemEffect.CopyMover, itemEffect.MoveTo5, itemEffect.Bane1Moves2, itemEffect.MovesForGems, itemEffect.EmptyHandMoves, itemEffect.MoveNextGem];
+				effects = [itemEffect.JustMove, itemEffect.MovesForSpecial, itemEffect.SpecialAdjacentMover, itemEffect.FarMoving, itemEffect.GrowingMover, itemEffect.CopyMover, itemEffect.MoveTo5, itemEffect.Bane1Moves2, itemEffect.MovesForGems, itemEffect.EmptyHandMoves, itemEffect.MoveNextGem, itemEffect.PlayCardMovement];
 			} else if (tabIndex == TAB_POINTS) {
 				effects = [itemEffect.BonusForKeys, itemEffect.GrowingPoints, itemEffect.PointInvestment, itemEffect.GainPoints5X, itemEffect.GainPointPerBuy, itemEffect.PlayedMostReward, itemEffect.MoveAndPoint, itemEffect.PointsForPassingGems];
 			} else if (tabIndex == TAB_GEMS) {
-				effects = [itemEffect.MoneyForSpecial, itemEffect.GemLandingExtra, itemEffect.LastCardGem, itemEffect.MovesForGems, itemEffect.EmptyHandGems, itemEffect.GainExtraGemFromHere, itemEffect.MoveNextGem, itemEffect.GemsForMoney, itemEffect.PointsForPassingGems, itemEffect.MoneyForPassingGems];
+				effects = [itemEffect.GemsForKeys, itemEffect.GemLandingExtra, itemEffect.LastCardGem, itemEffect.MovesForGems, itemEffect.EmptyHandGems, itemEffect.FutureGemsUp, itemEffect.FuturePassingGemsUp, itemEffect.MoveNextGem, itemEffect.GemsForMoney, itemEffect.PointsForPassingGems, itemEffect.MoneyForPassingGems];
 			} else if (tabIndex == TAB_HAND) {
-				effects = [itemEffect.AddToHand, itemEffect.ShuffleHand, itemEffect.CopyOfPreviousCardToHand, itemEffect.TrashItem, itemEffect.DiscardItem, itemEffect.EmptyHandGems, itemEffect.EmptyHandMoves, itemEffect.IncreaseHandSize, itemEffect.DrawLowestNonBane];
+				effects = [itemEffect.AddToHand, itemEffect.ShuffleHand, itemEffect.CopyOfPreviousCard, itemEffect.TrashItem, itemEffect.DiscardItem, itemEffect.EmptyHandGems, itemEffect.EmptyHandMoves, itemEffect.JustDrewEmptyBonus, itemEffect.JustDrewEmptyMover, itemEffect.IncreaseHandSize];
 			} else if (tabIndex == TAB_PLAY_MORE) {
-				effects = [itemEffect.BonusForKeys /*eh*/, itemEffect.CopyOfPreviousCardToHand, itemEffect.PlayedMostReward];
+				effects = [itemEffect.BonusForKeys /*eh*/, itemEffect.CopyMover, itemEffect.CopyOfPreviousCard, itemEffect.PlayedMostReward];
 			} else if (tabIndex == TAB_BUY) {
 				effects = [itemEffect.CardsCostLess, itemEffect.PointInvestment, itemEffect.GainExtraBuy, itemEffect.GainExtraMoney, itemEffect.GainPointPerBuy, itemEffect.TaxCollector, itemEffect.MoneyForPassingGems, itemEffect.GemsForMoney];
 			} else if (tabIndex == TAB_BANE) {
-				effects = [itemEffect.RemovePreviousBane, itemEffect.BaneCountRemoval, itemEffect.Bane1Moves2, itemEffect.BaneGiver];
+				effects = [itemEffect.RemovePreviousBane, itemEffect.BaneCountRemoval, itemEffect.Bane1Moves2, itemEffect.BaneGiver, itemEffect.BaneBriber];
 			} else if (tabIndex == TAB_UNIQUE) {
-				effects = [itemEffect.AddToHand, itemEffect.ShuffleHand, itemEffect.CopyOfPreviousCardToHand, itemEffect.IncreaseHandSize, itemEffect.DrawLowestNonBane];
+				effects = [itemEffect.AddToHand, itemEffect.ShuffleHand, itemEffect.CopyOfPreviousCard, itemEffect.IncreaseHandSize, itemEffect.DrawLowestNonBane, itemEffect.PlayCardMovement];
 			} else if (tabIndex == TAB_ATTACK) {
-				effects = [itemEffect.PoisonBrewer, itemEffect.TaxCollector, itemEffect.BaneGiver, itemEffect.BaneBriber, itemEffect.Poison, itemEffect.Tax, itemEffect.Virus, itemEffect.BaneDrawer];
+				effects = [itemEffect.Bane, itemEffect.PoisonBrewer, itemEffect.TaxCollector, itemEffect.BaneGiver, itemEffect.BaneBriber, itemEffect.Poison, itemEffect.Tax, itemEffect.Virus, itemEffect.BaneDrawer];
 			}
 		}
+		$scope.$watch(_ => effectChooserHelper.includeBane, function (__) { clickTab(activeTab) });
 	};
 
 	const bindings = {

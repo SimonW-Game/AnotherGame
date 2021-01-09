@@ -123,7 +123,9 @@ function pregameSettingsFunc() {
 			else if (ndx == 2)
 				return "Fight Against Banes";
 			else if (ndx == 3)
-				return "Attacking Game";
+				return "Standard Attacking";
+			else if (ndx == 4)
+				return "Standard Variant";
 			return "";
 		}
 

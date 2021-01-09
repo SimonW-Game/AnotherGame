@@ -41,16 +41,16 @@
                   </div>
                </div>
                <div class="sw-round-items">
-                  <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item {{$ctrl.getCardClass(item.effect)}}" ng-class="{'sw-item-effective': item.wasEffective}" ng-repeat="item in ::roundData.selectionResults.playerSelectionData[player.playerData.index].playedItems track by $index">
-                     <div>{{$ctrl.getCardName(item.effect)}} {{item.amount > item.points ? item.amount : item.points}}</div>
-                     <i class="{{$ctrl.getCardIconClass(item.effect)}}"></i>
+                  <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item {{::$ctrl.getCardClass(item.effect)}}" ng-class="{'sw-item-effective': item.wasEffective}" ng-repeat="item in ::roundData.selectionResults.playerSelectionData[player.playerData.index].playedItems track by $index">
+                     <div>{{::$ctrl.getCardNameAndAmount(item)}}</div>
+                     <i class="{{::$ctrl.getCardIconClass(item.effect)}}"></i>
                   </div>
                </div>
                <div class="sw-round-items sw-round-trash" ng-if="::roundData.selectionResults.playerSelectionData[player.playerData.index].trashedItems.length > 0">
                   <div>Trashed:</div>
-                  <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item sw-round-item-large {{$ctrl.getCardClass(item.effect)}}" ng-repeat="item in ::roundData.selectionResults.playerSelectionData[player.playerData.index].trashedItems track by $index">
-                     <div>{{$ctrl.getCardName(item.effect)}} {{item.amount > item.points ? item.amount : item.points}}</div>
-                     <i class="{{$ctrl.getCardIconClass(item.effect)}}"></i>
+                  <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item sw-round-item-large {{::$ctrl.getCardClass(item.effect)}}" ng-repeat="item in ::roundData.selectionResults.playerSelectionData[player.playerData.index].trashedItems track by $index">
+                     <div>{{::$ctrl.getCardNameAndAmount(item)}}</div>
+                     <i class="{{::$ctrl.getCardIconClass(item.effect)}}"></i>
                   </div>
                </div>
             </div>
@@ -94,13 +94,13 @@
                   </div>
 
                   <div class="sw-round-items">
-                     <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item sw-round-item-large {{$ctrl.getCardClass(item.effect)}}" ng-repeat="item in ::roundData.buySelectionData.playerBuySelectionData[player.playerData.index].items track by $index">
-                        <div>{{$ctrl.getCardName(item.effect)}} {{item.amount > item.points ? item.amount : item.points}}</div>
-                        <i class="{{$ctrl.getCardIconClass(item.effect)}}"></i>
+                     <div ng-click="$ctrl.clickItem(item)" ng-attr-class="sw-round-item sw-round-item-large {{::$ctrl.getCardClass(item.effect)}}" ng-repeat="item in ::roundData.buySelectionData.playerBuySelectionData[player.playerData.index].items track by $index">
+                        <div>{{::$ctrl.getCardNameAndAmount(item)}}</div>
+                        <i class="{{::$ctrl.getCardIconClass(item.effect)}}"></i>
                      </div>
 
                      <div ng-click="$ctrl.clickEnhancement(enhancement)" class="sw-round-item sw-round-item-large sw-enhancement-background" ng-repeat="enhancement in ::roundData.buySelectionData.playerBuySelectionData[player.playerData.index].enhancements track by $index">
-                        <div>{{$ctrl.getEnhancementName(enhancement)}}</div>
+                        <div>{{::$ctrl.getEnhancementName(enhancement)}}</div>
                         <i class="fa fa-gem"></i>
                      </div>
                   </div>

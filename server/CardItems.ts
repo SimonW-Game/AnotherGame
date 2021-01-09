@@ -27,7 +27,7 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 			item.cost = 16;
 		else if (points == 4)
 			item.cost = 21;
-	} else if (effect == itemEffect.MoneyForSpecial) {
+	} else if (effect == itemEffect.GemsForKeys) {
 		item.amount = 1;
 		item.points = 1;
 		item.cost = 7;
@@ -38,7 +38,7 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 			item.cost++;
 	} else if (effect == itemEffect.BonusForKeys) {
 		// You have to have keys in your deck which means you'd be spending turns buying cards that do nothing.
-		item.amount = 1;
+		item.amount = 0;
 		item.points = 0;
 		item.cost = 9;
 	} else if (effect == itemEffect.FarMoving) {
@@ -46,13 +46,15 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		item.points = 6;
 		item.cost = 26; // vanilla $$ to movement (4*6) + $2 because holy jeeze.
 	} else if (effect == itemEffect.GemLandingExtra) {
-		points = Math.min(2, points);
+		points = Math.min(3, points);
 		item.points = points;
 		item.amount = points;
 		if (points == 1)
 			item.cost = 5; // Almost guarenteed to get the bonus, 4+1.5 = 5.5, but don't always get the gem
-		if (points == 2)
+		else if (points == 2)
 			item.cost = 9;
+		else if (points == 3)
+			item.cost = 14;
 	} else if (effect == itemEffect.ShuffleHand) {
 		// Good for games with larger hand sizes.  Not so great for small hand sizes. Hard to balance off of that.
 		// In a lot of cases, you're looking at shuffling in a bane or two for the chance to draw cards you weren't lucky enough to draw initially.
@@ -77,7 +79,7 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		// Miss a buy phase and get 4 points.  Buy on last round for 0 point.  Cheap enough to maybe buy a sucky card as well.  Decent enough to play with "empty hand" cards.
 		item.amount = 0;
 		item.points = 0;
-		item.cost = 7;
+		item.cost = 6;
 	} else if (effect == itemEffect.CopyMover) {
 		// Vanilla stats, but both difficult to pull off and requires an entire strategy revolving around buying these.
 		item.amount = 1;
@@ -89,37 +91,28 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		item.points = 1;
 		item.cost = 7;
 	} else if (effect == itemEffect.RemovePreviousBane) {
-		// This card is overpowered.
-		// In almost every scenario, this card removes a larger bane effectively gaining you 2+ extra spaces.
-		// I'm pricing the movement 1 at $11 over vanilla value as you will use it on a Bane 2+ most of the time.
-		// Which gives you at least 3 movement (or $12).  But also gives you the ability to reach further in your deck.
-		// Changed to "if you just drew this card" meaning you don't have control over what you copy.
-		// Balance with just drew, $8 for effect as you can unreliably hit this, but is very good when you do.  It's mostly good on higher hands or lots of banes.
+		// Very good effect, but limited power.
+		// -Must have just played a bane and drawn this.
+		// Only removes a single bane counter, so removing more than a bane 1 will not help significantly.
+		// In that case, we are saying it is $2 more than vanilla moves.
 		item.amount = 1;
 		if (points == 1)
-			item.cost = 12;
+			item.cost = 6;
 		else if (points == 2)
-			item.cost = 16;
+			item.cost = 10;
 		else if (points == 3)
-			item.cost = 19;
+			item.cost = 15;
 		else if (points == 4)
-			item.cost = 23;
-	} else if (effect == itemEffect.CopyOfPreviousCardToHand) {
-		// This card is overpowered.
-		// The scenario to balance over would be copying a movement 4 card (or one worth a lot of money).
-		// As hand size makes it rather easy to copy the card you want to copy, it would have to be priced high.
-		// OR we would have to limit the ability... which I will do.
-		// Changed to "if you just drew this card" meaning you don't have control over what you copy.
-		// A lot of the time you'd be using it as a single move ($4), but when you get a hit (even on just a key),
-		//  you'd be gaining at least $4 worth, and a lot of the time more.
-		// Strategies would include playing your whole hand (best card last) in hopes to copy the good card.  With larger hand sizes, this may be more OP
+			item.cost = 19;
+	} else if (effect == itemEffect.CopyOfPreviousCard) {
+		// This (now) shuffles the last card you played into your deck.
 		points = Math.min(2, points);
 		item.points = points;
 		item.amount = points;
 		if (points == 1)
-			item.cost = 10;
+			item.cost = 8;
 		else
-			item.cost = 18;
+			item.cost = 15;
 	} else if (effect == itemEffect.CardsCostLess) {
 		// Spend $5 to get $1n discount for every future round (or $10 for $2n every future round)
 		points = Math.min(2, points);
@@ -140,18 +133,23 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		item.points = 0;
 		item.cost = 0;
 	} else if (effect == itemEffect.Poison) {
-		item.amount = 1;
+		item.amount = 0;
 		item.points = 0;
 		item.cost = 0;
 	} else if (effect == itemEffect.Tax) {
-		item.amount = 1;
+		item.amount = 0;
 		item.points = 0;
 		item.cost = 0;
 	} else if (effect == itemEffect.PoisonBrewer) {
-		// Paying $5 for making people more prone to bust for the rest of the game.
+		// Paying $3 for making people more prone to bust for the rest of the game.
 		item.amount = 1;
 		item.points = 1;
-		item.cost = 9;
+		item.cost = 7;
+	} else if (effect == itemEffect.BaneBriber) {
+		// Paying $6 for making people more prone to bust for the rest of the game.
+		item.amount = 1;
+		item.points = 1;
+		item.cost = 10;
 	} else if (effect == itemEffect.TaxCollector) {
 		// Paying $4 for making people have a smaller hand size or less money.
 		item.amount = 1;
@@ -167,6 +165,8 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		// Removes a threat in your deck forever.  Potential to ruin the risk of the game... only allow you to trash the card left of it.
 		// Thought was to make it so you always have a potential to bust (bane sum - 1 is the bane threshold), but meh.
 		// Making it a $14 effect.  Unsure if perfect, but it has potential to break the game which isn't neat.
+
+		// Might want to change to "non bane" for attacks and possibly other combo cards?
 		item.amount = 1;
 		item.points = 1;
 		item.cost = 18;
@@ -184,32 +184,28 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		item.points = 0;
 		item.cost = 2 + (6 * points);
 	} else if (effect == itemEffect.GainExtraBuy) {
-		// Really good with the correct deck.  Balance off the correct deck.
-		// $4/$8 for movement.  $2 for each buy, discount $1 on the second buy.
+		// Good with the correct deck.  Balance off the correct deck.
+		// $4/$8 for movement.  $2 for each buy, $1 more on the second buy.
 		points = Math.min(2, points);
 		item.points = points;
 		item.amount = points;
 		if (points == 1)
-			item.cost = 6;
+			item.cost = 5;
 		else
-			item.cost = 13;
+			item.cost = 11;
 	} else if (effect == itemEffect.MoveTo5) {
 		// This will move you at most 4 spaces.  If randomly played, it would move you 2 spaces ($8).
 		// If you try to move more than that, you will on average.  It isn't hard to get the full affect making it a very budget 4 moving card.
 		item.points = 0;
-		item.amount = 1;
+		item.amount = 0;
 		item.cost = 12 // 12
 	} else if (effect == itemEffect.BaneCountRemoval) {
-		// Chaining these together is really good.
-		// Extra movement with this effect is really good as well (less tradeoff to get a good effect without movement penalty).
-		// $10 to remove a bane counter. $4 to move one, $6 to move a second time.
-		points = Math.min(2, points);
-		item.points = points;
+		// Can only have one.  The question is when to buy it I think.
+		// Chaining these together is really good... So don't let them chain it!
+		// $7 to remove a bane counter.
+		item.points = 0;
 		item.amount = 1;
-		if (points == 1)
-			item.cost = 14;
-		else
-			item.cost = 20;
+		item.cost = 7;
 	} else if (effect == itemEffect.GainExtraMoney) {
 		item.points = 1;
 		item.amount = Math.min(4, points);
@@ -242,7 +238,7 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		// 16 gems is the cost to get this effect forever.  Assuming you get this halfway through the selection phase, that is an 8 gem cost.
 		// 8 gems is about $12, plus the $4 movement.
 		item.points = 0;
-		item.amount = 1;
+		item.amount = 0;
 		item.cost = 15;
 	} else if (effect == itemEffect.GainPointPerBuy) {
 		// Super good effect.  Able to accrue 2+ points per round (or 1 point per round to get a presumably better deck).
@@ -250,7 +246,12 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		item.points = 0;
 		item.amount = 0;
 		item.cost = 10;
-	} else if (effect == itemEffect.GainExtraGemFromHere) {
+	} else if (effect == itemEffect.FutureGemsUp) {
+		// Maybe 4-8 gems gotten each round, pick this up 50% of the way through the round and you get 2-4 extra gems.
+		item.points = 0;
+		item.amount = 0;
+		item.cost = 5;
+	} else if (effect == itemEffect.FuturePassingGemsUp) {
 		// Maybe 4-8 gems gotten each round, pick this up 50% of the way through the round and you get 2-4 extra gems.
 		item.points = 0;
 		item.amount = 0;
@@ -296,6 +297,34 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		item.points = 1;
 		item.amount = Math.min(2, points);
 		item.cost = 3 + (item.amount * 7); // 10, 17
+	} else if (effect == itemEffect.JustDrewEmptyMover) {
+		// Encourages poor plays for big payoff.
+		// Easy to pull off, not usually good to do, and cannot do late in selection phase.
+		item.points = 0; // Doesn't move you if you don't get the effect.
+		item.amount = 0;
+		item.cost = 6; // the average moves in a vacuum I suppose.
+	} else if (effect == itemEffect.JustDrewEmptyBonus) {
+		// Encourages poor plays for big payoff.
+		// Easy to pull off, not usually good to do, and cannot do late in selection phase.
+		item.points = Math.min(2, points);
+		item.amount = item.points;
+		if (item.points == 1)
+			item.cost = 8;
+		else if (item.points == 2)
+			item.cost = 17;
+	} else if (effect == itemEffect.PlayCardMovement) {
+		// Encourages poor plays for big payoff.
+		// Can't stack in deck (as they nullify each other).
+		// Must have many cards in deck to frequently pull off.
+		item.amount = 0;
+		if (item.points == 1)
+			item.cost = 7;
+		else if (item.points == 2)
+			item.cost = 11;
+		else if (item.points == 3)
+			item.cost = 16;
+		else if (item.points == 4)
+			item.cost = 20;
 	}
 
 	return item;
@@ -307,10 +336,11 @@ export function getAllItemsOfEffect(effect: itemEffect) {
 		case itemEffect.Virus:
 		case itemEffect.Tax:
 		case itemEffect.Poison:
+		case itemEffect.BaneDrawer:
 			maxSize = 0;
 			break;
 		case itemEffect.SpecialNoEffect:
-		case itemEffect.MoneyForSpecial:
+		case itemEffect.GemsForKeys:
 		case itemEffect.FarMoving:
 		case itemEffect.ShuffleHand:
 		case itemEffect.GrowingMover:
@@ -319,6 +349,7 @@ export function getAllItemsOfEffect(effect: itemEffect) {
 		case itemEffect.SpecialAdjacentMover:
 		case itemEffect.LastCardGem:
 		case itemEffect.PoisonBrewer:
+		case itemEffect.BaneBriber:
 		case itemEffect.TaxCollector:
 		case itemEffect.BaneGiver:
 		case itemEffect.TrashItem:
@@ -328,27 +359,30 @@ export function getAllItemsOfEffect(effect: itemEffect) {
 		case itemEffect.EmptyHandGems:
 		case itemEffect.IncreaseHandSize:
 		case itemEffect.GainPointPerBuy:
-		case itemEffect.GainExtraGemFromHere:
+		case itemEffect.FutureGemsUp:
+		case itemEffect.FuturePassingGemsUp:
 		case itemEffect.PlayedMostReward:
 		case itemEffect.DrawLowestNonBane:
 		case itemEffect.MoveNextGem:
 		case itemEffect.PointsForPassingGems:
 		case itemEffect.MoveTo5:
+		case itemEffect.BaneCountRemoval:
+		case itemEffect.JustDrewEmptyMover:
 			maxSize = 1;
 			break;
 
-		case itemEffect.GemLandingExtra:
-		case itemEffect.CopyOfPreviousCardToHand:
+		case itemEffect.CopyOfPreviousCard:
 		case itemEffect.CardsCostLess:
 		case itemEffect.GainExtraBuy:
-		case itemEffect.BaneCountRemoval:
 		case itemEffect.GainPoints5X:
 		case itemEffect.EmptyHandMoves:
 		case itemEffect.MoneyForPassingGems:
 		case itemEffect.PointInvestment:
+		case itemEffect.JustDrewEmptyBonus:
 			maxSize = 2;
 			break;
 
+		case itemEffect.GemLandingExtra:
 		case itemEffect.MovesForGems:
 		case itemEffect.GemsForMoney:
 			maxSize = 3;
@@ -360,6 +394,7 @@ export function getAllItemsOfEffect(effect: itemEffect) {
 		case itemEffect.GainExtraMoney:
 		case itemEffect.MoveAndPoint:
 		case itemEffect.JustMove:
+		case itemEffect.PlayCardMovement:
 			maxSize = 4;
 			break;
 	}
@@ -380,12 +415,18 @@ export function getEnhancementCost(enhancement: purchaseEnhancement, options: IG
 	else if (enhancement == purchaseEnhancement.GainThreePoints)
 		return Math.max(3, Math.min(24, (options.endGameGemsForPoints - 2) * 3));
 	else if (enhancement == purchaseEnhancement.IncreaseBaneThreshold)
-		return 15;
+		return 5;
 	else if (enhancement == purchaseEnhancement.VirusSpreader)
 		return 13;
 	else if (enhancement == purchaseEnhancement.ExtraMoney)
 		return 12;
 	else if (enhancement == purchaseEnhancement.RefreshPerk)
 		return 5;
+	else if (enhancement == purchaseEnhancement.NextRoundGemsUp)
+		return 4;
+	else if (enhancement == purchaseEnhancement.UpgradeFirstCard)
+		return 7;
+	else if (enhancement == purchaseEnhancement.BuyExtraMoves)
+		return 14;
 	return 20; // In case I missed something I guess /shrug
 }

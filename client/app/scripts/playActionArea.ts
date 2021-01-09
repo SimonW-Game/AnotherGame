@@ -23,6 +23,7 @@ interface IPlayActionComponent extends ng.IComponentController {
 	getPerkName: (perk: noHandPerk) => string;
 	getItemFromPerk: (perk: noHandPerk) => IItem;
 	viewHandDetails: () => void;
+	getDrawText: () => string;
 	exitInfo: () => void;
 	isAssistMode: () => boolean;
 }
@@ -45,7 +46,7 @@ function playActionFunc() {
 		ctrl.isWaitingForOthers = () => roundWrapper.isWaitingOnOthers();
 		ctrl.giveTurnOptions = () => roundWrapper.showSelectionTurnOptions(player.playerData);
 		ctrl.isExtraCard = (item: IItem) => roundWrapper.isExtraCard(item);
-		ctrl.willCauseBust = (item: IItem) => item.effect == itemEffect.Bane && player.playerData.baneThreshold - roundWrapper.getSelection().baneCount - item.points < 0;
+		ctrl.willCauseBust = (item: IItem) => item.effect == itemEffect.Bane && player.playerData.baneThreshold - roundWrapper.getSelection().baneCount - item.amount < 0;
 		ctrl.isCardEffective = isCardEffective;
 		ctrl.getMovementText = getMovementText;
 		ctrl.getAvailablePerks = getAvailablePerks;
@@ -56,11 +57,12 @@ function playActionFunc() {
 		ctrl.viewHandDetails = () => hoverKeyHelper.show(infoKeyType.handInfo);
 		ctrl.exitInfo = () => hoverKeyHelper.close();
 		ctrl.isAssistMode = () => globalSettings.assistMode && !gameWrapper.game.options.disableAssistMode;
+		ctrl.getDrawText = getDrawText;
 
 		let endTurnWarning: boolean = false;
 
 		function clickItem(item: IItem) {
-			roundWrapper.playItem(player.playerData, item);
+			roundWrapper.playCard(player.playerData, item);
 			endTurnWarning = false;
 		}
 		function clickInformation(item: IItem, event: Event): boolean {
@@ -80,20 +82,27 @@ function playActionFunc() {
 			let canPlayCard = false;
 			if (!endTurnWarning && globalSettings.assistMode && !gameWrapper.game.options.disableAssistMode) {
 				// If you're in assist mode and can still buy something, put up a warning.
-				if (!canBust && roundWrapper.remainingItems.length > 0)
-					cardInformationHelper.showInformation("End Turn?", "There is a 0% chance to bust if you draw another card.  Ending your turn now will result in less money for the buy phase (and less points!).  Draw as many cards as you can and then click the \"End\" button (or click it a second time now to end without drawing).");
-
+				if (!canBust && roundWrapper.remainingItems.length > 0) {
+					if (roundWrapper.currentHand.length >= roundWrapper.handSize) {
+						let baneCount = Math.max(0, player.playerData.baneThreshold - roundWrapper.selection.baneCount);
+						if (roundWrapper.currentHand.some(item => item.effect != itemEffect.Bane || item.amount <= baneCount)) {
+							cardInformationHelper.showInformation("End Turn?", "There is a playable card in your hand.  Ending your turn now will result in less money for the buy phase (and less points!).  Draw as many cards as you can and then click the \"End\" button (or click it a second time now to end without drawing).");
+						}
+					} else {
+						cardInformationHelper.showInformation("End Turn?", "There is a 0% chance to bust if you draw another card.  Ending your turn now will result in less money for the buy phase (and less points!).  Draw as many cards as you can and then click the \"End\" button (or click it a second time now to end without drawing).");
+					}
+				}
 				// If assist mode, also prevent them from ending if you can play a card with their deck empty.
 				if (roundWrapper.remainingItems.length == 0 && roundWrapper.currentHand.length > 0) {
 					let baneCount = Math.max(0, player.playerData.baneThreshold - roundWrapper.selection.baneCount);
 					// if you have a playable card in your hand, you might want to play it.
-					if (roundWrapper.currentHand.some(item => item.effect != itemEffect.Bane || item.points <= baneCount)) {
+					if (roundWrapper.currentHand.some(item => item.effect != itemEffect.Bane || item.amount <= baneCount)) {
 						canPlayCard = true;
 						cardInformationHelper.showInformation("End Turn?", "You have a playable card in your hand.");
 					}
 				}
 			}
-			if ((canBust && !canPlayCard) || (roundWrapper.remainingItems.length == 0 && roundWrapper.currentHand.length == 0) || endTurnWarning) {
+			if ((canBust && !canPlayCard) || (roundWrapper.remainingItems.length == 0 && !canPlayCard) || endTurnWarning) {
 				roundWrapper.endSelectionTurn(player.playerData, true);
 				endTurnWarning = false;
 			}
@@ -106,11 +115,13 @@ function playActionFunc() {
 			if (item.effect == itemEffect.GainExtraMoney
 				|| item.effect == itemEffect.PointInvestment)
 				cardName = cardName + " " + item.amount;
+			else if (item.effect == itemEffect.Bane && item.points != item.amount)
+				cardName = cardName + " " + item.amount; // I guess this is the same as the above statement. <_<
 			return cardName;
 		}
 
 		function isCardEffective(item: IItem) {
-			if (item.effect == itemEffect.MoneyForSpecial) {
+			if (item.effect == itemEffect.GemsForKeys) {
 				return roundWrapper.selection.playedItems.findIndex(i => i.effect == itemEffect.SpecialNoEffect) >= 0;
 			} else if (item.effect == itemEffect.MovesForSpecial) {
 				return roundWrapper.selection.playedItems.findIndex(i => i.effect == itemEffect.SpecialNoEffect) >= 0;
@@ -122,7 +133,7 @@ function playActionFunc() {
 				return roundWrapper.wasPreviousCardOfType(itemEffect.CopyMover);
 			} else if (item.effect == itemEffect.RemovePreviousBane) {
 				return roundWrapper.wasPreviousCardOfType(itemEffect.Bane) && roundWrapper.didJustDraw(item);
-			} else if (item.effect == itemEffect.CopyOfPreviousCardToHand) {
+			} else if (item.effect == itemEffect.CopyOfPreviousCard) {
 				return roundWrapper.didJustDraw(item);
 			} else if (item.effect == itemEffect.ShuffleHand) {
 				return roundWrapper.currentHand.length > 1; // if you have another card in your hand
@@ -133,19 +144,27 @@ function playActionFunc() {
 			} else if (item.effect == itemEffect.MoveTo5) {
 				return roundWrapper.getExtraMoves(item) > 0;
 			} else if (item.effect == itemEffect.Bane) {
-				return roundWrapper.getExtraMoves(item) > 0;
+				return roundWrapper.getExtraMoves(item) > 0 || (item.points != item.amount); // If it moves extra
 			} else if (item.effect == itemEffect.GainPoints5X) {
 				return (roundWrapper.selection.currentLocation + item.points) % 5 == 0; // if you are landing on a multiple of 5
 			} else if (item.effect == itemEffect.MovesForGems) {
 				return roundWrapper.selection.gemGains >= 5; // if you've earned at least 5 gems.
 			} else if (item.effect == itemEffect.EmptyHandGems) {
 				return roundWrapper.currentHand.length == 1; // if this is the only card in your hand, playing it would make your hand empty.
+			} else if (item.effect == itemEffect.EmptyHandMoves) {
+				return roundWrapper.currentHand.length == 1; // if this is the only card in your hand, playing it would make your hand empty.
 			} else if (item.effect == itemEffect.DrawLowestNonBane) {
-				return roundWrapper.remainingItems.some(i => i.effect != itemEffect.Bane && i.points < 3); // if there is a non-bane card in your deck
+				return roundWrapper.remainingItems.some(i => i.effect != itemEffect.Bane && i.points < 2); // if there is a non-bane card in your deck that moves 0-1
 			} else if (item.effect == itemEffect.MoveNextGem) {
 				return !roundWrapper.hasGem(roundWrapper.selection.currentLocation + item.points); // if you will move more than one space.
 			} else if (item.effect == itemEffect.GemsForMoney) {
 				return roundWrapper.selection.gemGains - (item.amount * 3) >= 0; // if you have enough gems to spend.
+			} else if (item.effect == itemEffect.JustDrewEmptyMover) {
+				return item.wasEffective; // Was deemed effective when it was drawn.
+			} else if (item.effect == itemEffect.JustDrewEmptyBonus) {
+				return item.wasEffective; // Was deemed effective when it was drawn.
+			} else if (item.effect == itemEffect.PlayCardMovement) {
+				return roundWrapper.getExtraMoves(item) > 0;
 			}
 			return false; // If not one of the above, then it is not effective.
 		}
@@ -166,7 +185,7 @@ function playActionFunc() {
 			endTurnWarning = false;
 			const item = getItemFromPerk(perk);
 			roundWrapper.selection.hasPerkAvailable = false;
-			roundWrapper.playItem(player.playerData, item);
+			roundWrapper.playCard(player.playerData, item);
 		}
 		function getItemFromPerk(perk: noHandPerk): IItem {
 			const item: IItem = {
@@ -185,6 +204,19 @@ function playActionFunc() {
 			}
 
 			return item;
+		}
+
+		function getDrawText() {
+			let text: string;
+			if (roundWrapper.extraCardsInHand.length > 0)
+				text = "Discard Extra Cards";
+			else if (roundWrapper.currentHand.length >= roundWrapper.handSize)
+				text = "-";
+			else if (ctrl.isAssistMode())
+				text = "Draw " + (roundWrapper.handSize - roundWrapper.currentHand.length) + " Card(s)";
+			else
+				text = "Draw";
+			return text;
 		}
 	};
 

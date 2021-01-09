@@ -57,7 +57,7 @@ function itemBuyPopupComponentFunc() {
 
 		$ctrl.getItemsToBuy = () => gameWrapper.game.currentRound.thingsToBuy.items[itemBuyHelper.effect];
 		$ctrl.buyItem = buyItem;
-		$ctrl.canBuyClass = (item: IItem) => roundWrapper.canBuyItem(item);
+		$ctrl.canBuyClass = (item: IItem) => roundWrapper.canBuyItem(player.playerData, item);
 		$ctrl.getItemCost = (item: IItem) => item.cost - roundWrapper.cardDiscount;
 
 		function getHeader() {
@@ -68,11 +68,21 @@ function itemBuyPopupComponentFunc() {
 		function getDescription() {
 			if (itemBuyHelper.showGem)
 				return "Spend your hard earned gems by enhancing various things to help you win.";
-			return styleHelper.getCardDescription({ amount: 0, cost: 0, effect: itemBuyHelper.effect, points: 0 }, player, roundWrapper);
+			let description: string = styleHelper.getCardDescription({ amount: 0, cost: 0, effect: itemBuyHelper.effect, points: 0 }, player, roundWrapper);
+
+			const deckLimit = roundWrapper.getDeckLimit(itemBuyHelper.effect);
+			if (deckLimit < Number.MAX_VALUE) {
+				let deckCount = player.playerData.items.reduce((num, val) => val.effect == itemBuyHelper.effect ? num + 1 : num, 0)
+					+ roundWrapper.buySelection.items.reduce((num, val) => val.effect == itemBuyHelper.effect ? num + 1 : num, 0);
+				if (deckCount >= deckLimit)
+					description = "You already have the maximum number of this card in your deck.  " + description;
+			}
+
+			return description;
 		}
 
 		function buyItem(item: IItem) {
-			roundWrapper.buyItem(item);
+			roundWrapper.buyItem(player.playerData, item);
 		}
 
 		function getItemsToBuy() {

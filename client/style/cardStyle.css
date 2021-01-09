@@ -113,6 +113,16 @@
 }
 
 
+.sw-playing-card.sw-card-play-card-movement::before {
+	background-color: rgba(190, 130, 30, .75);
+}
+
+.sw-card-play-card-movement {
+	color: rgb(50, 50, 210);
+	background-color: rgb(190, 130, 30); /*160, 110, 18*/
+}
+
+
 .sw-playing-card.sw-card-growing-mover::before {
 	background-color: rgba(90, 190, 90, .75);
 }
@@ -214,13 +224,34 @@
 
 
 .sw-playing-card.sw-card-remove-bane::before {
-	background-color: rgba(140, 140, 20, .75);
+	background-color: rgba(120, 120, 10, .75);
 }
 
 .sw-card-remove-bane {
 	color: rgb(235, 235, 235);
-	background-color: rgb(140, 140, 20);
+	background-color: rgb(120, 120, 10);
 }
+
+
+.sw-playing-card.sw-card-just-drew-bonus::before {
+	background-color: rgba(60, 60, 60, .75);
+}
+
+.sw-card-just-drew-bonus {
+	color: rgb(220, 30, 180);
+	background-color: rgb(60, 60, 60);
+}
+
+
+.sw-playing-card.sw-card-just-drew-mover::before {
+	background-color: rgba(60, 60, 60, .75);
+}
+
+.sw-card-just-drew-mover {
+	color: rgb(255, 50, 160);
+	background-color: rgb(60, 60, 60);
+}
+
 
 
 .sw-playing-card.sw-card-cost-less::before {
@@ -260,6 +291,26 @@
 .sw-card-tax {
 	color: rgb(160, 160, 40);
 	background-color: rgb(10, 10, 10);
+}
+
+
+.sw-playing-card.sw-card-bane-drawer::before {
+	background-color: rgba(10, 10, 10, .75);
+}
+
+.sw-card-bane-drawer {
+	color: rgb(150, 150, 235);
+	background-color: rgb(10, 10, 10);
+}
+
+
+.sw-playing-card.sw-card-bane-briber::before {
+	background-color: rgba(120, 120, 10, .75);
+}
+
+.sw-card-bane-briber {
+	color: rgb(180, 180, 255);
+	background-color: rgb(120, 120, 10);
 }
 
 
@@ -390,12 +441,22 @@
 }
 
 
+.sw-playing-card.sw-card-passing-future-gem::before {
+	background-color: rgba(30, 90, 30, .75);
+}
+
+.sw-card-passing-future-gem {
+	color: rgb(140, 140, 255);
+	background-color: rgb(30, 90, 30);
+}
+
+
 .sw-playing-card.sw-card-extra-future-gem::before {
 	background-color: rgba(30, 90, 30, .75);
 }
 
 .sw-card-extra-future-gem {
-	color: rgb(200, 60, 200);
+	color: rgb(255, 60, 225);
 	background-color: rgb(30, 90, 30);
 }
 
@@ -491,7 +552,7 @@
 	/* margin-top: 5%;*/
 	/* height: 90%;*/
 	height: 100%;
-	width: 32%;
+	width: 35.5%;
 	font-size: 3.63vw;
 	position: relative;
 	display: inline-block;
@@ -651,7 +712,8 @@
 #sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-draw {
 	position: absolute;
 	text-align: center;
-	font-size: 10vw;
+	font-size: 8vw;
+	white-space: break-spaces;
 	left: 0px;
 	right: 0px;
 	top: 0px;

@@ -382,6 +382,7 @@ class Game {
 		// People who bought "superspreader"
 		let virusInfectingPlayers = []; // duplicates allowed!
 		let poisonInfectingPlayers = []; // duplicates allowed!
+		let baneBribingPlayers = []; // duplicates allowed!
 		let taxCollectingPlayers = []; // duplicates allowed!
 		let bane1InfectingPlayers = []; // duplicates not allowed!
 
@@ -392,7 +393,7 @@ class Game {
 			}
 
 			// Remove poisons and taxes.
-			player.playerData.items = player.playerData.items.filter(i => i.effect != itemEffect.Poison && i.effect != itemEffect.Tax);
+			this.removeRoundEndCards(player);
 
 			// Could have evolving cards, moved previous evolving cards to after selection if they were played.
 			// Evolve cards before adding bought items.
@@ -403,8 +404,6 @@ class Game {
 			if (buySelection.buyingItems) {
 				totalBoughtCards = buySelection.items.length;
 				player.playerData.totalCardsBought = totalBoughtCards;
-				// Add bought cards to player deck
-				player.playerData.items.push(...buySelection.items);
 
 				// Do enhancements.
 				buySelection.enhancements.forEach(enhancement => {
@@ -412,8 +411,6 @@ class Game {
 						player.playerData.handSize++;
 					else if (enhancement == purchaseEnhancement.IncreaseStartingSquare)
 						player.playerData.startingPosition++;
-					else if (enhancement == purchaseEnhancement.IncreaseBaneThreshold)
-						player.playerData.baneThreshold++;
 					else if (enhancement == purchaseEnhancement.GainPoint)
 						player.playerData.totalScore += 1;
 					else if (enhancement == purchaseEnhancement.GainTwoPoints)
@@ -424,10 +421,23 @@ class Game {
 						virusInfectingPlayers.push(player.playerData.index);
 					else if (enhancement == purchaseEnhancement.RefreshPerk)
 						player.playerData.hasPerkAvailable = true;
+					else if (enhancement == purchaseEnhancement.UpgradeFirstCard) {
+						const firstCardPlayed = this.round.playerSelections[player.playerData.index].playedItems[0];
+						if (firstCardPlayed) {
+							const firstCard = player.playerData.items.find(c => c.effect == firstCardPlayed.effect && c.points == firstCardPlayed.points && c.amount == firstCardPlayed.amount);
+							if (firstCard)
+								firstCard.points += 1;
+						}
+					} else if (enhancement == purchaseEnhancement.BuyExtraMoves) {
+						buySelection.items.forEach(card => card.points += 1);
+					}
 
 					player.playerData.totalEnhancements.push(enhancement);
 				});
 				player.playerData.gemTotal -= buySelection.gemsSpent;
+
+				// Add bought cards to player deck
+				player.playerData.items.push(...buySelection.items);
 			}
 
 			this.options.forceBuys[roundNumber].forEach(it => {
@@ -443,6 +453,8 @@ class Game {
 					addBaneInfection = true;
 				else if (playedItem.effect == itemEffect.PoisonBrewer)
 					poisonInfectingPlayers.push(player.playerData.index);
+				else if (playedItem.effect == itemEffect.BaneBriber)
+					baneBribingPlayers.push(player.playerData.index);
 				else if (playedItem.effect == itemEffect.TaxCollector)
 					taxCollectingPlayers.push(player.playerData.index);
 				else if (playedItem.effect == itemEffect.GainPointPerBuy)
@@ -465,8 +477,8 @@ class Game {
 
 		// After adding up various things, go through players again and apply the sums.
 		this.players.forEach((player: Player) => {
-			let extraPoints = Math.floor((winningScore - player.playerData.totalScore) / 2.5);
-			roundData.buySelectionData.additionalStartingPoints[player.playerData.index] = extraPoints;
+			let extraMovement = Math.floor((winningScore - player.playerData.totalScore) / 2.5);
+			roundData.buySelectionData.additionalStartingPoints[player.playerData.index] = extraMovement;
 
 			if (virusInfectingPlayers.length > 0) {
 				const buySelection = roundData.buySelectionData.playerBuySelectionData[player.playerData.index];
@@ -482,6 +494,14 @@ class Game {
 				if (newPoisons.length > 0) {
 					player.playerData.items.push(...newPoisons);
 					buySelection.items.push(...newPoisons);
+				}
+			}
+			if (baneBribingPlayers.length > 0) {
+				const buySelection = roundData.buySelectionData.playerBuySelectionData[player.playerData.index];
+				const newDrawer = new Array(baneBribingPlayers.reduce((amt, playerIndex) => playerIndex == player.playerData.index ? amt : amt + 1, 0)).fill(getItem(itemEffect.BaneDrawer));
+				if (newDrawer.length > 0) {
+					player.playerData.items.push(...newDrawer);
+					buySelection.items.push(...newDrawer);
 				}
 			}
 			if (taxCollectingPlayers.length > 0) {
@@ -509,6 +529,11 @@ class Game {
 		return roundData;
 	}
 
+	private removeRoundEndCards(player: Player) {
+		player.playerData.items = player.playerData.items.filter(i => i.effect != itemEffect.Poison && i.effect != itemEffect.Tax && i.effect != itemEffect.BaneDrawer);
+	}
+
+
 	public calculateGameResults(): IEndGameInfo {
 		let endGameInfo: IEndGameInfo = <IEndGameInfo>{ players: [] };
 		// Calculate end game bonuses here.
@@ -526,10 +551,13 @@ class Game {
 			this.populatePointsForCurrentRound(player, this.round.roundData);
 			let selectionData = this.round.roundData.selectionResults.playerSelectionData[player.playerData.index];
 
+			// No need to show which attacks were given to you on the second to last round.
+			this.removeRoundEndCards(player);
+
 			// If there is a card that does something at the end of the game, do it here.
 			player.playerData.items.forEach(item => {
 				if (item.effect == itemEffect.GrowingPoints) {
-					endGamePlayerInfo.endGamePointsForCards += item.amount;
+					endGamePlayerInfo.endGamePointsForCards += Math.min(4, item.amount);
 				}
 				if (item.effect == itemEffect.MoveAndPoint) {
 					endGamePlayerInfo.endGamePointsForCards += item.amount; // Always one, but I'll allow it.
@@ -620,7 +648,7 @@ class Game {
 			compareNumber = this.completedRounds.concat(this.round.roundData).reduce((count, r) => {
 				count += r.selectionResults.playerSelectionData[playerData.index].playedItems.reduce((baneCount, item) => {
 					if (item.effect == itemEffect.Bane)
-						baneCount += item.points;
+						baneCount += item.amount;
 					return baneCount;
 				}, 0);
 				return count;
@@ -648,6 +676,8 @@ class Game {
 			this.options = gameModes.getFightAgainstBaneOptions();
 		else if (modeIndex == 3)
 			this.options = gameModes.getAttackGameOptions();
+		else if (modeIndex == 4)
+			this.options = gameModes.getDefault2GameOptions();
 		this.options.gameMode = modeIndex;
 	}
 }
@@ -657,7 +687,7 @@ class Game {
 export enum itemEffect {
 	JustMove,
 	SpecialNoEffect,
-	MoneyForSpecial,
+	GemsForKeys,
 	MovesForSpecial,
 	SpecialAdjacentMover,
 	BonusForKeys,
@@ -669,7 +699,7 @@ export enum itemEffect {
 	GrowingPoints,
 	CopyMover,
 	RemovePreviousBane,
-	CopyOfPreviousCardToHand,
+	CopyOfPreviousCard,
 	CardsCostLess,
 	LastCardGem,
 	TrashItem,
@@ -684,9 +714,12 @@ export enum itemEffect {
 	MovesForGems,
 	EmptyHandGems,
 	EmptyHandMoves,
+	JustDrewEmptyMover,
+	JustDrewEmptyBonus,
 	IncreaseHandSize,
 	GainPointPerBuy,
-	GainExtraGemFromHere,
+	FutureGemsUp,
+	FuturePassingGemsUp,
 	PlayedMostReward,
 	DrawLowestNonBane,
 	MoveAndPoint,
@@ -694,18 +727,19 @@ export enum itemEffect {
 	GemsForMoney,
 	PointsForPassingGems,
 	MoneyForPassingGems,
+	PlayCardMovement,
 
 
-
-	Tax,
-	Virus,
-	BaneDrawer,
-	BaneBriber,
-	Poison,
-	PoisonBrewer,
 	TaxCollector,
+	PoisonBrewer,
+	BaneBriber,
 	BaneGiver,
+	Tax,
+	Poison,
+	BaneDrawer,
+	Virus,
 	Bane,
+
 	DrawNoPenalty,
 }
 export enum purchaseEnhancement {
@@ -717,6 +751,9 @@ export enum purchaseEnhancement {
 	IncreaseBaneThreshold,
 	VirusSpreader,
 	RefreshPerk,
+	NextRoundGemsUp,
+	UpgradeFirstCard,
+	BuyExtraMoves,
 
 
 	// Below here doesn't cost extra money to buy

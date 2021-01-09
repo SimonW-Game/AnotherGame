@@ -114,8 +114,12 @@ function invectoryFunc() {
 		}
 
 		function getPercentageToBust(): string {
-			if (roundWrapper.showSelectionTurnOptions(player.playerData))
-				return roundWrapper.getPercentageToBust(player) + "%";
+			if (roundWrapper.currentHand.length >= roundWrapper.handSize) {
+				return "-";
+			} else {
+				if (roundWrapper.showSelectionTurnOptions(player.playerData))
+					return roundWrapper.getPercentageToBust(player) + "%";
+			}
 			return "-";
 		}
 

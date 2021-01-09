@@ -42,7 +42,7 @@ enum RoundPhaseStatus {
 	PreRound,
 	PlayPhase,
 	BuyPhase,
-	GameAnalysisPhase, // TODO, finished game, look at results.
+	GameAnalysisPhase,
 }
 
 interface IGameOptions {
@@ -134,7 +134,7 @@ class StyleHelper {
 			cardClass = "sw-card-special-no-effect";
 		else if (effect == itemEffect.AddToHand)
 			cardClass = "sw-card-add-to-hand";
-		else if (effect == itemEffect.MoneyForSpecial)
+		else if (effect == itemEffect.GemsForKeys)
 			cardClass = "sw-card-money-for-special";
 		else if (effect == itemEffect.MovesForSpecial)
 			cardClass = "sw-card-moves-for-special";
@@ -156,7 +156,7 @@ class StyleHelper {
 			cardClass = "sw-card-special-adjacent-mover";
 		else if (effect == itemEffect.RemovePreviousBane)
 			cardClass = "sw-card-remove-bane";
-		else if (effect == itemEffect.CopyOfPreviousCardToHand)
+		else if (effect == itemEffect.CopyOfPreviousCard)
 			cardClass = "sw-card-copy-previous";
 		else if (effect == itemEffect.CardsCostLess)
 			cardClass = "sw-card-cost-less";
@@ -168,6 +168,10 @@ class StyleHelper {
 			cardClass = "sw-card-poison";
 		else if (effect == itemEffect.PoisonBrewer)
 			cardClass = "sw-card-poison-brewer";
+		else if (effect == itemEffect.BaneBriber)
+			cardClass = "sw-card-bane-briber";
+		else if (effect == itemEffect.BaneDrawer)
+			cardClass = "sw-card-bane-drawer";
 		else if (effect == itemEffect.Tax)
 			cardClass = "sw-card-tax";
 		else if (effect == itemEffect.TaxCollector)
@@ -206,8 +210,10 @@ class StyleHelper {
 			cardClass = "sw-card-increase-hand";
 		else if (effect == itemEffect.GainPointPerBuy)
 			cardClass = "sw-card-points-per-buy";
-		else if (effect == itemEffect.GainExtraGemFromHere)
+		else if (effect == itemEffect.FutureGemsUp)
 			cardClass = "sw-card-extra-future-gem";
+		else if (effect == itemEffect.FuturePassingGemsUp)
+			cardClass = "sw-card-passing-future-gem";
 		else if (effect == itemEffect.MoveAndPoint)
 			cardClass = "sw-card-move-point";
 		else if (effect == itemEffect.MoveNextGem)
@@ -218,6 +224,12 @@ class StyleHelper {
 			cardClass = "sw-card-points-no-gems";
 		else if (effect == itemEffect.MoneyForPassingGems)
 			cardClass = "sw-card-money-pass-gem";
+		else if (effect == itemEffect.JustDrewEmptyBonus)
+			cardClass = "sw-card-just-drew-bonus";
+		else if (effect == itemEffect.JustDrewEmptyMover)
+			cardClass = "sw-card-just-drew-mover";
+		else if (effect == itemEffect.PlayCardMovement)
+			cardClass = "sw-card-play-card-movement";
 		else
 			cardClass = "sw-perk-card";
 
@@ -234,7 +246,7 @@ class StyleHelper {
 			cardClass = "fa fa-key";
 		else if (effect == itemEffect.AddToHand)
 			cardClass = "fa fa-hand-holding-medical";
-		else if (effect == itemEffect.MoneyForSpecial)
+		else if (effect == itemEffect.GemsForKeys)
 			cardClass = "fa fa-search-dollar";
 		else if (effect == itemEffect.MovesForSpecial)
 			cardClass = "fa fa-running";
@@ -256,7 +268,7 @@ class StyleHelper {
 			cardClass = "fa fa-caret-square-left";
 		else if (effect == itemEffect.RemovePreviousBane)
 			cardClass = "fa fa-eraser";
-		else if (effect == itemEffect.CopyOfPreviousCardToHand)
+		else if (effect == itemEffect.CopyOfPreviousCard)
 			cardClass = "far fa-clone";
 		else if (effect == itemEffect.CardsCostLess)
 			cardClass = "fa fa-tags";
@@ -270,6 +282,10 @@ class StyleHelper {
 			cardClass = "fa fa-vial";
 		else if (effect == itemEffect.PoisonBrewer)
 			cardClass = "fa fa-vials";
+		else if (effect == itemEffect.BaneBriber)
+			cardClass = "fa fa-briefcase";
+		else if (effect == itemEffect.BaneDrawer)
+			cardClass = "fa fa-heart-broken";
 		else if (effect == itemEffect.TaxCollector)
 			cardClass = "fa fa-search-dollar";
 		else if (effect == itemEffect.BaneGiver)
@@ -306,7 +322,9 @@ class StyleHelper {
 			cardClass = "fa fa-hand-point-up";
 		else if (effect == itemEffect.GainPointPerBuy)
 			cardClass = "fa fa-shopping-bag";
-		else if (effect == itemEffect.GainExtraGemFromHere)
+		else if (effect == itemEffect.FutureGemsUp)
+			cardClass = "fa fa-calendar-plus";
+		else if (effect == itemEffect.FuturePassingGemsUp)
 			cardClass = "fa fa-calendar-plus";
 		else if (effect == itemEffect.MoveAndPoint)
 			cardClass = "fa fa-medal";
@@ -318,6 +336,12 @@ class StyleHelper {
 			cardClass = "fa fa-times-circle";
 		else if (effect == itemEffect.MoneyForPassingGems)
 			cardClass = "fa fa-circle-notch";
+		else if (effect == itemEffect.JustDrewEmptyBonus)
+			cardClass = "fa fa-bell";
+		else if (effect == itemEffect.JustDrewEmptyMover)
+			cardClass = "far fa-bell";
+		else if (effect == itemEffect.PlayCardMovement)
+			cardClass = "fa fa-people-carry";
 
 		return cardClass;
 	}
@@ -332,7 +356,7 @@ class StyleHelper {
 			cardName = "Key";
 		else if (effect == itemEffect.AddToHand)
 			cardName = "Add To Hand";
-		else if (effect == itemEffect.MoneyForSpecial)
+		else if (effect == itemEffect.GemsForKeys)
 			cardName = "Gems For Keys";
 		else if (effect == itemEffect.MovesForSpecial)
 			cardName = "Moves For Keys";
@@ -354,7 +378,7 @@ class StyleHelper {
 			cardName = "Adjacent Key Mover";
 		else if (effect == itemEffect.RemovePreviousBane)
 			cardName = "Remove Bane";
-		else if (effect == itemEffect.CopyOfPreviousCardToHand)
+		else if (effect == itemEffect.CopyOfPreviousCard)
 			cardName = "Copy Previous";
 		else if (effect == itemEffect.CardsCostLess)
 			cardName = "Card Sale";
@@ -366,6 +390,10 @@ class StyleHelper {
 			cardName = "Poison";
 		else if (effect == itemEffect.PoisonBrewer)
 			cardName = "Poison Brewer";
+		else if (effect == itemEffect.BaneBriber)
+			cardName = "Bane Briber";
+		else if (effect == itemEffect.BaneDrawer)
+			cardName = "Bane Drawer";
 		else if (effect == itemEffect.TaxCollector)
 			cardName = "Tax Collector";
 		else if (effect == itemEffect.Tax)
@@ -406,8 +434,10 @@ class StyleHelper {
 			cardName = "Hand Size Up";
 		else if (effect == itemEffect.GainPointPerBuy)
 			cardName = "Point Per Buy";
-		else if (effect == itemEffect.GainExtraGemFromHere)
+		else if (effect == itemEffect.FutureGemsUp)
 			cardName = "Future Gems Up";
+		else if (effect == itemEffect.FuturePassingGemsUp)
+			cardName = "Gain Passing Gems";
 		else if (effect == itemEffect.MoveAndPoint)
 			cardName = "Extra Point";
 		else if (effect == itemEffect.MoveNextGem)
@@ -418,6 +448,12 @@ class StyleHelper {
 			cardName = "Passing Gems Points";
 		else if (effect == itemEffect.MoneyForPassingGems)
 			cardName = "Pass Gem Money";
+		else if (effect == itemEffect.JustDrewEmptyBonus)
+			cardName = "Empty Draw Bonus";
+		else if (effect == itemEffect.JustDrewEmptyMover)
+			cardName = "Empty Draw Mover";
+		else if (effect == itemEffect.PlayCardMovement)
+			cardName = "Hand Move Evolver";
 
 		return cardName;
 	}
@@ -430,7 +466,7 @@ class StyleHelper {
 				baneCount = Math.max(0, player.playerData.baneThreshold - roundWrapper.getSelection().baneCount);
 			else
 				baneCount = -1;
-			description = "Bane will give you points, but too many Bane's will cause you to bust" + (baneCount == -1 ? "" : "(" + baneCount + " left)") + ".  If you bust, you will have to chose to gain points or spend money.";
+			description = "Bane will give you points, but too many Bane's will cause you to bust" + (baneCount == -1 ? "" : "(" + baneCount + " base movement left)") + ".  If you bust, you will have to chose to gain points or spend money.  Effects that make Banes move further do not increase their bane count.";
 		} else if (item.effect == itemEffect.JustMove) {
 			description = "Moves you forward on the board.  No special effect.";
 		} else if (item.effect == itemEffect.SpecialNoEffect) {
@@ -442,7 +478,7 @@ class StyleHelper {
 			else
 				additionalCardText = item.amount + " ";
 			description = "Draw " + additionalCardText + "more card(s) to your hand, then chose a remaining card to play (additional cards will be reshuffled).";
-		} else if (item.effect == itemEffect.MoneyForSpecial) {
+		} else if (item.effect == itemEffect.GemsForKeys) {
 			description = "Gain 1 extra gem for each Key you've played so far, up to three extra gems.";
 		} else if (item.effect == itemEffect.MovesForSpecial) {
 			description = "Move an extra space for each Key you've played so far, up to three extra spaces.";
@@ -451,10 +487,12 @@ class StyleHelper {
 		} else if (item.effect == itemEffect.GemLandingExtra) {
 			let additionalCardText: string;
 			if (item.amount == 0)
-				additionalCardText = "extra gems";
+				additionalCardText = "1-2 extra gems";
+			else if (item.amount == 1)
+				additionalCardText = "an extra gem";
 			else
 				additionalCardText = "an extra " + item.amount + " gems";
-			description = "Gain " + additionalCardText + " if this is placed on a gem.  If not placed on a gem, you gain no gems.";
+			description = "Gain " + additionalCardText + " if this card lands on a gem.  If not, gain no gems.";
 		} else if (item.effect == itemEffect.ShuffleHand) {
 			description = "Shuffle the remaining cards in your hand back into your deck.";
 		} else if (item.effect == itemEffect.DrawLowestNonBane) {
@@ -469,7 +507,9 @@ class StyleHelper {
 			description = "Moves " + additionalCardText + " forward.  After each round, this will permanently move one additional space until it reaches 4 spaces.";
 		} else if (item.effect == itemEffect.GrowingPoints) {
 			let additionalCardText: string;
-			if (item.amount <= 1)
+			if (item.amount == 0)
+				additionalCardText = "0 point";
+			else if (item.amount == 1)
 				additionalCardText = "1 point";
 			else
 				additionalCardText = item.amount + " points"
@@ -480,8 +520,8 @@ class StyleHelper {
 		} else if (item.effect == itemEffect.SpecialAdjacentMover) {
 			description = "If the last card you played was a Key, move an additional space.";
 		} else if (item.effect == itemEffect.RemovePreviousBane) {
-			description = "If the last card you played was a Bane, shuffle it back into your deck removing its bane counter.";
-		} else if (item.effect == itemEffect.CopyOfPreviousCardToHand) {
+			description = "If you play this card immediately after drawing it (without playing another afterward) and the last card you played was a Bane, shuffle it back into your deck and remove one bane counter.";
+		} else if (item.effect == itemEffect.CopyOfPreviousCard) {
 			description = "If you play this card immediately after drawing it (without playing another afterward), copy the last card you played and put it in our hand (with the choice to end your turn if desired).";
 		} else if (item.effect == itemEffect.CardsCostLess) {
 			let additionalCardText: string = "";
@@ -528,7 +568,7 @@ class StyleHelper {
 		} else if (item.effect == itemEffect.MoveTo5) {
 			description = "Move to the next board space multiple of 5 (Will not move if already on a multiple of 5).";
 		} else if (item.effect == itemEffect.BaneCountRemoval) {
-			description = "Remove a single bane counter.";
+			description = "Remove a single bane counter.  You can only have one of these in your deck.";
 		}
 		else if (item.effect == itemEffect.GainExtraMoney) {
 			let additionalCardText: string = "";
@@ -540,7 +580,7 @@ class StyleHelper {
 			description = "If you play this card so it lands on a board space of a multiple of 5, gain two points (after the selection phase).  This effect stacks.";
 		}
 		else if (item.effect == itemEffect.Bane1Moves2) {
-			description = "For every Bane 1 you play after this, it will move 2 spaces instead of 1.";
+			description = "For every Bane 1 you play after this, it will move 2 spaces instead of 1.  This will not increase the bane count (Bane 1's will always only decrease the bane threshold by 1).";
 		}
 		else if (item.effect == itemEffect.MovesForGems) {
 			description = "Move an extra space for every 5 gems you've earned this round so far, up to three spaces.";
@@ -560,11 +600,14 @@ class StyleHelper {
 		else if (item.effect == itemEffect.GainPointPerBuy) {
 			description = "For each card you buy the round you play this, gain a point.  Spending gems does not earn points.  This card does not move you.";
 		}
-		else if (item.effect == itemEffect.GainExtraGemFromHere) {
+		else if (item.effect == itemEffect.FutureGemsUp) {
 			description = "Landing on gems gain you an extra gem for the rest of the round. This effect stacks.";
 		}
+		else if (item.effect == itemEffect.FuturePassingGemsUp) {
+			description = "Passing gems gain you 2 gems for the rest of the round (or 2 extra gems if this effect is already active). This effect stacks.";
+		}
 		else if (item.effect == itemEffect.MoveAndPoint) {
-			description = "At the end of the game, gain a point";
+			description = "Does nothing when you play this.  At the end of the game, gain a point.";
 		}
 		else if (item.effect == itemEffect.MoveNextGem) {
 			description = "Place this on the next gem on the board.";
@@ -576,10 +619,31 @@ class StyleHelper {
 				description = "If you have " + (item.amount * 3) + " or more gems, exchange them for " + item.amount + " money.";
 		}
 		else if (item.effect == itemEffect.PointsForPassingGems) {
-			description = "At the end of the round, gain a point for every additional gem you passed more than gem you landed on.";
+			description = "At the end of the round, gain a point for every additional gem you passed more than gem you landed on, up to 4 points.";
 		}
 		else if (item.effect == itemEffect.MoneyForPassingGems) {
-			description = "Gain " + (item.amount > 1 ? item.amount : 1) + " money for every gem you have not landed on so far.";
+			let additionalText: string;
+			if (item.amount == 0)
+				additionalText = "1-2";
+			else
+				additionalText = String(item.amount);
+			description = "Gain " + additionalText + " money for every gem you have not landed on so far.";
+		}
+		else if (item.effect == itemEffect.JustDrewEmptyBonus) {
+			let additionalText: string;
+			if (item.amount == 0)
+				additionalText = "1-2 points, 1-2 money, and 1-2 gems.";
+			else if (item.amount == 1)
+				additionalText = "1 point, 1 money, and 1 gem.";
+			else if (item.amount == 2)
+				additionalText = "2 points, 2 money, and 2 gems";
+			description = "If you drew this with an empty hand, gain " + additionalText;
+		}
+		else if (item.effect == itemEffect.JustDrewEmptyMover) {
+			description = "If you drew this with an empty hand, move 3 extra spaces.";
+		}
+		else if (item.effect == itemEffect.PlayCardMovement) {
+			description = "For every 2 cards you play while this is in your hand, gain 1 extra movement (up to 3).";
 		}
 		return description;
 	}
@@ -606,6 +670,12 @@ class StyleHelper {
 			name = "4 Money";
 		} else if (enhancement == purchaseEnhancement.RefreshPerk) {
 			name = "Refresh Perk";
+		} else if (enhancement == purchaseEnhancement.NextRoundGemsUp) {
+			name = "Earn Extra Gems";
+		} else if (enhancement == purchaseEnhancement.UpgradeFirstCard) {
+			name = "Upgrade First Card";
+		} else if (enhancement == purchaseEnhancement.BuyExtraMoves) {
+			name = "Buying Extra Moves";
 		}
 		return name;
 	}
@@ -625,13 +695,19 @@ class StyleHelper {
 		} else if (enhancement == purchaseEnhancement.GainThreePoints) {
 			name = "Your total score will be increased by 3 points";
 		} else if (enhancement == purchaseEnhancement.IncreaseBaneThreshold) {
-			name = "You can play an additional bane before busting.";
+			name = "For the next round, your bane counter increases by 1.";
 		} else if (enhancement == purchaseEnhancement.VirusSpreader) {
 			name = "Give every other player a virus card that stays for the duration of the game.";
 		} else if (enhancement == purchaseEnhancement.ExtraMoney) {
 			name = "Immediately gain 4 money for this buy phase (to buy cards with).";
 		} else if (enhancement == purchaseEnhancement.RefreshPerk) {
 			name = "Refresh your perk so you are able to use your 'no hand perk' again in future selection phases.";
+		} else if (enhancement == purchaseEnhancement.NextRoundGemsUp) {
+			name = "For the next round, landing on gems gain you an extra gem.";
+		} else if (enhancement == purchaseEnhancement.UpgradeFirstCard) {
+			name = "Increase the movement of the first card you played in the selection phase of this round by one for the rest of the game. Banes that are upgraded will not increase their bane count.";
+		} else if (enhancement == purchaseEnhancement.BuyExtraMoves) {
+			name = "Cards bought during this buy phase gain 1 extra movement.";
 		}
 		return name;
 	}
@@ -692,7 +768,6 @@ class StyleHelper {
 		}
 		return name;
 	}
-
 }
 
 class RoundSummaryHelper {
@@ -893,7 +968,7 @@ enum infoKeyType {
 enum itemEffect {
 	JustMove, // Just moves you along the board.
 	SpecialNoEffect, // These do nothing (except progress you through the board).  They will be used as triggers to other card effects.
-	MoneyForSpecial, // Adds one money for each SpecialNoEffect's you have played.
+	GemsForKeys, // Adds one money for each SpecialNoEffect's you have played.
 	MovesForSpecial, // Move one extra spot for each SpecialNoEffect's you have played.
 	SpecialAdjacentMover, // If the previous card is SpecialNoEffect, do something.
 	BonusForKeys, // Grants you a bonus depending on how many keys you've played before this.
@@ -905,7 +980,7 @@ enum itemEffect {
 	GrowingPoints, // Gain "amount" points at the end of the game.  Does nothing in your deck. Grows each time you play it up to 4.
 	CopyMover, // Moves twice as far as the immediately played CopyMover
 	RemovePreviousBane, // If the previous card is a Bane, shuffle it back in deck (remove bane penalty).
-	CopyOfPreviousCardToHand, // Add a copy of the previous card you played to your hand.
+	CopyOfPreviousCard, // Add a copy of the previous card you played to your hand.
 	CardsCostLess, // Cards cost less during buy phase.
 	LastCardGem, // If this was the last card you played, gain gems.
 	TrashItem, // Super OP. Remove the leftmost card in your hand from your deck. (Might want to make it so you can't play if it's the last card in hand)
@@ -920,9 +995,12 @@ enum itemEffect {
 	MovesForGems, // For each 5 gems you got this round, move an extra space (up to three).
 	EmptyHandGems, // Gain 3 gems if played with an empty hand.
 	EmptyHandMoves, // Move an extra space if played with an empty hand.
+	JustDrewEmptyMover, // Moves you 4 spaces if you drew it with an empty hand.
+	JustDrewEmptyBonus, // Gain Money, gem, and point if you drew it with an empty hand.
 	IncreaseHandSize, // Increase hand size for the rest of the round
 	GainPointPerBuy, // Gain a point for every card you buy during the buy phase.
-	GainExtraGemFromHere, // Every time you land on a gem from here on our, gain an additional gem
+	FutureGemsUp, // Every time you land on a gem from here on out, gain an additional gem
+	FuturePassingGemsUp, // Get 2 gems for each gem you pass.
 	PlayedMostReward, // Reward the player for playing the most of these
 	DrawLowestNonBane, // Draws lowest moving non-bane card.
 	MoveAndPoint, // Just moves and gives you points.
@@ -930,20 +1008,21 @@ enum itemEffect {
 	GemsForMoney, // Removes 3 gems for 1 money.
 	PointsForPassingGems, // point for each gem below 4 you are.
 	MoneyForPassingGems, // Get extra money for each gem you passed.
-	// Get Reward if you have the most of these played
+	PlayCardMovement, // While this is in your hand, every two cards you play will increase its movement by 1, up to 3 extra spaces.
+	// Move as far as the furthest moving card you've played this round.
 	// Decide if you want to add the previous card back to your deck.
 	// Decide if you want to add a copy of the previous card to your deck at the end of the round (luck based, yuck).
+	// Play the next card in your deck.  If it is a bane, reduce it's bane count by 1.  Combo breaker, but really safe to play.
 
 
-
-	Tax, // Removes one money from their buy phase.
-	Virus, // adds a copy to your deck when you play it.  When drawn, it shuffles your first card back in your deck.
-	BaneDrawer, // Draws the first bane from your deck.
-	BaneBriber, // Adds a BaneDrawer into every other players deck for the next round.
-	Poison, // prevents you from drawing or ending your turn while in hand.  When played, it draws cards up to your hand size + 1. (Might only want to remove if you played it)
-	PoisonBrewer, // Adds a poison into every other players deck for the next round.
 	TaxCollector, // Adds a Tax into every other players deck.
+	PoisonBrewer, // Adds a poison into every other players deck for the next round.
+	BaneBriber, // Adds a BaneDrawer into every other players deck for the next round.
 	BaneGiver, // Adds a Bane 1 into every other players deck.
+	Tax, // Removes one money from their buy phase.
+	Poison, // prevents you from drawing or ending your turn while in hand.  When played, it draws cards up to your hand size + 1. (Might only want to remove if you played it)
+	BaneDrawer, // Draws the first bane from your deck.
+	Virus, // adds a copy to your deck when you play it.  When drawn, it shuffles your first card back in your deck.
 	Bane, // Card driving the game's progress. This is the "Bad" type.  Bad boy always goes last.
 
 	// Cards after this are perks.
@@ -959,6 +1038,9 @@ enum purchaseEnhancement {
 	IncreaseBaneThreshold,
 	VirusSpreader,
 	RefreshPerk,
+	NextRoundGemsUp,
+	UpgradeFirstCard,
+	BuyExtraMoves,
 
 
 	// Below here doesn't cost extra money to buy
