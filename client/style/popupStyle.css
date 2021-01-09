@@ -71,14 +71,14 @@
 		width: 100%;
 	}
 
-		.sw-popup .sw-popup-header::before {
-			position: absolute;
-			top: 0;
-			right: 2%;
-			content: 'X';
-			color: gray;
-			font-size: .5em;
-		}
+	.sw-popup:not(.sw-info-key-popup) .sw-popup-header::before {
+		position: absolute;
+		top: 0;
+		right: 2%;
+		content: 'X';
+		color: gray;
+		font-size: .5em;
+	}
 
 	.sw-popup .sw-popup-body {
 		top: 10%;
