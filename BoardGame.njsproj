@@ -104,7 +104,6 @@
     <TypeScriptCompile Include="client\app\scripts\pregameSettings.ts" />
     <TypeScriptCompile Include="client\app\scripts\itemBuyPopup.ts" />
     <TypeScriptCompile Include="client\app\scripts\cardInformationPopup.ts" />
-    <TypeScriptCompile Include="client\app\scripts\roundPreview.ts" />
     <TypeScriptCompile Include="client\app\scripts\boardArea.ts" />
     <TypeScriptCompile Include="client\app\scripts\inventoryArea.ts" />
     <TypeScriptCompile Include="client\app\scripts\buyActionArea.ts" />

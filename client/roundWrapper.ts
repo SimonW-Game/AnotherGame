@@ -250,7 +250,7 @@ class RoundWrapper {
 
 		// Before removing the card from your hand, check how many extra moves we get
 		// Have to do this prior to removing the card as it needs to be consistent with card text.
-		const extraMoves = this.getExtraMoves(card);
+		const extraMoves = this.getExtraMoves(card, player);
 		let movedSpaces = card.points + extraMoves;
 
 		// Remove the card from your hand.
@@ -420,7 +420,7 @@ class RoundWrapper {
 				let moneyGains = 0;
 				let helperPosition = this.getExtraStartingPoint(player.index);
 				for (let i = player.startingPosition + helperPosition + 1; i < this.selection.currentLocation; i++)
-					if (this.hasGem(i) && !this.boardItems[i])
+					if (this.hasGem(i, player) && !this.boardItems[i])
 						moneyGains++;
 				this.selection.moneyGains += (moneyGains * card.amount);
 				if (moneyGains > 0)
@@ -455,7 +455,7 @@ class RoundWrapper {
 			if (movedSpaces > 0) {
 				this.boardItems[this.selection.currentLocation] = card;
 
-				if (this.hasGem(this.selection.currentLocation)) {
+				if (this.hasGem(this.selection.currentLocation, player)) {
 					this.selection.gemGains += this.gemGainedOnLanding;
 					if (card.effect == itemEffect.GemLandingExtra) {
 						this.selection.gemGains += card.amount;
@@ -466,7 +466,7 @@ class RoundWrapper {
 				if (this.gemGainedOnPassing > 0) {
 					if (movedSpaces > 1) { // Can't pass when only moving one space.
 						for (let passedSpaceNdx = this.selection.currentLocation - 1; passedSpaceNdx > this.selection.currentLocation - movedSpaces; passedSpaceNdx--) {
-							if (this.hasGem(passedSpaceNdx)) {
+							if (this.hasGem(passedSpaceNdx, player)) {
 								this.selection.gemGains += this.gemGainedOnPassing;
 							}
 						}
@@ -489,11 +489,11 @@ class RoundWrapper {
 	public didJustDraw(item: IItem) {
 		return this.justDrawnCards.indexOf(item) >= 0;
 	}
-	public willLandOnGem(item: IItem) {
-		let movement = item.points + this.getExtraMoves(item);
-		return movement > 0 && this.hasGem(this.selection.currentLocation + movement);
+	public willLandOnGem(item: IItem, playerData: IPlayerClientData) {
+		let movement = item.points + this.getExtraMoves(item, playerData);
+		return movement > 0 && this.hasGem(this.selection.currentLocation + movement, playerData);
 	}
-	public getExtraMoves(item: IItem): number {
+	public getExtraMoves(item: IItem, playerData: IPlayerClientData): number {
 		let extraMoves = 0;
 		if (item.effect == itemEffect.MovesForSpecial) {
 			const additionalMoves = Math.min(3, this.selection.playedItems.reduce((count, curItem) => curItem.effect == itemEffect.SpecialNoEffect ? (count + 1) : count, 0));
@@ -530,7 +530,7 @@ class RoundWrapper {
 		else if (item.effect == itemEffect.MoveNextGem) {
 			let extraSpaces = 0;
 			// put in a fail-safe of three extra spaces.
-			while (!this.hasGem(this.selection.currentLocation + item.points + extraSpaces) && extraSpaces < 4)
+			while (!this.hasGem(this.selection.currentLocation + item.points + extraSpaces, playerData) && extraSpaces < 4)
 				extraSpaces++;
 			extraMoves = extraSpaces;
 		}
@@ -568,7 +568,7 @@ class RoundWrapper {
 				let gemBalance = 0;
 				let helperPosition = this.getExtraStartingPoint(playerData.index);
 				for (let i = playerData.startingPosition + helperPosition + 1; i < this.selection.currentLocation; i++) {
-					if (this.hasGem(i)) {
+					if (this.hasGem(i, playerData)) {
 						// If the spot has a gem, balance goes up if you played a card and down if not.
 						if (!this.boardItems[i])
 							gemBalance--;
@@ -621,7 +621,10 @@ class RoundWrapper {
 			$(boardAreaElem).animate({ scrollLeft: newLeftLocation }, Math.max(400, Math.abs(newLeftLocation - boardAreaElem.offsetLeft) / 2), 'linear');
 		}
 	}
-	public hasGem(index: number) {
+	public hasGem(index: number, playerData: IPlayerClientData) {
+		if (index <= playerData.startingPosition + this.getExtraStartingPoint(playerData.index))
+			return false;
+
 		for (let i = 1; i < 45; i++)
 			if (Math.floor(2.1999 * i) == index)
 				return true;

@@ -53,7 +53,7 @@ function playActionFunc() {
 		ctrl.clickPerk = clickPerk;
 		ctrl.getItemFromPerk = getItemFromPerk;
 		ctrl.getPerkName = (perk: noHandPerk) => styleHelper.getPerkName(perk);
-		ctrl.willLandOnGem = (item: IItem) => roundWrapper.willLandOnGem(item);
+		ctrl.willLandOnGem = (item: IItem) => roundWrapper.willLandOnGem(item, player.playerData);
 		ctrl.viewHandDetails = () => hoverKeyHelper.show(infoKeyType.handInfo);
 		ctrl.exitInfo = () => hoverKeyHelper.close();
 		ctrl.isAssistMode = () => globalSettings.assistMode && !gameWrapper.game.options.disableAssistMode;
@@ -128,7 +128,7 @@ function playActionFunc() {
 			} else if (item.effect == itemEffect.SpecialAdjacentMover) {
 				return roundWrapper.wasPreviousCardOfType(itemEffect.SpecialNoEffect);
 			} else if (item.effect == itemEffect.GemLandingExtra) {
-				return roundWrapper.willLandOnGem(item);
+				return roundWrapper.willLandOnGem(item, player.playerData);
 			} else if (item.effect == itemEffect.CopyMover) {
 				return roundWrapper.wasPreviousCardOfType(itemEffect.CopyMover);
 			} else if (item.effect == itemEffect.RemovePreviousBane) {
@@ -142,9 +142,9 @@ function playActionFunc() {
 			} else if (item.effect == itemEffect.TrashItem) {
 				return roundWrapper.currentHand[0] != item; // if this is not the leftmost card in your hand
 			} else if (item.effect == itemEffect.MoveTo5) {
-				return roundWrapper.getExtraMoves(item) > 0;
+				return roundWrapper.getExtraMoves(item, player.playerData) > 0;
 			} else if (item.effect == itemEffect.Bane) {
-				return roundWrapper.getExtraMoves(item) > 0 || (item.points != item.amount); // If it moves extra
+				return roundWrapper.getExtraMoves(item, player.playerData) > 0 || (item.points != item.amount); // If it moves extra
 			} else if (item.effect == itemEffect.GainPoints5X) {
 				return (roundWrapper.selection.currentLocation + item.points) % 5 == 0; // if you are landing on a multiple of 5
 			} else if (item.effect == itemEffect.MovesForGems) {
@@ -156,7 +156,7 @@ function playActionFunc() {
 			} else if (item.effect == itemEffect.DrawLowestNonBane) {
 				return roundWrapper.remainingItems.some(i => i.effect != itemEffect.Bane && i.points < 2); // if there is a non-bane card in your deck that moves 0-1
 			} else if (item.effect == itemEffect.MoveNextGem) {
-				return !roundWrapper.hasGem(roundWrapper.selection.currentLocation + item.points); // if you will move more than one space.
+				return !roundWrapper.hasGem(roundWrapper.selection.currentLocation + item.points, player.playerData); // if you will move more than one space.
 			} else if (item.effect == itemEffect.GemsForMoney) {
 				return roundWrapper.selection.gemGains - (item.amount * 3) >= 0; // if you have enough gems to spend.
 			} else if (item.effect == itemEffect.JustDrewEmptyMover) {
@@ -164,12 +164,12 @@ function playActionFunc() {
 			} else if (item.effect == itemEffect.JustDrewEmptyBonus) {
 				return item.wasEffective; // Was deemed effective when it was drawn.
 			} else if (item.effect == itemEffect.PlayCardMovement) {
-				return roundWrapper.getExtraMoves(item) > 0;
+				return roundWrapper.getExtraMoves(item, player.playerData) > 0;
 			}
 			return false; // If not one of the above, then it is not effective.
 		}
 		function getMovementText(item: IItem) {
-			const extraMoves = roundWrapper.getExtraMoves(item);
+			const extraMoves = roundWrapper.getExtraMoves(item, player.playerData);
 			if (extraMoves > 0)
 				return item.points + " + " + extraMoves + " = " + (item.points + extraMoves);
 			return String(item.points);

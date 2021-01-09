@@ -3,10 +3,11 @@ angular.module('mainApp').component(BOARDAREA_COMPONENT, boardAreaFunc());
 
 interface IBoardAreaController extends ng.IComponentController {
 	selection: ISelection;
+	game: Game;
 	getCardIconClass: (itemEffect: itemEffect) => string;
 	getSpaceClasses: (item: IItem, index: number) => string;
 	getSpacePoints: (index: number) => number;
-	getSpaceMoney: (index: number) => number;
+	isStartingSpace: (index: number) => boolean;
 	hasGem: (index: number) => boolean;
 	isPlayPhase: () => boolean;
 	isBuyPhase: () => boolean;
@@ -21,13 +22,16 @@ interface IBoardAreaController extends ng.IComponentController {
 
 function boardAreaFunc() {
 	const controllerFunc = function (userData: IUserData, gameWrapper: IGameWrapper, roundWrapper: RoundWrapper, styleHelper: StyleHelper, hoverKeyHelper: HoverKeyHelper) {
+		let player: IPlayer = gameWrapper.game.getPlayerByIndex(userData.index);
 		var $ctrl: IBoardAreaController = this;
 		$ctrl.selection = roundWrapper.getSelection();
+		$ctrl.game = gameWrapper.game;
 
 		$ctrl.getCardIconClass = styleHelper.getCardIconClass;
 		$ctrl.getSpaceClasses = getSpaceClasses;
 		$ctrl.getSpacePoints = (ndx) => roundWrapper.getSpacePoints(ndx);
-		$ctrl.hasGem = (index: number) => roundWrapper.hasGem(index);
+		$ctrl.isStartingSpace = (ndx) => ndx == player.playerData.startingPosition + roundWrapper.getExtraStartingPoint(player.playerData.index);
+		$ctrl.hasGem = (index: number) => roundWrapper.hasGem(index, player.playerData);
 		$ctrl.isPlayPhase = () => gameWrapper.game.roundPhaseStatus == RoundPhaseStatus.PlayPhase;
 		$ctrl.isBuyPhase = () => gameWrapper.game.roundPhaseStatus == RoundPhaseStatus.BuyPhase;
 		$ctrl.getRemainingMoneyToSpend = () => roundWrapper.availableMoney;
