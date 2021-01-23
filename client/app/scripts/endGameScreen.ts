@@ -58,7 +58,7 @@ function endGameScreenComponentFunc() {
 	};
 
 	var scorebarComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/endGameScreen.html',
+		templateUrl: '/app/views/endGameScreen.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

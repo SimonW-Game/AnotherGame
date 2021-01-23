@@ -41,7 +41,7 @@ function infoKeyPopupComponentFunc() {
 	};
 
 	var infoKeyComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/infoKeyPopup.html',
+		templateUrl: '/app/views/infoKeyPopup.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

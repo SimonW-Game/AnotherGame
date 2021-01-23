@@ -409,11 +409,12 @@ class RoundWrapper {
 				this.selection.moneyGains += Math.floor(card.amount);
 			}
 			else if (card.effect == itemEffect.GemsForMoney) {
-				let gemsNeeded = (card.amount * 3);
-				if (this.selection.gemGains - gemsNeeded >= 0) {
-					card.wasEffective = true;
-					this.selection.gemGains -= gemsNeeded;
-					this.selection.moneyGains += card.amount;
+				for (let i = 0; i < card.amount; i++) {
+					if (this.selection.gemGains - 3 >= 0) {
+						card.wasEffective = true;
+						this.selection.gemGains -= 3;
+						this.selection.moneyGains += card.amount;
+					}
 				}
 			}
 			else if (card.effect == itemEffect.MoneyForPassingGems) {

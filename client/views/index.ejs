@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <meta name="viewport" charset="utf-8" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+   <title>Simonionburg</title>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+   <link rel="stylesheet" href="../style/popupStyle.css">
+   <link rel="stylesheet" href="../style/main.css">
+   <link rel="stylesheet" href="../style/cardStyle.css">
+   <link rel="stylesheet" href="../style/pregameOptionsStyle.css">
+   <link rel="stylesheet" href="../style/fa.css">
+</head>
+<body ng-app="mainApp" ng-controller="IndexController as indexVm" ng-attr-class="{{indexVm.getBodyScaleClass()}}" ng-init="indexVm.initialize('<%= code %>', '<%= name %>', <%= ishost %>)">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+
+   <script src="/socket.io/socket.io.js"></script>
+   <script src="/main.js"></script>
+   <script src="/roundWrapper.js"></script>
+   <script src="/socketReceiver.js"></script>
+   <script src="/socketSender.js"></script>
+   <script src="/app/mainApp.js"></script>
+   <script src="/app/indexController.js"></script>
+   <script src="/app/gameController.js"></script>
+   <script src="/app/scripts/scorebar.js"></script>
+   <script src="/app/scripts/inventoryArea.js"></script>
+   <script src="/app/scripts/playActionArea.js"></script>
+   <script src="/app/scripts/buyActionArea.js"></script>
+   <script src="/app/scripts/boardArea.js"></script>
+   <script src="/app/scripts/cardInformationPopup.js"></script>
+   <script src="/app/scripts/roundPopup.js"></script>
+   <script src="/app/scripts/itemBuyPopup.js"></script>
+   <script src="/app/scripts/pregameSettings.js"></script>
+   <script src="/app/scripts/effectAddPopup.js"></script>
+   <script src="/app/scripts/endGameScreen.js"></script>
+   <script src="/app/scripts/globalSettings.js"></script>
+   <script src="/app/scripts/infoKeyPopup.js"></script>
+
+   <div id="game-header" ng-cloak>
+      <span>{{indexVm.gameWrapper.game ? indexVm.gameWrapper.game.gameId : ""}}<i ng-if="indexVm.userData.isHost" title="You are the host" class="fa fa-chess-queen"></i></span>
+      <span>{{indexVm.gameWrapper.game ? indexVm.getHeaderText() : ""}}</span>
+      <i class="sw-game-settings-cog fa fa-cog" ng-click="indexVm.globalSettings.isShowing = true"></i>
+   </div>
+
+   <div id="sw-game-intro" ng-if="!indexVm.gameWrapper.game">
+      <div id="sw-game-intro-container" ng-if="!indexVm.gameWrapper.game">
+         <h1>Simonionburg</h1>
+         <div class="sw-label-input"><label class="label">Name: </label><input ng-model="indexVm.userData.username" type="text" ng-change="indexVm.userData.username = indexVm.userData.username.substr(0, 10)" /></div>
+         <div class="sw-label-input"><label class="label">gameId: </label><input ng-model="indexVm.gameId" type="text" ng-change="indexVm.gameId = indexVm.gameId.toUpperCase().substr(0, 4)" /></div>
+
+         <div>
+            <div class="btn btn-light" ng-click="indexVm.createGame()" ng-class="{'disabled': !indexVm.isValidUsername()}">Create</div>
+            <div class="btn btn-light" ng-click="indexVm.joinGame()" ng-class="{'disabled': !indexVm.isValidUsername() || indexVm.gameId == ''}">Join</div>
+         </div>
+         <div class="alert alert-danger" ng-cloak="true" ng-if="indexVm.errorMessage != ''">{{indexVm.errorMessage}}</div>
+         <div class="info-tutorial"><span on-long-press="indexVm.viewTutorialInfo()" on-long-touch-end="indexVm.exitInfo()">Tap/Click and hold for more info.</span></div>
+      </div>
+      <div id="sw-donate-container">
+         <div class="btn btn-primary"><a href="https://www.buymeacoffee.com/Soupy" target="_blank"><i class="fa fa-mug-hot"></i> Buy Simon a box of tea! <i class="fa fa-external-link-alt"></i></a></div>
+      </div>
+   </div>
+
+   <div ng-if="indexVm.gameWrapper.game">
+      <div ng-include="'../app/Views/gameView.html'"></div>
+      <round-popup></round-popup>
+      <item-buy-popup></item-buy-popup>
+      <card-information-popup></card-information-popup>
+   </div>
+   <global-settings-popup ng-if="indexVm.globalSettings.isShowing"></global-settings-popup>
+   <info-key-popup></info-key-popup>
+</body>
+</html>

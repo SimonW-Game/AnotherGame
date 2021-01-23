@@ -72,7 +72,7 @@ function boardAreaFunc() {
 	};
 
 	var buyActionComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/boardArea.html',
+		templateUrl: '/app/views/boardArea.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

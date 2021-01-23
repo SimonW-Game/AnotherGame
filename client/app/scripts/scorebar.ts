@@ -31,7 +31,7 @@ function scorebarComponentFunc() {
 	};
 
 	var scorebarComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/scorebar.html',
+		templateUrl: '/app/views/scorebar.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

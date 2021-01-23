@@ -138,7 +138,7 @@ function itemBuyPopupComponentFunc() {
 	};
 
 	var scorebarComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/itemBuyPopup.html',
+		templateUrl: '/app/views/itemBuyPopup.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

@@ -148,7 +148,7 @@ function invectoryFunc() {
 	};
 
 	var buyActionComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/inventoryArea.html',
+		templateUrl: '/app/views/inventoryArea.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

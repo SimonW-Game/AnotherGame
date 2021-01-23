@@ -103,7 +103,7 @@ function effectAddPopupComponentFunc() {
 	};
 
 	var scorebarComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/effectAddPopup.html',
+		templateUrl: '/app/views/effectAddPopup.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

@@ -184,7 +184,7 @@ function pregameSettingsFunc() {
 	const bindings = {
 	};
 	var pregameSettingsComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/pregameSettings.html',
+		templateUrl: '/app/views/pregameSettings.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

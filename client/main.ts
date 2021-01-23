@@ -580,7 +580,7 @@ class StyleHelper {
 			description = "If you play this card so it lands on a board space of a multiple of 5, gain two points (after the selection phase).  This effect stacks.";
 		}
 		else if (item.effect == itemEffect.Bane1Moves2) {
-			description = "For every Bane 1 you play after this, it will move 2 spaces instead of 1.  This will not increase the bane count (Bane 1's will always only decrease the bane threshold by 1).";
+			description = "For every Bane 1 you play after this, it will move one additional space.  This card effect does not stack (it will still move an additional space if another effect also adds movement to the Bane 1).  This will not increase the bane count (Bane 1's will always only decrease the bane threshold by 1).";
 		}
 		else if (item.effect == itemEffect.MovesForGems) {
 			description = "Move an extra space for every 5 gems you've earned this round so far, up to three spaces.";
@@ -607,7 +607,7 @@ class StyleHelper {
 			description = "Passing gems gain you 2 gems for the rest of the round (or 2 extra gems if this effect is already active). This effect stacks.";
 		}
 		else if (item.effect == itemEffect.MoveAndPoint) {
-			description = "Does nothing when you play this.  At the end of the game, gain a point.";
+			description = "Does nothing aside from moving when played.  At the end of the game, gain a point.";
 		}
 		else if (item.effect == itemEffect.MoveNextGem) {
 			description = "Place this on the next gem on the board.";
@@ -619,7 +619,7 @@ class StyleHelper {
 				description = "If you have " + (item.amount * 3) + " or more gems, exchange them for " + item.amount + " money.";
 		}
 		else if (item.effect == itemEffect.PointsForPassingGems) {
-			description = "At the end of the round, gain a point for every additional gem you passed more than gem you landed on, up to 4 points.";
+			description = "At the end of the round, gain a point for the number of gems passed minus the number of gems landed on, up to 4 points.";//gain a point for every additional gem you passed more than gem you landed on, up to 4 points.";
 		}
 		else if (item.effect == itemEffect.MoneyForPassingGems) {
 			let additionalText: string;

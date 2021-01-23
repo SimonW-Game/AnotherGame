@@ -74,7 +74,7 @@ function roundPopupComponentFunc() {
 	};
 
 	var scorebarComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/roundPopup.html',
+		templateUrl: '/app/views/roundPopup.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

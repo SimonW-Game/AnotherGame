@@ -4,11 +4,11 @@ import socketIo = require('socket.io');
 export function setupSocket(io: socketIo.Server, socket: socketIo.Socket) {
 	try {
 		let currentGameId = undefined;
-		socket.on("createGame", function (username: string) {
+		socket.on("createGame", function (username: string, existingId?: string) {
 			if (username.length < 3 || username.length > 10) {
 				socket.emit('cannotJoinGame', "Username must be 3-10 characters");
 			} else {
-				const game = gameHelper.startNewGame();
+				const game = gameHelper.startNewGame(existingId);
 				const newPlayer = game.addPlayer(username, socket);
 				socket.join(game.gameId);
 				currentGameId = game.gameId;

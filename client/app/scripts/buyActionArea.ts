@@ -112,7 +112,7 @@ function buyActionFunc() {
 	};
 
 	var buyActionComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/buyActionArea.html',
+		templateUrl: '/app/views/buyActionArea.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

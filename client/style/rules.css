@@ -1,0 +1,39 @@
+body {
+	display: flex;
+	justify-content: center;
+}
+
+@media (min-width: 800px) {
+	body {
+		font-size: 18px;
+	}
+}
+
+#sw-rules-container {
+	width: 96%;
+	max-width: 800px;
+	border: 1px solid gray;
+	border-radius: 20px;
+	padding: 8px;
+	background: rgb(240, 240, 240);
+}
+
+.text-center {
+	text-align: center;
+}
+
+.sw-split-rule {
+	display: flex;
+}
+
+	.sw-split-rule div {
+		width: 50%;
+	}
+
+	.sw-split-rule #sw-board-image {
+		width: 100%;
+	}
+
+.darkred {
+	color: darkred;
+}

@@ -292,7 +292,7 @@ export function getItem(effect: itemEffect, points: number = 1): IItem {
 		// Could earn up to 4 points per round.  Especially combined with gems for money or when not moving very far on purpose.
 		item.points = 0;
 		item.amount = 1;
-		item.cost = 9;
+		item.cost = 10;
 	} else if (effect == itemEffect.MoneyForPassingGems) {
 		item.points = 1;
 		item.amount = Math.min(2, points);

@@ -12,6 +12,7 @@ interface IIndexController {
 	getHeaderText: () => string;
 	viewTutorialInfo: () => void;
 	exitInfo: () => void;
+	initialize: (code?: string) => void;
 
 	createGame: () => void;
 	joinGame: () => void;
@@ -40,6 +41,7 @@ function indexController($scope: ng.IScope,
 	vm.getHeaderText = getHeaderText;
 	vm.viewTutorialInfo = () => hoverKeyHelper.show(infoKeyType.tapTutorial);
 	vm.exitInfo = () => hoverKeyHelper.close();
+	vm.initialize = initialize;
 
 	let scaleSetting = localStorage.getItem(SCALE_SETTINGS);
 	if (!isNaN(Number(scaleSetting)))
@@ -48,6 +50,18 @@ function indexController($scope: ng.IScope,
 	let assistSetting = localStorage.getItem(ASSIST_SETTINGS);
 	globalSettings.assistMode = assistSetting == null ? true : !!assistSetting;
 
+	function initialize(code?: string, name?: string, isHost?: boolean) {
+		if (code) {
+			vm.userData.username = name || vm.userData.username;
+			setUsernameInStorage();
+			vm.gameId = code;
+			if (isHost) {
+				socket.emit("createGame", vm.userData.username, code);
+			} else {
+				socket.emit("joinGame", vm.gameId, vm.userData.username);
+			}
+		}
+	}
 
 	setupSocketCallbacks();
 

@@ -225,7 +225,7 @@ function playActionFunc() {
 	};
 
 	var playActionComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/playActionArea.html',
+		templateUrl: '/app/views/playActionArea.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}

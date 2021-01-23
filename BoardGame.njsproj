@@ -54,12 +54,15 @@
     <Content Include="client\app\views\scorebar.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="client\images\BoardAreas.png" />
     <Content Include="client\images\randomBackground.jpg" />
     <Content Include="client\style\fa.css" />
     <Content Include="client\style\cardStyle.css" />
+    <Content Include="client\style\rules.css" />
     <Content Include="client\style\pregameOptionsStyle.css" />
     <Content Include="client\style\popupStyle.css" />
-    <Content Include="client\views\index.html">
+    <Content Include="client\views\rules.html" />
+    <Content Include="client\views\index.ejs">
       <SubType>Code</SubType>
     </Content>
     <Content Include="client\webfonts\fa-brands-400.eot" />

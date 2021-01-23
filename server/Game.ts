@@ -792,7 +792,6 @@ export enum endGameBonus {
 const allGames: { [id: string]: Game } = {};
 
 export function startNewGame(id: string = undefined): Game {
-
 	while (typeof id === "undefined" || typeof getGame(id) !== "undefined")
 		id = getRandomId();
 

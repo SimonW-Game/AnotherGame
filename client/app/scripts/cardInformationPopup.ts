@@ -34,7 +34,7 @@ function cardInfoPopupComponentFunc() {
 	};
 
 	var scorebarComponent = <ng.IComponentOptions>{
-		templateUrl: 'app/views/cardInformationPopup.html',
+		templateUrl: '/app/views/cardInformationPopup.html',
 		bindings: bindings,
 		controller: controllerFunc
 	}
