@@ -423,7 +423,7 @@ class StyleHelper {
 		else if (effect == itemEffect.Bane1Moves2)
 			cardName = "Banes Move Extra";
 		else if (effect == itemEffect.MovesForGems)
-			cardName = "Moves for Gems";
+			cardName = "Moves For Gems";
 		else if (effect == itemEffect.DrawNoPenalty)
 			cardName = "No Penalty Draw";
 		else if (effect == itemEffect.EmptyHandGems)
@@ -443,7 +443,7 @@ class StyleHelper {
 		else if (effect == itemEffect.MoveNextGem)
 			cardName = "Move To Gem";
 		else if (effect == itemEffect.GemsForMoney)
-			cardName = "Gems for Money";
+			cardName = "Gems For Money";
 		else if (effect == itemEffect.PointsForPassingGems)
 			cardName = "Passing Gems Points";
 		else if (effect == itemEffect.MoneyForPassingGems)
@@ -487,7 +487,7 @@ class StyleHelper {
 		} else if (item.effect == itemEffect.GemLandingExtra) {
 			let additionalCardText: string;
 			if (item.amount == 0)
-				additionalCardText = "1-2 extra gems";
+				additionalCardText = "1-3 extra gems";
 			else if (item.amount == 1)
 				additionalCardText = "an extra gem";
 			else

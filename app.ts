@@ -21,7 +21,9 @@ app.get('/', (req, res) => res.render(__dirname + '/client/views/index.ejs', { c
 app.get('/createOrJoin/:code', (req, res) => {
 	const code = req.params.code;
 	res.render(__dirname + '/client/views/index.ejs', { code: code, name: req.query.name || "", ishost: req.query.ishost || false });
-}); app.get('/rules', (req, res) => {
+});
+
+app.get('/rules', (req, res) => {
 	res.sendFile(__dirname + '/client/views/rules.html');
 });
 

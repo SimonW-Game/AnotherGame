@@ -26,8 +26,12 @@ body {
 	display: flex;
 }
 
-	.sw-split-rule div {
-		width: 50%;
+	.sw-split-rule div:first-child {
+		width: 52%;
+	}
+
+	.sw-split-rule div:last-child {
+		width: 48%;
 	}
 
 	.sw-split-rule #sw-board-image {
@@ -36,4 +40,12 @@ body {
 
 .darkred {
 	color: darkred;
+}
+
+.no-top-margin {
+	margin-top: -1em;
+}
+
+ul, ol {
+	padding-inline-start: 20px;
 }

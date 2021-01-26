@@ -16,18 +16,6 @@ body {
 		user-select: none;
 	}
 
-	body.scale-size-larger .sw-zoom-container * {
-		transform: scale(.98);
-	}
-
-	body.scale-size-medium .sw-zoom-container * {
-		transform: scale(.95);
-	}
-
-	body.scale-size-small .sw-zoom-container * {
-		transform: scale(.90);
-	}
-
 .info-tutorial {
 	position: absolute;
 	bottom: 0;
@@ -259,7 +247,7 @@ body {
 	flex-direction: column;
 	align-content: center;
 	height: 12%;
-	font-size: 2.5vh;
+	font-size: 2vh;
 }
 
 	.sw-boardArea-currency.sw-boardArea-currency-big {
@@ -269,7 +257,7 @@ body {
 	}
 
 	.sw-boardArea-currency * {
-		font-size: 2.5vh;
+		font-size: 2vh;
 	}
 
 	.sw-boardArea-currency.sw-boardArea-currency-big * {
@@ -1049,10 +1037,6 @@ li.hide-marker {
 
 	#sw-action-area .action-area-scrollable-container .play-area-action-item .play-area-item-details > i {
 		font-size: 50px;
-	}
-
-	.sw-popup .sw-popup-header {
-		font-size: 5.5vh;
 	}
 
 	#sw-inventory .inventory-container .sw-inventory-effect-count {

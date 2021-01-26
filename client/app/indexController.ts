@@ -8,7 +8,6 @@ interface IIndexController {
 	userData: IUserData;
 	errorMessage: string;
 	isValidUsername: () => boolean;
-	getBodyScaleClass: () => string;
 	getHeaderText: () => string;
 	viewTutorialInfo: () => void;
 	exitInfo: () => void;
@@ -35,17 +34,12 @@ function indexController($scope: ng.IScope,
 	vm.gameId = localStorage.getItem(GAME_ID_KEY) ?? "";
 
 	vm.createGame = createGame;
-	vm.getBodyScaleClass = getBodyScaleClass;
 	vm.isValidUsername = isValidUsername;
 	vm.joinGame = joinGame;
 	vm.getHeaderText = getHeaderText;
 	vm.viewTutorialInfo = () => hoverKeyHelper.show(infoKeyType.tapTutorial);
 	vm.exitInfo = () => hoverKeyHelper.close();
 	vm.initialize = initialize;
-
-	let scaleSetting = localStorage.getItem(SCALE_SETTINGS);
-	if (!isNaN(Number(scaleSetting)))
-		globalSettings.scaleOption = Number(scaleSetting);
 
 	let assistSetting = localStorage.getItem(ASSIST_SETTINGS);
 	globalSettings.assistMode = assistSetting == null ? true : !!assistSetting;
@@ -71,16 +65,6 @@ function indexController($scope: ng.IScope,
 	}
 	function isValidUsername() {
 		return vm.userData.username.length > 1;
-	}
-
-	function getBodyScaleClass() {
-		if (globalSettings.scaleOption == 1)
-			return "scale-size-larger";
-		if (globalSettings.scaleOption == 2)
-			return "scale-size-medium";
-		if (globalSettings.scaleOption == 3)
-			return "scale-size-small";
-		return "";
 	}
 
 	function joinGame() {

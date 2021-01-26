@@ -31,20 +31,23 @@
             <div>
                <h3>Screen Breakdown</h3>
                <ul>
-                  <li>The screen is split into 4 sections.</li>
+                  <li>
+                     The screen is split into 4 sections.
+                     <ol>
+                        <li>The Board.</li>
+                        <li>The Inventory.</li>
+                        <li>Play Area.</li>
+                        <li>Scoreboard.</li>
+                     </ol>
+                  </li>
                </ul>
-               <ol>
-                  <li>The Board.</li>
-                  <li>The Inventory.</li>
-                  <li>Play Area.</li>
-                  <li>Scoreboard.</li>
-               </ol>
                <h4>The Board</h4>
                <ul>
                   <li>Shows you how far you've progressed from playing your cards in the <b>Selection Phase</b>.</li>
                </ul>
                <h4>The Inventory</h4>
                <ul>
+                  <li>Click on any card effect to see what it does and how much it costs during the <b>Buy Phase</b>.</li>
                   <li>Shows you how many of each card you have left in your deck during the <b>Selection Phase</b>.</li>
                   <li>Shows how many cards you have total in your deck during the <b>Buy Phase</b>.</li>
                </ul>
@@ -87,14 +90,54 @@
                      If you play too many <b>Bane</b> cards, you will <b>Bust</b> <i class="fa fa-skull-crossbones"></i>.
                      <ul>
                         <li><b>Busting</b> will immediately end your <b>Selection Phase</b>.</li>
-                        <li>If you <b>Bust</b> you will have to chose between the points or money you've earned on the board during this <b>Selection Phase</b>.</li>
+                        <li>If you <b>Bust</b> you will have to chose between the <i>points</i> or <i>money</i> you've earned on the board during this <b>Selection Phase</b>.</li>
                      </ul>
                   </li>
                </ul>
             </li>
             <li>If your hand has less cards then your total hand size, you have the option of ending your turn.</li>
-            <li>This means, if you have a full hand, you are forced to play at least one card (which may end up causing you to bust).</li>
+            <li>If you have a full hand, you are forced to play at least one card (which may end up causing you to bust).</li>
          </ul>
+
+         <div class="sw-split-rule">
+            <div>
+               <h4>Card Breakdown</h4>
+               <ul>
+                  <li>
+                     A card has multiple points of interest.
+                  </li>
+               </ul>
+               <ol class="no-top-margin">
+                  <li>The card name.</li>
+                  <li>How many spaces the card will move your piece along the board.</li>
+                  <li>A gem will appear if playing this card will land on a gem.</li>
+                  <li>The card effect's icon.</li>
+                  <li>The information button.  Click to see more information about this card.</li>
+               </ol>
+               <ul class="no-top-margin">
+                  <li>A card will have a highlighted boarder (as shown on the right) when a special effect can be triggered by playing the card.</li>
+                  <li>
+                     Additional icons can appear on certain cards.
+                     <ul>
+                        <li>If playing a <b>Bane</b> will cause you to bust, <i class="fa fa-skull-crossbones"></i> will appear next to the card name.</li>
+                        <li>Adding temporary cards to your hand outside of a normal draw, <i class="fa fa-hand-holding-medical"></i> will appear next to the card name.</li>
+                     </ul>
+                  </li>
+               </ul>
+            </div>
+            <div>
+               <img id="sw-board-image" src="../images/LabelledCard.png" />
+            </div>
+         </div>
+
+         <!--TODO: BUY SELECTION AND END GAME-->
+
+         <div>After the selection phase, you enter the buy phase.  During the buy phase, you spend your money and gems to buy new cards and enhancements.  If you busted during the selection phase, you must choose between scoring points or buying.</div>
+         <div>Money earned during the selection phase will disappear after the buy phase.  Gems earned will continue to carry over to future rounds.  Always spend your money, but it may be a good strategy to hold on to your gems.</div>
+         <div>Spend your money on new cards.  Some cards have different point values.  The higher the points, the more effect the card has and the further it moves you along the game board.  Buying higher point value cards is always a good strategy.</div>
+         <div>You can only purchase one card from each effect (but as many cards as you want as long as they are all distinct effects).</div>
+         <div>Spend your gems on enhancements.  An enhancement can sometimes just be applicable during the buy phase, but oftentimes will apply for the remainder of the game.</div>
+         <div>Only one enhancement can be purchased each round, so make sure you spend your gems if you have an abundance. There is an enhancement you can buy to enable a second enhancement to be purchased and a second card of the same effect to be purchased.</div>
       </div>
    </div>
 </body>
