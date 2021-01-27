@@ -55,8 +55,11 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="client\images\BoardAreas.png" />
+    <Content Include="client\images\BuyCard.png" />
+    <Content Include="client\images\BuyEnhancement.png" />
     <Content Include="client\images\LabelledCard.png" />
     <Content Include="client\images\randomBackground.jpg" />
+    <Content Include="client\images\ShopView.png" />
     <Content Include="client\style\fa.css" />
     <Content Include="client\style\cardStyle.css" />
     <Content Include="client\style\rules.css" />

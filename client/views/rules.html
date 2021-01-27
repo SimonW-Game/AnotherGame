@@ -97,6 +97,7 @@
             </li>
             <li>If your hand has less cards then your total hand size, you have the option of ending your turn.</li>
             <li>If you have a full hand, you are forced to play at least one card (which may end up causing you to bust).</li>
+            <li>Try and end your turn before you are stuck with a full hand of <b>Bane</b> cards that will cause you to <b>Bust</b>.</li>
          </ul>
 
          <div class="sw-split-rule">
@@ -115,7 +116,7 @@
                   <li>The information button.  Click to see more information about this card.</li>
                </ol>
                <ul class="no-top-margin">
-                  <li>A card will have a highlighted boarder (as shown on the right) when a special effect can be triggered by playing the card.</li>
+                  <li>A card will have a highlighted border (as shown on the right) when a special effect can be triggered by playing the card.</li>
                   <li>
                      Additional icons can appear on certain cards.
                      <ul>
@@ -129,16 +130,98 @@
                <img id="sw-board-image" src="../images/LabelledCard.png" />
             </div>
          </div>
-
-         <!--TODO: BUY SELECTION AND END GAME-->
-
-         <div>After the selection phase, you enter the buy phase.  During the buy phase, you spend your money and gems to buy new cards and enhancements.  If you busted during the selection phase, you must choose between scoring points or buying.</div>
-         <div>Money earned during the selection phase will disappear after the buy phase.  Gems earned will continue to carry over to future rounds.  Always spend your money, but it may be a good strategy to hold on to your gems.</div>
-         <div>Spend your money on new cards.  Some cards have different point values.  The higher the points, the more effect the card has and the further it moves you along the game board.  Buying higher point value cards is always a good strategy.</div>
-         <div>You can only purchase one card from each effect (but as many cards as you want as long as they are all distinct effects).</div>
-         <div>Spend your gems on enhancements.  An enhancement can sometimes just be applicable during the buy phase, but oftentimes will apply for the remainder of the game.</div>
-         <div>Only one enhancement can be purchased each round, so make sure you spend your gems if you have an abundance. There is an enhancement you can buy to enable a second enhancement to be purchased and a second card of the same effect to be purchased.</div>
       </div>
-   </div>
+      <div class="sw-rule-block">
+         <h3>Buy Phase</h3>
+         <ul>
+            <li>Once all players in the game have either <b>Busted</b> or ended their <b>Selection Phase</b>, the <b>Buy Phase</b> begins.</li>
+            <li>During the <b>Buy Phase</b>, the <b>Play Area</b> is the <b>Shop</b>.</li>
+            <li>The <b>Shop</b> is where you will spend your money to buy new cards and gems to buy enhancements.</li>
+            <li>If you <b>Busted</b> during this round's <b>Selection Phase</b>, you have to choose between scoring points or spending money that was earned during the <b>Selection Phase</b>.</li>
+            <li>Points earned during the <b>Selection Phase</b> will show up in the scoreboard after everyone has completed the <b>Buy Phase</b>.</li>
+            <li>Once you've bought the cards and enhancements for the phase, click "End" to continue to the next round.</li>
+         </ul>
+
+         <div class="sw-split-rule">
+            <div>
+               <h4>Spending Money</h4>
+               <ul>
+                  <li>Money earned during the <b>Selection Phase</b> will disappear after the <b>Buy Phase</b>.</li>
+                  <li>You have a maximum number of cards you can buy during the <b>Buy Phase</b> (Standard game is 2).  You also can only purchase one card of each effect.</li>
+                  <li>In the <b>Shop</b>, Click on a card effect to open a popup with more information.</li>
+                  <li>Your remaining money, available number of card buys, and gems will be displayed at the top of the popup.</li>
+                  <li>Click on a card to buy it.  Each card will display the cost, number of board spaces it will move, and the effect it will have.</li>
+                  <li>If you cannot afford a card, you already made a purchase of this card effect, or have used all of your card buys for the phase, the card will be grayed out.</li>
+                  <li>Cards you buy during the phase will have a checkmark on them in the shop and the popup.</li>
+                  <li>You can refund any purchase by clicking the undo button <i class="fa fa-undo"></i>.</li>
+               </ul>
+            </div>
+            <div>
+               <img id="sw-board-image" src="../images/ShopView.png" />
+               <hr />
+               <img id="sw-board-image" src="../images/BuyCard.png" />
+            </div>
+         </div>
+
+         <div class="sw-split-rule">
+            <div>
+               <h4>Spending Gems</h4>
+               <ul>
+                  <li>Gems will not disappear after the <b>Buy Phase</b>. If you bust, gems earned during the <b>Selection Phase</b> will be added to your gem total for future rounds.</li>
+                  <li>In the <b>Shop</b>, Click on <i>Spend Gems</i> to open a popup with more information.</li>
+                  <li>You can buy as many enhancements as you are able to with your stash of gems.  However, each time you buy an enhancement, the price of all enhancements go up.</li>
+                  <li>Your remaining money, available number of card buys, and gems will be displayed at the top of the popup.</li>
+                  <li>Click on an enhancement to buy it.  Each enhancement will display its cost in gems and the title.</li>
+                  <li>If you cannot afford an enhancement, it will be grayed out.</li>
+                  <li>Enhancements you buy during the phase will have a checkmark on them in the shop and the popup.</li>
+                  <li>You can refund any purchase by clicking the undo button <i class="fa fa-undo"></i>.</li>
+               </ul>
+            </div>
+            <div>
+               <img id="sw-board-image" src="../images/BuyEnhancement.png" />
+            </div>
+         </div>
+      </div>
+      <div class="sw-rule-block">
+         <h3>End Of Round</h3>
+         <ul>
+            <li>Once all players in the game have ended their <b>Buy Phase</b>, each player will see the <b>Round Results</b>.</li>
+            <li><b>Round Results</b> display various information including what cards were played and bought by each player as well as how many points were earned.</li>
+            <li>You must click the "x" in the top right corner of the <b>Round Results</b> to close the popup (or outside of the popup).</li>
+            <li>To revisit the <b>Round Results</b>, click the "Round Results" button on the scoreboard.</li>
+            <li>Reexamine previous rounds by clicking the "Previous" button in the <b>Round Results</b> popup.</li>
+            <li>Players who are not in the lead will start further on the board during the next <b>Selection Phase</b> (for every 2.25 board spaces behind the leader, start a space further on the board).</li>
+         </ul>
+      </div>
+      <div class="sw-rule-block">
+         <h3>End Of Game</h3>
+         <ul>
+            <li>Once all players in the game have ended the <b>Selection Phase</b> of the last round, the game ends.</li>
+            <li>There is no <b>Buy Phase</b> during the last round.</li>
+            <li>Money earned during the last round's <b>Selection Phase</b> is converted to points (A standard game converts 8 money into 1 point) if you don't bust.</li>
+            <li>Your total gems, including gems you've earned in the last <b>Selection Phase</b>, are converted to points (A standard game converts 8 gems into 1 point) regardless of if you bust or not.</li>
+            <li>The end of game screen shows everyone various stats including board spaces moved, number of cards played, total gems earned and more.</li>
+         </ul>
+      </div>
+      <div class="sw-rule-block">
+         <h3>Alternative Rules</h3>
+         <ul>
+            <li>Many of the rules of the game can be bent or broken by cards or enhancements.  Try out various combinations for a fresh experience.</li>
+            <li>
+               In the pre-game lobby, almost everything can be customized.
+               <ul>
+                  <li>Number of Rounds</li>
+                  <li>Starting Deck</li>
+                  <li>Starting Gems</li>
+                  <li>Cards/Enhancements available to buy</li>
+                  <li>A timer for each phase (defaulted off)</li>
+                  <li>End Game Bonuses (award points for performing poorly/well at something)</li>
+                  <li>And (an overwhelming amount) more</li>
+               </ul>
+            </li>
+            <li>In the pre-game lobby, various game modes can be selected at the top for prebuilt cards/settings.</li>
+            <li>In the case of a disconnect, you should be able to refresh the page (or navigate back to the site) and connect back with your exact username.</li>
+         </ul>
+      </div>
 </body>
 </html>
