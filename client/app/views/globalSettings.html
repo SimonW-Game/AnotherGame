@@ -2,13 +2,21 @@
    <div class="sw-content">
       <div class="sw-popup-header" ng-click="$ctrl.globalSettings.isShowing = false">Settings</div>
       <div class="sw-popup-body">
-         <div>
-            <div>
-               Assist <div class="btn-group">
-                  <div class="btn btn-light" ng-class="{'active': !$ctrl.globalSettings.assistMode}" ng-click="$ctrl.setAssistMode(false)">No</div>
-                  <div class="btn btn-light" ng-class="{'active': $ctrl.globalSettings.assistMode}" ng-click="$ctrl.setAssistMode(true)">Yes</div>
-               </div>
+         <div class="sw-setting-container">
+            Assist Mode <div class="btn-group">
+               <div class="btn btn-light" ng-class="{'active': !$ctrl.globalSettings.assistMode}" ng-click="$ctrl.setAssistMode(false)">No</div>
+               <div class="btn btn-light" ng-class="{'active': $ctrl.globalSettings.assistMode}" ng-click="$ctrl.setAssistMode(true)">Yes</div>
             </div>
+            <div class="sw-setting-flavor-text">This will give you a percentage of busting in the inventory and warn you if you try ending a phase while there is something to do.</div>
+         </div>
+         <div class="sw-setting-container">
+            <div>Don't know how to play?  Need a refresher?</div>
+            <a href="/rules" target="_blank"> Open Rules in a new tab <i class="fa fa-external-link-alt"></i></a>
+            <div>Or look for an orange triangle and <span class="settings-info-tutorial" on-long-press="$ctrl.viewTutorialInfo()" on-long-touch-end="$ctrl.exitInfo()">Tap/Click and hold for more info</span>.</div>
+         </div>
+         <div class="sw-setting-container">
+            <div>Have some great ideas?  Found something unfair or broken?</div>
+            <div>Email me at <a class="user-selectable" href="mailto:simonw.game@gmail.com">simonw.game@gmail.com</a></div>
          </div>
       </div>
       <button class="btn btn-light sw-popup-footer" ng-click="$ctrl.globalSettings.isShowing = false">

@@ -40,7 +40,7 @@
    <script src="/app/scripts/infoKeyPopup.js"></script>
 
    <div id="game-header" ng-cloak>
-      <span>{{indexVm.gameWrapper.game ? indexVm.gameWrapper.game.gameId : ""}}<i ng-if="indexVm.userData.isHost" title="You are the host" class="fa fa-chess-queen"></i></span>
+      <span class="user-selectable">{{indexVm.gameWrapper.game ? indexVm.gameWrapper.game.gameId : ""}}<i ng-if="indexVm.userData.isHost" title="You are the host" class="fa fa-chess-queen"></i></span>
       <span>{{indexVm.gameWrapper.game ? indexVm.getHeaderText() : ""}}</span>
       <i class="sw-game-settings-cog fa fa-cog" ng-click="indexVm.globalSettings.isShowing = true"></i>
    </div>
@@ -56,7 +56,7 @@
             <div class="btn btn-light" ng-click="indexVm.joinGame()" ng-class="{'disabled': !indexVm.isValidUsername() || indexVm.gameId == ''}">Join</div>
          </div>
          <div class="alert alert-danger" ng-cloak="true" ng-if="indexVm.errorMessage != ''">{{indexVm.errorMessage}}</div>
-         <div class="info-tutorial"><span on-long-press="indexVm.viewTutorialInfo()" on-long-touch-end="indexVm.exitInfo()">Tap/Click and hold for more info.</span></div>
+         <div class="info-tutorial"><span class="settings-info-tutorial" on-long-press="indexVm.viewTutorialInfo()" on-long-touch-end="indexVm.exitInfo()">Tap/Click and hold for more info</span></div>
       </div>
       <div id="sw-donate-container">
          <div class="btn btn-primary"><a href="https://www.buymeacoffee.com/Soupy" target="_blank"><i class="fa fa-mug-hot"></i> Buy Simon a box of tea! <i class="fa fa-external-link-alt"></i></a></div>

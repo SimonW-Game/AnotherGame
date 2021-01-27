@@ -16,6 +16,15 @@ body {
 		user-select: none;
 	}
 
+/*Don't like this because it makes the help stuff break...*/
+/*
+	body .user-selectable {
+		user-select: all;
+		-moz-user-select: all;
+		-webkit-user-select: all;
+		-ms-user-select: all;
+		user-select: all;
+	}*/
 .info-tutorial {
 	position: absolute;
 	bottom: 0;
@@ -23,12 +32,12 @@ body {
 	text-align: center;
 }
 
-	.info-tutorial > [on-long-press] {
-		border: 1px solid rgb(180,180,255);
-		border-radius: 4px;
-		background: rgb(200,200,255);
-		padding: 2px;
-	}
+.settings-info-tutorial {
+	border: 1px solid rgb(180,180,255);
+	border-radius: 4px;
+	background: rgb(200,200,255);
+	padding: 2px;
+}
 
 .info-example {
 	width: 100%;
@@ -1120,3 +1129,12 @@ li.hide-marker {
 		font-size: 24px;
 	}
 }
+
+.sw-setting-container {
+	margin-bottom: 20px;
+}
+
+	.sw-setting-container .sw-setting-flavor-text {
+		font-size: .8em;
+		color: darkgray;
+	}

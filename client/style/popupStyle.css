@@ -86,6 +86,7 @@
 		height: 80%;
 		overflow-y: auto;
 		border-bottom: 1px solid gray;
+		padding: 4px;
 	}
 
 	/*We know this doesn't have a footer, so don't give the footer any room.*/

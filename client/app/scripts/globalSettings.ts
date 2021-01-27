@@ -6,14 +6,18 @@ interface ISettingsComponent extends ng.IComponentController {
 
 	setScale: (scaleNumber: number) => void;
 	setAssistMode: (flag: boolean) => void;
+	viewTutorialInfo: () => void;
+	exitInfo: () => void;
 }
 
 function settingsComponentFunc() {
-	const controllerFunc = function (userData: IUserData, globalSettings: IGlobalSettings) {
+	const controllerFunc = function (userData: IUserData, globalSettings: IGlobalSettings, hoverKeyHelper: HoverKeyHelper) {
 		var $ctrl: ISettingsComponent = this;
 		$ctrl.globalSettings = globalSettings;
 		$ctrl.setScale = setScale;
 		$ctrl.setAssistMode = setAssistMode;
+		$ctrl.viewTutorialInfo = () => hoverKeyHelper.show(infoKeyType.tapTutorial);
+		$ctrl.exitInfo = () => hoverKeyHelper.close();
 
 		function setScale(scaleNumber: number) {
 			globalSettings.scaleOption = scaleNumber;
