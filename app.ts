@@ -5,8 +5,8 @@ import { minifyClient } from './minify.config';
 const app = express();
 app.set('view engine', 'ejs');
 const port = process.env.port || 8080;
-
-let isDev = process.env.NODE_ENV !== "production";
+console.log(process.argv);
+let isDev = !process.argv || process.argv.length < 3 || process.argv[2] != "production";
 let clientDir: string;
 if (isDev) {
 	clientDir = __dirname + '/client';
