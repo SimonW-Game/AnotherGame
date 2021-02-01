@@ -1,21 +1,22 @@
 {
 	"name": "test-angularjs",
 	"version": "0.0.0",
-	"description": "TestAngularjs",
+	"description": "Inspiration drawn from Quacks of Quedlinburg and Dominion",
 	"main": "app.js",
 	"author": {
-		"name": ""
+		"name": "Simon Weisse"
 	},
 	"scripts": {
 		"build": "tsc --build",
 		"clean": "tsc --build --clean",
-		"start": "node app.js"
+		"start": "cross-env NODE_ENV=production node app.js "
 	},
 	"devDependencies": {
 		"@types/angular": "^1.7.2",
 		"@types/express": "^4.17.7",
 		"@types/jasmine": "^3.5.11",
 		"@types/jquery": "^3.5.0",
+		"@types/minify": "^6.0.0",
 		"@types/node": "^8.0.14",
 		"@types/socket.io": "^2.1.8",
 		"@types/socket.io-client": "^1.4.33",
@@ -23,8 +24,10 @@
 		"typescript": "^3.2.2"
 	},
 	"dependencies": {
+		"cross-env": "^7.0.3",
 		"ejs": "^3.1.5",
 		"express": "^4.17.1",
+		"minify": "^6.0.1",
 		"socket.io": "^2.3.0",
 		"typescript": "^3.2.2"
 	}

@@ -5,11 +5,18 @@
    <meta name="viewport" charset="utf-8" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
    <title>Simonionburg</title>
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+   <%if (isDev) { %>
    <link rel="stylesheet" href="../style/popupStyle.css">
    <link rel="stylesheet" href="../style/main.css">
    <link rel="stylesheet" href="../style/cardStyle.css">
    <link rel="stylesheet" href="../style/pregameOptionsStyle.css">
    <link rel="stylesheet" href="../style/fa.css">
+   <% } %>
+   <%if (!isDev) { %>
+   <link rel="stylesheet" href="../css/all.css">
+   <% } %>
+
 </head>
 <body ng-app="mainApp" ng-controller="IndexController as indexVm" ng-attr-class="{{indexVm.getBodyScaleClass()}}" ng-init="indexVm.initialize('<%= code %>', '<%= name %>', <%= ishost %>)">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -18,11 +25,11 @@
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
 
    <script src="/socket.io/socket.io.js"></script>
+
+   <%if (isDev) { %>
    <script src="/main.js"></script>
    <script src="/roundWrapper.js"></script>
-   <script src="/socketReceiver.js"></script>
-   <script src="/socketSender.js"></script>
-   <script src="/app/mainApp.js"></script>
+   <script src="/app/angularMainApp.js"></script>
    <script src="/app/indexController.js"></script>
    <script src="/app/gameController.js"></script>
    <script src="/app/scripts/scorebar.js"></script>
@@ -38,6 +45,11 @@
    <script src="/app/scripts/endGameScreen.js"></script>
    <script src="/app/scripts/globalSettings.js"></script>
    <script src="/app/scripts/infoKeyPopup.js"></script>
+   <% } %>
+   <%if (!isDev) { %>
+   <script src="/scripts/all.js"></script>
+   <% } %>
+
 
    <div id="game-header" ng-cloak>
       <span class="user-selectable">{{indexVm.gameWrapper.game ? indexVm.gameWrapper.game.gameId : ""}}<i ng-if="indexVm.userData.isHost" title="You are the host" class="fa fa-chess-queen"></i></span>

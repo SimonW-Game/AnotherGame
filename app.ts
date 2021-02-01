@@ -1,30 +1,31 @@
 import express = require('express');
 import socketIo = require('socket.io');
 import socketHandler = require('./server/SocketHandler');
-import fs = require('fs');
-
+import { minifyClient } from './minify.config';
 const app = express();
 app.set('view engine', 'ejs');
-//const http = require('http');
-
-
 const port = process.env.port || 8080;
 
+let isDev = process.env.NODE_ENV !== "production";
+let clientDir: string;
+if (isDev) {
+	clientDir = __dirname + '/client';
+} else {
+	clientDir = __dirname + '/dist';
+	minifyClient();
+}
+app.use(express.static(clientDir));
 
-//http.createServer(function (req, res) {
-//	res.writeHead(200, { 'Content-Type': 'text/plain' });
-//	res.end('Hello World\n');
-//}).listen(port);
-
-app.use(express.static(__dirname + '/client'))
-app.get('/', (req, res) => res.render(__dirname + '/client/views/index.ejs', { code: "", name: "", ishost: false }));
+app.get('/', (req, res) => {
+	res.render(clientDir + '/views/index.ejs', { code: "", name: "", ishost: false, isDev: isDev });
+});
 app.get('/createOrJoin/:code', (req, res) => {
 	const code = req.params.code;
-	res.render(__dirname + '/client/views/index.ejs', { code: code, name: req.query.name || "", ishost: req.query.ishost || false });
+	res.render(clientDir + '/views/index.ejs', { code: code, name: req.query.name || "", ishost: req.query.ishost || false, isDev: isDev });
 });
 
 app.get('/rules', (req, res) => {
-	res.sendFile(__dirname + '/client/views/rules.html');
+	res.render(clientDir + '/views/rules.ejs', { isDev: isDev });
 });
 
 const server = app.listen(port, () => console.log(`listening at http://localhost:${port}`));
@@ -34,7 +35,6 @@ io.on('connection', (socket: socketIo.Socket) => {
 	socketHandler.setupSocket(io, socket);
 
 });
-
 
 // Game goes as follows:
 // 1: Play your cards

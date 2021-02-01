@@ -62,10 +62,10 @@
     <Content Include="client\images\ShopView.png" />
     <Content Include="client\style\fa.css" />
     <Content Include="client\style\cardStyle.css" />
-    <Content Include="client\style\rules.css" />
+    <Content Include="client\style\rules\rules.css" />
     <Content Include="client\style\pregameOptionsStyle.css" />
     <Content Include="client\style\popupStyle.css" />
-    <Content Include="client\views\rules.html" />
+    <Content Include="client\views\rules.ejs" />
     <Content Include="client\views\index.ejs">
       <SubType>Code</SubType>
     </Content>
@@ -95,16 +95,15 @@
     <Folder Include="client\images\" />
     <Folder Include="client\style\" />
     <Folder Include="client\app\views\" />
+    <Folder Include="client\style\rules\" />
     <Folder Include="client\webfonts\" />
     <Folder Include="server\" />
     <Folder Include="client\views\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="client\app\angularMainApp.ts" />
     <TypeScriptCompile Include="client\app\gameController.ts" />
     <TypeScriptCompile Include="client\app\indexController.ts" />
-    <TypeScriptCompile Include="client\app\mainApp.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="client\app\scripts\infoKeyPopup.ts" />
     <TypeScriptCompile Include="client\app\scripts\effectAddPopup.ts" />
     <TypeScriptCompile Include="client\app\scripts\endGameScreen.ts" />
@@ -122,6 +121,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="client\roundWrapper.ts" />
     <TypeScriptCompile Include="client\main.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="minify.config.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="server\gameModes.ts" />

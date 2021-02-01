@@ -4,8 +4,16 @@
 <head>
    <meta name="viewport" charset="utf-8" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
    <title>Simonionburg</title>
-   <link rel="stylesheet" href="../style/rules.css">
+
+
+   <%if (isDev) { %>
+   <link rel="stylesheet" href="../style/rules/rules.css">
    <link rel="stylesheet" href="../style/fa.css">
+   <% } %>
+   <%if (!isDev) { %>
+   <link rel="stylesheet" href="../css/rules.css">
+   <% } %>
+
 </head>
 <body>
    <div id="sw-rules-container">
@@ -223,5 +231,6 @@
             <li>In the case of a disconnect, you should be able to refresh the page (or navigate back to the site) and connect back with your exact username.</li>
          </ul>
       </div>
+   </div>
 </body>
 </html>
