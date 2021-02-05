@@ -110,10 +110,14 @@ function invectoryFunc() {
 		}
 
 		function getDeckCount(): number {
-			return roundWrapper.remainingItems.length;
+			return $ctrl.viewType == ViewType.round
+				? roundWrapper.remainingItems.length
+				: player.playerData.items.length;
 		}
 
 		function getPercentageToBust(): string {
+			if ($ctrl.viewType == ViewType.total)
+				return '-';
 			if (roundWrapper.currentHand.length >= roundWrapper.handSize) {
 				return "-";
 			} else {
@@ -124,6 +128,8 @@ function invectoryFunc() {
 		}
 
 		function getPercentageForCard(): string {
+			if ($ctrl.viewType == ViewType.total)
+				return '-';
 			if (roundWrapper.showSelectionTurnOptions(player.playerData))
 				return roundWrapper.getPercentageForOneCard(player) + "%";
 			return "-";

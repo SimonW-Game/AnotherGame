@@ -65,6 +65,7 @@
     <Content Include="client\style\rules\rules.css" />
     <Content Include="client\style\pregameOptionsStyle.css" />
     <Content Include="client\style\popupStyle.css" />
+    <Content Include="client\views\admin.ejs" />
     <Content Include="client\views\rules.ejs" />
     <Content Include="client\views\index.ejs">
       <SubType>Code</SubType>

@@ -106,7 +106,7 @@ class Game {
 			&& this.completedRounds.length == 0;
 	}
 
-	private getPlayerCount(): number { return this.players.length + this.removedPlayers.length; }
+	public getPlayerCount(): number { return this.players.length + this.removedPlayers.length; }
 
 	public addPlayer(username: string, socket: socketIo.Socket): Player {
 		const player = new Player(username, socket, this.playerIndex++);
@@ -809,3 +809,5 @@ export function removeGame(gameId: string) {
 	console.log("deleting: " + gameId);
 	delete allGames[gameId];
 }
+export function getGameCount() { return Object.keys(allGames).length; }
+export function getPlayerCount() { return Object.keys(allGames).reduce((acc, cur) => allGames[cur].getPlayerCount() + acc, 0); }

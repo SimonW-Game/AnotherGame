@@ -2,11 +2,12 @@ import express = require('express');
 import socketIo = require('socket.io');
 import socketHandler = require('./server/SocketHandler');
 import { minifyClient } from './minify.config';
+import { getGameCount, getPlayerCount } from './server/Game';
 const app = express();
 app.set('view engine', 'ejs');
 const port = process.env.port || 8080;
-console.log(process.argv);
 let isDev = !process.argv || process.argv.length < 3 || process.argv[2] != "production";
+isDev = false;
 let clientDir: string;
 if (isDev) {
 	clientDir = __dirname + '/client';
@@ -26,6 +27,10 @@ app.get('/createOrJoin/:code', (req, res) => {
 
 app.get('/rules', (req, res) => {
 	res.render(clientDir + '/views/rules.ejs', { isDev: isDev });
+});
+
+app.get('/admin', (req, res) => {
+	res.render(clientDir + '/views/admin.ejs', { gameCount: getGameCount(), playerCount: getPlayerCount() });
 });
 
 const server = app.listen(port, () => console.log(`listening at http://localhost:${port}`));
