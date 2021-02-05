@@ -16,6 +16,7 @@ interface IEndGameComponent extends ng.IComponentController {
 	getBonusWinners: (bonus: endGameBonus) => string;
 	viewEndGameInfo: () => void;
 	exitInfo: () => void;
+	startNewGame: () => void;
 }
 
 function endGameScreenComponentFunc() {
@@ -36,6 +37,8 @@ function endGameScreenComponentFunc() {
 		$ctrl.getBonusPointAmount = () => gameWrapper.game.options.pointsPerEndGameBonus;
 		$ctrl.viewEndGameInfo = () => hoverKeyHelper.show(infoKeyType.endGame);
 		$ctrl.exitInfo = () => hoverKeyHelper.close();
+		$ctrl.startNewGame = startNewGame;
+		$ctrl.isHost = () => userData.isHost;
 
 		function getPlayerItems(player: IEndGamePlayerInfo) {
 			player.playerData.items.sort(function (a, b) { return (a.effect * 10 + a.points) - (b.effect * 10 + b.points) });
@@ -50,6 +53,9 @@ function endGameScreenComponentFunc() {
 				return gameWrapper.endGameInfo.players.find(p => p.playerData.index == ndx).playerData.username;
 			}).join(", ");
 			return winners;
+		}
+		function startNewGame() {
+			socket.emit("startNewGame", gameWrapper.game.gameId);
 		}
 	};
 

@@ -90,6 +90,17 @@ export function setupSocket(io: socketIo.Server, socket: socketIo.Socket) {
 				console.log(e);
 			}
 		});
+		socket.on("startNewGame", function (gameId: string) {
+			try {
+				const game = gameHelper.getGame(gameId);
+				if (typeof game !== "undefined" && game.completedRounds.length == game.options.totalRounds) {
+					game.resetGame();
+					io.in(gameId).emit("restartGame", game.getPlayers());
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		});
 		socket.on("updateOptions", function (gameId: string, options: IGameOptions) {
 			try {
 				const game = gameHelper.getGame(gameId);

@@ -20,6 +20,11 @@ class Game {
 		this.roundPhaseStatus = RoundPhaseStatus.PreRound;
 		this.options = options;
 	}
+	public resetGame() {
+		this.completedRounds = [];
+		this.currentRound = { selectionResults: undefined, buySelectionData: undefined, thingsToBuy: undefined };
+		this.roundPhaseStatus = RoundPhaseStatus.PreRound;
+	}
 	public addPlayer(playerData: IPlayerClientData) {
 		this.players.push({ playerData: playerData, isDisconnected: false, isWaitingOnOthers: false });
 	}

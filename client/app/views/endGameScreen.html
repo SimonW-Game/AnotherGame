@@ -1,5 +1,5 @@
 ﻿<div id="sw-end-game-screen" class="sw-zoom-container">
-   <h1>Game Results</h1>
+   <div id="end-game-title"><div>Game Results</div><div ng-if="::$ctrl.isHost()" class="btn btn-light right float-right" ng-click="$ctrl.startNewGame()">Start New Game</div></div>
    <div class="sw-end-game-bonuses" ng-if="::$ctrl.getBonuses().length > 0">
       <h3>End Game Bonuses ({{::$ctrl.getBonusPointAmount()}} points each)</h3>
       <table>
@@ -12,8 +12,8 @@
          </thead>
          <tr ng-repeat="bonus in ::$ctrl.getBonuses()">
             <td>{{::$ctrl.getBonusName(bonus)}}</td>
-            <td> {{::$ctrl.getBonusWinners(bonus)}}</td>
-            <td> {{::$ctrl.getBonusAmount(bonus)}}</td>
+            <td>{{::$ctrl.getBonusWinners(bonus)}}</td>
+            <td>{{::$ctrl.getBonusAmount(bonus)}}</td>
          </tr>
       </table>
    </div>

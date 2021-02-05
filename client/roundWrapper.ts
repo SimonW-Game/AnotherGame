@@ -564,6 +564,9 @@ class RoundWrapper {
 		if (this.waitingOnServer) return;
 		// Populate the points (so we only have one function for this as opposed to client and server).
 
+		if (this.gameWrapper.game.options.enableTimeLimit)
+			this.timerHelper.endTimer();
+
 		this.selection.playedItems.forEach(item => {
 			if (item.effect == itemEffect.PointsForPassingGems) {
 				let gemBalance = 0;
@@ -598,6 +601,8 @@ class RoundWrapper {
 
 	public endBuyTurn(ranOutOfTime: boolean = false) {
 		if (this.waitingOnServer) return;
+		if (this.gameWrapper.game.options.enableTimeLimit)
+			this.timerHelper.endTimer();
 		let dupeNdx = this.buySelection.enhancements.findIndex(e => e == purchaseEnhancement.CanBuyADuplicate);
 		if (dupeNdx >= 0
 			&& (!this.buySelection.items.some((val, ndx, arr) => arr.indexOf(val) != ndx))

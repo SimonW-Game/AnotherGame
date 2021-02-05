@@ -52,6 +52,13 @@ function gameController($scope: ng.IScope,
 	}
 
 	function setupSocketCallbacks() {
+		socket.on("restartGame", function (playerDatas: IPlayerClientData[]) {
+			gameWrapper.game.resetGame();
+			// Get rid of the disconnected players.
+			gameWrapper.game.players = gameWrapper.game.players.filter(p => !p.isDisconnected);
+			updatePlayerData(playerDatas);
+			$scope.$digest();
+		});
 		socket.on("gameStarted", function (currentRoundData: IRoundData, options: IGameOptions, playerDatas: IPlayerClientData[]) {
 			gameWrapper.endGameInfo = undefined;
 			gameWrapper.game.options = options;

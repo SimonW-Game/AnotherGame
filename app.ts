@@ -7,7 +7,6 @@ const app = express();
 app.set('view engine', 'ejs');
 const port = process.env.port || 8080;
 let isDev = !process.argv || process.argv.length < 3 || process.argv[2] != "production";
-isDev = false;
 let clientDir: string;
 if (isDev) {
 	clientDir = __dirname + '/client';
@@ -38,7 +37,6 @@ const server = app.listen(port, () => console.log(`listening at http://localhost
 const io = socketIo(server, { pingTimeout: 120000, pingInterval: 25000 /*Default*/ });
 io.on('connection', (socket: socketIo.Socket) => {
 	socketHandler.setupSocket(io, socket);
-
 });
 
 // Game goes as follows:

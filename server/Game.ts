@@ -59,6 +59,9 @@ export class Player {
 	public socket: socketIo.Socket;
 	constructor(username: string, socket: socketIo.Socket, index: number) {
 		this.socket = socket;
+		this.resetPlayer(username, index);
+	}
+	public resetPlayer(username: string, index: number) {
 		const defaultGemCount = 5;
 		this.playerData = {
 			index: index,
@@ -154,6 +157,13 @@ class Game {
 		return this.players.find(p => p.socket === socket);
 	}
 
+	public resetGame() {
+		// No more completed rounds. No more current round.
+		this.round = undefined;
+		this.completedRounds = [];
+		this.removedPlayers = []; // We don't care who left, just kick em!
+		this.players.forEach(p => p.resetPlayer(p.playerData.username, p.playerData.index));
+	}
 	public startGame() {
 		// Must apply options to players.
 		this.players.forEach(player => {
@@ -576,13 +586,15 @@ class Game {
 			endGameInfo.players.push(endGamePlayerInfo);
 		});
 
+		this.completedRounds.push(this.round.roundData); // push the current round (just the selection phase).
+
 		Object.keys(endGameInfo.endGameBonuses).forEach((bonusStr: string) => {
 			const bonus = Number(bonusStr);
 			if (bonus == endGameBonus.CrownsLeast || bonus == endGameBonus.CrownsMost) {
 				let bonusScore: { winningAmount: number, winners: number[] } = endGameInfo.endGameBonuses[bonus];
 				bonusScore.winners = []; // Reset Crown Winners.
 				const isLowest = bonus == endGameBonus.CrownsLeast;
-				let crownWinners = this.completedRounds.concat(this.round.roundData).reduce((ps, round) => {
+				let crownWinners = this.completedRounds.reduce((ps, round) => {
 					round.selectionResults.winnerIndexes.forEach(ndx => ps[ndx] = Number((ps[ndx] || 0)) + 1);
 					return ps;
 				}, <{ [pNdx: number]: number }>{});

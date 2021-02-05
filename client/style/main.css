@@ -902,10 +902,19 @@ body {
 	overflow: auto;
 }
 
-
-	#sw-end-game-screen h1 {
-		font-size: 7vw;
+	#sw-end-game-screen #end-game-title {
+		display: flex;
+		align-items: center;
 	}
+
+		#sw-end-game-screen #end-game-title div:first-child {
+			font-size: 7vw;
+			flex-grow: 1;
+			font-weight: bold;
+		}
+
+		#sw-end-game-screen #end-game-title div:last-child {
+		}
 
 	#sw-end-game-screen .sw-end-game-player {
 		display: flex;
