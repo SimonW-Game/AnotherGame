@@ -802,6 +802,7 @@ export enum endGameBonus {
 }
 
 const allGames: { [id: string]: Game } = {};
+let recentFinishedGames: Date[] = [];
 
 export function startNewGame(id: string = undefined): Game {
 	while (typeof id === "undefined" || typeof getGame(id) !== "undefined")
@@ -820,6 +821,13 @@ export function getGame(id: string): Game {
 export function removeGame(gameId: string) {
 	console.log("deleting: " + gameId);
 	delete allGames[gameId];
+	recentFinishedGames.push(new Date());
 }
 export function getGameCount() { return Object.keys(allGames).length; }
 export function getPlayerCount() { return Object.keys(allGames).reduce((acc, cur) => allGames[cur].getPlayerCount() + acc, 0); }
+export function getRecentGamesCount() {
+	let recentDate = new Date();
+	recentDate.setHours(recentDate.getHours() - (24 * 14)); // 14 days
+	recentFinishedGames = recentFinishedGames.filter(date => date.getTime() > recentDate.getTime())
+	return recentFinishedGames.length;
+}
